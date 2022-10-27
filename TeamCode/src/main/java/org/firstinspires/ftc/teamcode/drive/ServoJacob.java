@@ -84,7 +84,7 @@ public class ServoJacob extends LinearOpMode {
                 position2 = 1;
                 position3 = 1;
             }
-            if (gamepad1.left_trigger != 0) {
+            if (gamepad1.left_trigger != 0.0) {
                 position4 += gamepad1.left_trigger * SCALE;
                 if (position4 >= MAX_POS) {
                     position4 = MAX_POS;
@@ -92,7 +92,8 @@ public class ServoJacob extends LinearOpMode {
                 if (position4 <= MIN_POS) {
                     position4 = MIN_POS;
                 }
-            if (gamepad1.right_trigger != 0){
+            }
+            if (gamepad1.right_trigger != 0.0){
                 position4 -= gamepad1.right_trigger * SCALE;
                 if (position4 >= MAX_POS) {
                     position4 = MAX_POS;
@@ -101,13 +102,13 @@ public class ServoJacob extends LinearOpMode {
                     position4 = MIN_POS;
                 }
             }
-            if (gamepad1.left_bumper == true) {
+            if (gamepad1.left_bumper) {
                 position5 = 1;
             }
-            if (gamepad1.right_bumper == true) {
+            if (gamepad1.right_bumper) {
                 position5 = 0;
             }
-            }
+
             // Display the current value
             telemetry.addData("spinOne Servo Position", "%5.2f", position1);
             telemetry.addData("spinTwo Servo Position", "%5.2f", position2);

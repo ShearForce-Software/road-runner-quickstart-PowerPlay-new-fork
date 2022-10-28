@@ -61,13 +61,13 @@ public class CustomModelCodeTesting extends LinearOpMode {
      * has been downloaded to the Robot Controller's SD FLASH memory, it must to be loaded using loadModelFromFile()
      * Here we assume it's an Asset.    Also see method initTfod() below .
      */
-    private static final String TFOD_MODEL_ASSET = "model_20221020_192916.tflite";
+    private static final String TFOD_MODEL_ASSET = "model_20221020_185359.tflite";
     // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
 
     private static final String[] LABELS = {
-      "Checkered1",
-      "Logo3",
-      "Squig2"
+      "Smile",
+      "Lines",
+      "Logo"
     };
 
     /*
@@ -117,7 +117,7 @@ public class CustomModelCodeTesting extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1.5, 16.0/9.0);
+            tfod.setZoom(1.0, 16.0/9.0);
         }
 
         /* Wait for the game to begin */

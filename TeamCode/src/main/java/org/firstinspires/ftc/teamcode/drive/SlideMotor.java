@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="Jacob Slide Drive using Encoder")
 //@Disabled
-public class SlideMotorJacob extends LinearOpMode {
+public class SlideMotor extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor leftSlide = null;

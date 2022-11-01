@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name = "Auto Place")
-public class SensorREVColorDistance_Demo extends LinearOpMode {
+public class AutoDrop extends LinearOpMode {
 
     DistanceSensor sensorDistance;
 

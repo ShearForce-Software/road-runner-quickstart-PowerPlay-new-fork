@@ -22,10 +22,10 @@ public class SlideMotors extends LinearOpMode {
         slideOne.setDirection(DcMotor.Direction.FORWARD);
         slideTwo.setDirection(DcMotor.Direction.REVERSE);
         telemetry.addData(">", "Robot Ready.  Press Play.");    //
+
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
-
             if (gamepad1.dpad_up) {
                 slideOne.setPower(ARM_UP_POWER);
                 slideTwo.setPower(ARM_UP_POWER);
@@ -36,6 +36,7 @@ public class SlideMotors extends LinearOpMode {
                 slideOne.setPower(0.0);
                 slideTwo.setPower(0.0);
             }
+
         }
     }
 }

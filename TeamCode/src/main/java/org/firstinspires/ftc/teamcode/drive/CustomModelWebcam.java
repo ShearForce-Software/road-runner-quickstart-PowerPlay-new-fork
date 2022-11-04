@@ -98,9 +98,48 @@ public class CustomModelWebcam extends LinearOpMode {
      * Detection engine.
      */
     private TFObjectDetector tfod;
+    public String label;
 
     @Override
     public void runOpMode() {
+        initWebcam();
+        waitForStart();
+
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+                runOpModeActive();
+            }
+        }
+    }
+
+    public void runOpModeActive() {
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Objects Detected", updatedRecognitions.size());
+
+                // step through the list of recognitions and display image position/size information for each one
+                // Note: "Image number" refers to the randomized image orientation/number
+                for (Recognition recognition : updatedRecognitions) {
+                    double col = (recognition.getLeft() + recognition.getRight()) / 2 ;
+                    double row = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+                    double width  = Math.abs(recognition.getRight() - recognition.getLeft()) ;
+                    double height = Math.abs(recognition.getTop()  - recognition.getBottom()) ;
+
+                    telemetry.addData(""," ");
+                    label = recognition.getLabel();
+                    telemetry.addData("Image", "%s (%.0f %% Conf.)", label, recognition.getConfidence() * 100 );
+                    telemetry.addData("- Position (Row/Col)","%.0f / %.0f", row, col);
+                    telemetry.addData("- Size (Width/Height)","%.0f / %.0f", width, height);
+                }
+                telemetry.update();
+            }
+        }
+    }
+
+    public void initWebcam() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -125,35 +164,6 @@ public class CustomModelWebcam extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
-        waitForStart();
-
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Objects Detected", updatedRecognitions.size());
-
-                        // step through the list of recognitions and display image position/size information for each one
-                        // Note: "Image number" refers to the randomized image orientation/number
-                        for (Recognition recognition : updatedRecognitions) {
-                            double col = (recognition.getLeft() + recognition.getRight()) / 2 ;
-                            double row = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-                            double width  = Math.abs(recognition.getRight() - recognition.getLeft()) ;
-                            double height = Math.abs(recognition.getTop()  - recognition.getBottom()) ;
-
-                            telemetry.addData(""," ");
-                            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 );
-                            telemetry.addData("- Position (Row/Col)","%.0f / %.0f", row, col);
-                            telemetry.addData("- Size (Width/Height)","%.0f / %.0f", width, height);
-                        }
-                        telemetry.update();
-                    }
-                }
-            }
-        }
     }
 
     /**

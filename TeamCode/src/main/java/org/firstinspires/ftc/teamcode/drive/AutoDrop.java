@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "Auto Place")
+@TeleOp(name = "Auto Drop")
 public class AutoDrop extends LinearOpMode {
 
     DistanceSensor sensorDistance;

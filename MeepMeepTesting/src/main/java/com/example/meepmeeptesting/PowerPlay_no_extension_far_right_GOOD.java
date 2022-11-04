@@ -11,7 +11,7 @@ public class PowerPlay_no_extension_far_right_GOOD {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(70, 70, Math.toRadians(248), Math.toRadians(180), 13.5)
+                .setConstraints(68, 68, Math.toRadians(248), Math.toRadians(180), 13.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 60, Math.toRadians(-90)))
                                 .splineToLinearHeading(new Pose2d(-50, 12, Math.toRadians(0)), Math.toRadians(-170))

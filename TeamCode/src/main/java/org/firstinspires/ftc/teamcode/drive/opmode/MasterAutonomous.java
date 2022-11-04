@@ -41,11 +41,15 @@ public class MasterAutonomous extends LinearOpMode {
     private CustomModelWebcam customModelWebcam = new CustomModelWebcam();
     @Override
     public void runOpMode() {
+        customModelWebcam.initWebcam();
         waitForStart();
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
+            customModelWebcam.runOpModeActive();
+            //do more for autonomous route to parking spot from signal sleeve
+            String signalSleeveLabel = customModelWebcam.label;
 
         }
     }}

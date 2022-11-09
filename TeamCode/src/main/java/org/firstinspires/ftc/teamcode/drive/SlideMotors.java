@@ -27,23 +27,33 @@ public class SlideMotors extends LinearOpMode {
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
-            slideOne.setPower(ARM_POWER);
-            slideTwo.setPower(ARM_POWER);
             if (gamepad1.dpad_up) {
                 desiredPos = 1612;
                 runToPos = desiredPos - slideOne.getCurrentPosition();
                 slideOne.setTargetPosition(runToPos);
                 slideTwo.setTargetPosition(runToPos);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
             }else if (gamepad1.dpad_left) {
                 desiredPos = 1075;
                 runToPos = desiredPos - slideOne.getCurrentPosition();
                 slideOne.setTargetPosition(runToPos);
                 slideTwo.setTargetPosition(runToPos);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
             }else if (gamepad1.dpad_down){
                 desiredPos = 0;
                 runToPos -= slideOne.getCurrentPosition();
                 slideOne.setTargetPosition(runToPos);
                 slideTwo.setTargetPosition(runToPos);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
 
             }
 

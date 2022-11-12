@@ -73,8 +73,8 @@ public class BasicDrive extends LinearOpMode {
     private DcMotor leftBackDrive = null;
     private DcMotor rightFrontDrive = null;
     private DcMotor rightBackDrive = null;
-    private DcMotor rightSlide = null;
-    private DcMotor leftSlide = null;
+    //private DcMotor rightSlide = null;
+    //private DcMotor leftSlide = null;
 
     @Override
     public void runOpMode() {
@@ -85,8 +85,8 @@ public class BasicDrive extends LinearOpMode {
         leftBackDrive  = hardwareMap.get(DcMotor.class, "leftRear");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightRear");
-        rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");
-        leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");
+        //rightSlide = hardwareMap.get(DcMotor.class, "rightSlide");
+        //leftSlide = hardwareMap.get(DcMotor.class, "leftSlide");
 
         // ########################################################################################
         // !!!            IMPORTANT Drive Information. Test your motor directions.            !!!!!
@@ -102,7 +102,7 @@ public class BasicDrive extends LinearOpMode {
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        //leftSlide.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         telemetry.addData("Status", "Initialized");
@@ -119,19 +119,6 @@ public class BasicDrive extends LinearOpMode {
             double axial   = -gamepad1.left_stick_y;  // Note: pushing stick forward gives negative value
             double lateral =  gamepad1.left_stick_x;
             double yaw     =  gamepad1.right_stick_x;
-
-            if(gamepad1.dpad_up) {
-                rightSlide.setPower(.2);
-                leftSlide.setPower(.2);
-            }
-            else if (gamepad1.dpad_down){
-                rightSlide.setPower(-.2);
-                leftSlide.setPower(-.2);
-            }
-            else {
-                rightSlide.setPower(0);
-                leftSlide.setPower(0);
-            }
 
             // Combine the joystick requests for each axis-motion to determine each wheel's power.
             // Set up a variable for each drive wheel to save the power level for telemetry.

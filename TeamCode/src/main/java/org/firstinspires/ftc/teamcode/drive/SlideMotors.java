@@ -22,42 +22,54 @@ public class SlideMotors extends LinearOpMode {
 
         slideOne.setDirection(DcMotor.Direction.FORWARD);
         slideTwo.setDirection(DcMotor.Direction.REVERSE);
+        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData(">", "Robot Ready.  Press Play.");    //
 
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
+            telemetry.addData("current Pos: ", slideOne.getCurrentPosition());
+            telemetry.addData("desiredPos: ", desiredPos);
             if (gamepad1.dpad_up) {
                 desiredPos = 1612;
-                runToPos = desiredPos - slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
-            }else if (gamepad1.dpad_left) {
-                desiredPos = 1075;
-                runToPos = desiredPos - slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
-                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideOne.setPower(ARM_POWER);
-                slideTwo.setPower(ARM_POWER);
-            }else if (gamepad1.dpad_down){
-                desiredPos = 0;
-                runToPos -= slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
-                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideOne.setPower(ARM_POWER);
-                slideTwo.setPower(ARM_POWER);
-
+                while((slideOne.isBusy())&&(slideTwo.isBusy())){}
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
             }
-
-
+            else if (gamepad1.dpad_left) {
+                desiredPos = 1075;
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
+                while((slideOne.isBusy())&&(slideTwo.isBusy())){}
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+            }
+            else if (gamepad1.dpad_down){
+                desiredPos = 0;
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
+                while((slideOne.isBusy())&&(slideTwo.isBusy())){}
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+            }
+            telemetry.update();
         }
     }
 }

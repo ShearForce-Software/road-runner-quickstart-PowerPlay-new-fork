@@ -118,7 +118,7 @@ public class Operator_Controls extends LinearOpMode {
             double rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
-            if (rangeClaw < 2) {
+            if (rangeClaw < 2.75) {
                 position5 = 0;
                 position1 = .67;
                 position2 = .67;

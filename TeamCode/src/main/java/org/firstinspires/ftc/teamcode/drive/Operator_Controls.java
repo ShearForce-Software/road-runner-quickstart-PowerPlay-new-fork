@@ -109,7 +109,7 @@ public class Operator_Controls extends LinearOpMode {
                 }
             }
             if (gamepad1.left_bumper) {
-                position5 = 1;
+                position5 = .5;
             }
             if (gamepad1.right_bumper) {
                 position5 = 0;

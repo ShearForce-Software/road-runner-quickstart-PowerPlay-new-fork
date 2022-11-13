@@ -67,9 +67,9 @@ public class CustomModelWebcam extends LinearOpMode {
 
 
     private static final String[] LABELS = {
-            "Squiggles",
-            "Checkered",
-            "Logo"
+            "Checkered1",
+            "Logo3",
+            "Squig2"
     };
 
     /*

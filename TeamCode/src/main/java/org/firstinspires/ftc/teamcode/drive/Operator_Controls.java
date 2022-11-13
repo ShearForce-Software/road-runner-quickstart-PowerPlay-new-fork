@@ -123,9 +123,8 @@ public class Operator_Controls extends LinearOpMode {
                 position1 = .67;
                 position2 = .67;
                 desiredPos = 1065;
-                runToPos = desiredPos - slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
@@ -143,9 +142,8 @@ public class Operator_Controls extends LinearOpMode {
                 position3 = .83;
                 position4 = .22;
                 desiredPos = 1529;
-                runToPos = desiredPos - slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
@@ -164,9 +162,8 @@ public class Operator_Controls extends LinearOpMode {
                 position3 = .83;
                 position4 = .94;
                 desiredPos = 3823;
-                runToPos = desiredPos - slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
@@ -185,9 +182,8 @@ public class Operator_Controls extends LinearOpMode {
                 position3 = .83;
                 position4 = .94;
                 desiredPos = 1909;
-                runToPos = desiredPos - slideOne.getCurrentPosition();
-                slideOne.setTargetPosition(runToPos);
-                slideTwo.setTargetPosition(runToPos);
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);

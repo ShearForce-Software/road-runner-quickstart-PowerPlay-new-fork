@@ -87,22 +87,13 @@ public class Operator_Controls extends LinearOpMode {
                     position2 = MIN_POS;
                 }
             }
-            if (gamepad1.left_trigger != 0.0) {
-                position4 += gamepad1.left_trigger * SCALE;
-                if (position4 >= MAX_POS) {
-                    position4 = MAX_POS;
+            if ((gamepad1.right_stick_x != 0) && (gamepad1.right_stick_button==false)) { //armRotate
+                position3 += gamepad1.right_stick_x * SCALE;
+                if (position3 >= MAX_POS) {
+                    position3 = MAX_POS;
                 }
-                if (position4 <= MIN_POS) {
-                    position4 = MIN_POS;
-                }
-            }
-            if (gamepad1.right_trigger != 0.0){
-                position4 -= gamepad1.right_trigger * SCALE;
-                if (position4 >= MAX_POS) {
-                    position4 = MAX_POS;
-                }
-                if (position4 <= MIN_POS) {
-                    position4 = MIN_POS;
+                if (position3 <= MIN_POS) {
+                    position3 = MIN_POS;
                 }
             }
             if (gamepad1.left_bumper) {

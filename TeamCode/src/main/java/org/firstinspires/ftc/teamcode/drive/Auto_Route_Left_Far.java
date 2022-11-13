@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /*
  * This is an example of a more complex path to really test the tuning.
  */
-@TeleOp(name = "Auto Route")
+@TeleOp(name = "Auto Route Left Far")
 public class Auto_Route_Left_Far extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

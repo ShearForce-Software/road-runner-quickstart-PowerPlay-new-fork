@@ -21,8 +21,8 @@ public class ServoAndSlidesManualControl extends LinearOpMode {
     Servo  armGrip;
     DcMotor slideOne;
     DcMotor slideTwo;
-    double  position1 = 0.8; //spinOne, left stick y
-    double  position2 = 0.8; //spinTwo
+    double  position1 = 0.94; //spinOne, left stick y
+    double  position2 = 0.94; //spinTwo
     double  position3 = 0.13; //armRote, right stick x
     double  position4 = 0.65; //liftWrist, right stick y
     double  position5 = 0.0; //armGrip, bumpers
@@ -124,7 +124,7 @@ public class ServoAndSlidesManualControl extends LinearOpMode {
             }
 
             if (gamepad1.left_bumper) {
-                position5 = .8;
+                position5 = .15;
             }
             if (gamepad1.right_bumper) {
                 position5 = 0;

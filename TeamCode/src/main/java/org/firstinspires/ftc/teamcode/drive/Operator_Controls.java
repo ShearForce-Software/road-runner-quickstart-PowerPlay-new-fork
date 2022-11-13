@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,13 +28,12 @@ public class Operator_Controls extends LinearOpMode {
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
-    double  position1 = 0.8;
-    double  position2 = 0.8;
+    double  position1 = 0.95;
+    double  position2 = 0.95;
     double  position3 = 0.13;
-    double  position4 = 0.65;
+    double  position4 = 0.6;
     double  position5 = 0.0;
     int desiredPos = 0;
-    int runToPos = 0;
     public static final double ARM_POWER    =  0.50 ;
 
     @Override
@@ -59,7 +59,9 @@ public class Operator_Controls extends LinearOpMode {
         liftWrist.setDirection(Servo.Direction.FORWARD);
         armGrip.setDirection(Servo.Direction.FORWARD);
         slideOne.setDirection(DcMotor.Direction.FORWARD);
-        slideTwo.setDirection(DcMotor.Direction.REVERSE);
+        slideTwo.setDirection(DcMotor.Direction.FORWARD);
+        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Wait for the start button
         telemetry.addData(">", "Press Start to move Servos with left joystick and triggers." );
@@ -68,6 +70,7 @@ public class Operator_Controls extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
+
             if (gamepad1.left_stick_y != 0) {
                 position1 += gamepad1.left_stick_y * SCALE;
                 position2 += gamepad1.left_stick_y * SCALE;
@@ -103,7 +106,7 @@ public class Operator_Controls extends LinearOpMode {
                 }
             }
             if (gamepad1.left_bumper) {
-                position5 = .5;
+                position5 = .15;
             }
             if (gamepad1.right_bumper) {
                 position5 = 0;
@@ -112,41 +115,49 @@ public class Operator_Controls extends LinearOpMode {
             double rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
-            if (rangeClaw < 2.75) {
+            if ((rangeClaw < 2.75) && (position5 == .15)) {
                 position5 = 0;
-                position1 = .67;
-                position2 = .67;
-                desiredPos = 1065;
+                position1 = .80;
+                position2 = .80;
+                desiredPos = 1244;
+                armGrip.setPosition(position5);
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
-                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                }
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
 
-                armGrip.setPosition(position5);
-                sleep(3000);
+
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
             }
             //High
             if (gamepad1.y){
-                position1 = 0;
-                position2 = 0;
+                position1 = .11;
+                position2 = .11;
                 position3 = .83;
-                position4 = .22;
-                desiredPos = 1529;
+                position4 = .13;
+                desiredPos = 1969;
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
-                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                }
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
 
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
+                sleep(1500);
                 armRote.setPosition(position3);
-                sleep(6000);
                 liftWrist.setPosition(position4);
             }
             //Medium
@@ -189,12 +200,32 @@ public class Operator_Controls extends LinearOpMode {
                 sleep(6000);
                 liftWrist.setPosition(position4);
             }
+            if (gamepad1.b){
+                position1 = .95;
+                position2 = .95;
+                position3 = .13;
+                position4 = .65;
+                position5 = 0;
+                desiredPos = 5;
+                armRote.setPosition(position5);
+                spinOne.setPosition(position1);
+                spinTwo.setPosition(position2);
+                slideOne.setTargetPosition(desiredPos);
+                slideTwo.setTargetPosition(desiredPos);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                liftWrist.setPosition(position4);
+                armRote.setPosition(position3);
+
+            }
             // Display the current value
             telemetry.addData("spinOne Servo Position", "%5.2f", position1);
             telemetry.addData("spinTwo Servo Position", "%5.2f", position2);
             telemetry.addData("armRote Servo Position", "%5.2f", position3);
             telemetry.addData("liftWrist Servo Position", "%5.2f", position4);
             telemetry.addData("armGrip Servo Position", "%5.2f", position5);
+            telemetry.addData("slideOne motor Position", slideOne.getCurrentPosition());
+            telemetry.addData("slideTwo motor Position", slideTwo.getCurrentPosition());
             telemetry.addData(">", "Press Stop to end test." );
             telemetry.update();
 

@@ -53,10 +53,6 @@ public class PowerPlay_no_extension_far_right_GOOD {
                                 .setReversed(false)
                                 //6th cone
                                 .splineToSplineHeading(new Pose2d(-8, 16, Math.toRadians(45)), Math.toRadians(45))
-                                //.waitSeconds(.75)
-                                //.setReversed(true)
-                                //.splineToLinearHeading(new Pose2d(-58, 12, Math.toRadians(0)), Math.toRadians(-180))
-                                //.forward(48)
                                 .build()
                 );
 

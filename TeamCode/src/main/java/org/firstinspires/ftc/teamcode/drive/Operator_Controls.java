@@ -34,7 +34,7 @@ public class Operator_Controls extends LinearOpMode {
     double  position4 = 0.6;
     double  position5 = 0.0;
     int desiredPos = 0;
-    public static final double ARM_POWER    =  0.50 ;
+    public static final double ARM_POWER    =  1 ;
 
     @Override
     public void runOpMode() {
@@ -115,12 +115,13 @@ public class Operator_Controls extends LinearOpMode {
             double rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
-            if ((rangeClaw < 2.75) && (position5 == .15)) {
+            if ((((rangeClaw < 2.75) && (position5 == .15)) && (slideOne.getCurrentPosition() <= 100) && (slideTwo.getCurrentPosition() <= 100))) {
                 position5 = 0;
                 position1 = .80;
                 position2 = .80;
                 desiredPos = 1244;
                 armGrip.setPosition(position5);
+                sleep(200);
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
                 slideOne.setPower(ARM_POWER);
@@ -156,67 +157,83 @@ public class Operator_Controls extends LinearOpMode {
 
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(1500);
+                sleep(1000);
                 armRote.setPosition(position3);
                 liftWrist.setPosition(position4);
             }
             //Medium
             if (gamepad1.x){
-                position1 = .68;
-                position2 = .68;
+                position1 = .83;
+                position2 = .83;
                 position3 = .83;
-                position4 = .94;
-                desiredPos = 3823;
+                position4 = .86;
+                desiredPos = 3777;
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
-                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                }
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
 
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
+                sleep(1000);
                 armRote.setPosition(position3);
-                sleep(6000);
                 liftWrist.setPosition(position4);
             }
             //Low
             if (gamepad1.a){
-                position1 = .66;
-                position2 = .66;
+                position1 = .82;
+                position2 = .82;
                 position3 = .83;
-                position4 = .94;
-                desiredPos = 1909;
+                position4 = .82;
+                desiredPos = 2176;
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
-                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                }
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
 
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
+                sleep(1000);
                 armRote.setPosition(position3);
-                sleep(6000);
                 liftWrist.setPosition(position4);
             }
             if (gamepad1.b){
                 position1 = .95;
                 position2 = .95;
                 position3 = .13;
-                position4 = .65;
+                position4 = .74;
                 position5 = 0;
                 desiredPos = 5;
-                armRote.setPosition(position5);
+                armGrip.setPosition(position5);
+                liftWrist.setPosition(position4);
+                armRote.setPosition(position3);
+                sleep(500);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                }
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+                position4 = .6;
                 liftWrist.setPosition(position4);
-                armRote.setPosition(position3);
-
             }
             // Display the current value
             telemetry.addData("spinOne Servo Position", "%5.2f", position1);

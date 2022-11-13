@@ -11,26 +11,18 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @TeleOp(name = "Auto Drop")
 public class AutoDrop extends LinearOpMode {
 
-    DistanceSensor sensorDistance;
+    DistanceSensor rearDistance;
+    DistanceSensor clawDistance;
+    DistanceSensor frontDistance;
 
-
-    Servo  spinOne;
-    Servo  spinTwo;
-    Servo  shoulder;
-    double  position1 = 0.0;
-    double  position2 = 0.0;
-    double  position3 = 0.0;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "distance_sensor");
-        spinOne = hardwareMap.get(Servo.class, "spinOne");
-        spinTwo = hardwareMap.get(Servo.class, "spinTwo");
-        shoulder = hardwareMap.get(Servo.class, "shoulder");
-        spinOne.setDirection(Servo.Direction.FORWARD);
-        spinTwo.setDirection(Servo.Direction.REVERSE);
-        shoulder.setDirection(Servo.Direction.FORWARD);
+        rearDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
+        clawDistance = hardwareMap.get(DistanceSensor.class, "clawDistance");
+        frontDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
+
         telemetry.addData(">", "Press Start and move the sensor to activate the servos." );
         telemetry.update();
         // wait for the start button to be pressed.
@@ -39,19 +31,14 @@ public class AutoDrop extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            double range = sensorDistance.getDistance(DistanceUnit.CM);
-            if (range < 2) {
-                position1 = 1;
-                position2 = 1;
-                position3 = 1;
+            double rearRange = rearDistance.getDistance(DistanceUnit.CM);
+            double clawRange = clawDistance.getDistance(DistanceUnit.CM);
+            double frontRange = frontDistance.getDistance(DistanceUnit.CM);
 
-                spinOne.setPosition(position1);
-                spinTwo.setPosition(position2);
-                sleep(3000);
-                shoulder.setPosition(position3);
-            }
+            telemetry.addData("rearDistance (cm): ","%.02f", rearRange);
+            telemetry.addData("clawDistance (cm): ","%.02f", clawRange);
+            telemetry.addData("frontDistance (cm): ","%.02f", frontRange);
 
-            telemetry.addData("Distance (cm): ","%.02f", range);
             telemetry.update();
         }
     }

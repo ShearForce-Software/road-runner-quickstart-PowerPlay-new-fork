@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "Jacob Servo")
+@TeleOp(name = "Operator Controls")
 
 public class Operator_Controls extends LinearOpMode {
 
@@ -27,10 +27,10 @@ public class Operator_Controls extends LinearOpMode {
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
-    double  position1 = 0.0;
-    double  position2 = 0.0;
-    double  position3 = 0.0;
-    double  position4 = 0.0;
+    double  position1 = 0.8;
+    double  position2 = 0.8;
+    double  position3 = 0.13;
+    double  position4 = 0.65;
     double  position5 = 0.0;
     int desiredPos = 0;
     int runToPos = 0;

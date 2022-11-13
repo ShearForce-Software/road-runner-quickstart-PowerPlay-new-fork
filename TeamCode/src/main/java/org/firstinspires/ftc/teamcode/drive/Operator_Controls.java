@@ -84,12 +84,6 @@ public class Operator_Controls extends LinearOpMode {
                     position2 = MIN_POS;
                 }
             }
-            if (gamepad1.x) {
-                position3 = 1;
-            }
-            if (gamepad1.y){
-                position3 = 0;
-            }
             if (gamepad1.left_trigger != 0.0) {
                 position4 += gamepad1.left_trigger * SCALE;
                 if (position4 >= MAX_POS) {
@@ -176,7 +170,7 @@ public class Operator_Controls extends LinearOpMode {
                 liftWrist.setPosition(position4);
             }
             //Low
-            if (gamepad1.b){
+            if (gamepad1.a){
                 position1 = .66;
                 position2 = .66;
                 position3 = .83;

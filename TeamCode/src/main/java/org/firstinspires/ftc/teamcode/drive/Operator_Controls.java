@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "Jacob Servo")
+@TeleOp(name = "Operator Controls")
 
 public class Operator_Controls extends LinearOpMode {
 

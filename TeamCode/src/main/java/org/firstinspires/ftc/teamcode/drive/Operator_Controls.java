@@ -206,15 +206,19 @@ public class Operator_Controls extends LinearOpMode {
                 liftWrist.setPosition(position4);
             }
             if (gamepad1.b){
-                position1 = .95;
-                position2 = .95;
+                position1 = .48;
+                position2 = .48;
                 position3 = .13;
                 position4 = .74;
                 position5 = 0;
                 desiredPos = 5;
+                spinOne.setPosition(position1);
+                spinTwo.setPosition(position2);
                 armGrip.setPosition(position5);
                 liftWrist.setPosition(position4);
                 armRote.setPosition(position3);
+                position1 = .95;
+                position2 = .95;
                 sleep(500);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);

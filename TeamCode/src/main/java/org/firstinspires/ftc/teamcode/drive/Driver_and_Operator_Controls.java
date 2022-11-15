@@ -117,18 +117,6 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                     position2 = MIN_POS;
                 }
             }
-            if((gamepad1.right_stick_y < 0)&&(gamepad1.right_stick_button==false)&&(slideOne.getCurrentPosition()<4900)&&(slideTwo.getCurrentPosition()<4900)){ //slides up
-                slideOne.setPower(-gamepad1.right_stick_y);
-                slideTwo.setPower(-gamepad1.right_stick_y);
-            }
-            else if((gamepad1.right_stick_y > 0)&&(gamepad1.right_stick_button==false)&&(slideOne.getCurrentPosition()>10)&&(slideTwo.getCurrentPosition()>10)) {
-                slideOne.setPower(-gamepad1.right_stick_y);
-                slideTwo.setPower(-gamepad1.right_stick_y);
-            }
-            else {
-                slideOne.setPower(0);
-                slideTwo.setPower(0);
-            }
             if (gamepad1.left_bumper) {
                 position5 = .18;
             }

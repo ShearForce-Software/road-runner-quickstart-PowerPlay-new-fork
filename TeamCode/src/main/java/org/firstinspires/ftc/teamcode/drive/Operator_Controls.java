@@ -183,8 +183,8 @@ public class Operator_Controls extends LinearOpMode {
             }
             //Low
             if (gamepad1.a){
-                position1 = .82;
-                position2 = .82;
+                position1 = .48;
+                position2 = .48;
                 position3 = .83;
                 position4 = .82;
                 desiredPos = 2176;
@@ -204,6 +204,11 @@ public class Operator_Controls extends LinearOpMode {
                 sleep(1000);
                 armRote.setPosition(position3);
                 liftWrist.setPosition(position4);
+                sleep(400);
+                position1 = .83;
+                position2 = .83;
+                spinOne.setPosition(position1);
+                spinTwo.setPosition(position2);
             }
             if (gamepad1.b){
                 position1 = .48;
@@ -214,12 +219,13 @@ public class Operator_Controls extends LinearOpMode {
                 desiredPos = 5;
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
+                sleep(3000);
                 armGrip.setPosition(position5);
                 liftWrist.setPosition(position4);
                 armRote.setPosition(position3);
                 position1 = .95;
                 position2 = .95;
-                sleep(500);
+                sleep(3000);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
                 slideOne.setTargetPosition(desiredPos);

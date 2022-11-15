@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "Operator Controls")
+@TeleOp(name = "Driver_and_Operator_Controls")
 
 public class Driver_and_Operator_Controls extends LinearOpMode {
 
@@ -127,7 +127,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
             double rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
-            if ((((rangeClaw < 2.75) && (position5 == .15)) && (slideOne.getCurrentPosition() <= 100) && (slideTwo.getCurrentPosition() <= 100))) {
+            if ((((rangeClaw < 2.75) && (position5 == .18)) && (slideOne.getCurrentPosition() <= 100) && (slideTwo.getCurrentPosition() <= 100))) {
                 position5 = 0;
                 position1 = .80;
                 position2 = .80;
@@ -141,6 +141,18 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    y = -gamepad2.left_stick_y;
+                    x = gamepad2.left_stick_x * 1.1;
+                    rx = gamepad2.right_stick_x;
+                    denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                    frontLeftPower = (y + x + rx) / denominator;
+                    backLeftPower = (y - x + rx) / denominator;
+                    frontRightPower = (y - x - rx) / denominator;
+                    backRightPower = (y + x - rx) / denominator;
+                    leftFront.setPower(frontLeftPower);
+                    leftRear.setPower(backLeftPower);
+                    rightFront.setPower(frontRightPower);
+                    rightRear.setPower(backRightPower);
                 }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
@@ -155,7 +167,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 position2 = .11;
                 position3 = .83;
                 position4 = .13;
-                desiredPos = 1969;
+                desiredPos = 1900;
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
                 slideOne.setPower(ARM_POWER);
@@ -163,6 +175,18 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    y = -gamepad2.left_stick_y;
+                    x = gamepad2.left_stick_x * 1.1;
+                    rx = gamepad2.right_stick_x;
+                    denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                    frontLeftPower = (y + x + rx) / denominator;
+                    backLeftPower = (y - x + rx) / denominator;
+                    frontRightPower = (y - x - rx) / denominator;
+                    backRightPower = (y + x - rx) / denominator;
+                    leftFront.setPower(frontLeftPower);
+                    leftRear.setPower(backLeftPower);
+                    rightFront.setPower(frontRightPower);
+                    rightRear.setPower(backRightPower);
                 }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
@@ -187,6 +211,18 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    y = -gamepad2.left_stick_y;
+                    x = gamepad2.left_stick_x * 1.1;
+                    rx = gamepad2.right_stick_x;
+                    denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                    frontLeftPower = (y + x + rx) / denominator;
+                    backLeftPower = (y - x + rx) / denominator;
+                    frontRightPower = (y - x - rx) / denominator;
+                    backRightPower = (y + x - rx) / denominator;
+                    leftFront.setPower(frontLeftPower);
+                    leftRear.setPower(backLeftPower);
+                    rightFront.setPower(frontRightPower);
+                    rightRear.setPower(backRightPower);
                 }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
@@ -208,7 +244,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 position2 = .48;
                 position3 = .83;
                 position4 = .82;
-                desiredPos = 2953;
+                desiredPos = 2176;
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
                 slideOne.setPower(ARM_POWER);
@@ -216,10 +252,21 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    y = -gamepad2.left_stick_y;
+                    x = gamepad2.left_stick_x * 1.1;
+                    rx = gamepad2.right_stick_x;
+                    denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                    frontLeftPower = (y + x + rx) / denominator;
+                    backLeftPower = (y - x + rx) / denominator;
+                    frontRightPower = (y - x - rx) / denominator;
+                    backRightPower = (y + x - rx) / denominator;
+                    leftFront.setPower(frontLeftPower);
+                    leftRear.setPower(backLeftPower);
+                    rightFront.setPower(frontRightPower);
+                    rightRear.setPower(backRightPower);
                 }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
-
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
                 sleep(500);
@@ -256,11 +303,25 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    y = -gamepad2.left_stick_y;
+                    x = gamepad2.left_stick_x * 1.1;
+                    rx = gamepad2.right_stick_x;
+                    denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                    frontLeftPower = (y + x + rx) / denominator;
+                    backLeftPower = (y - x + rx) / denominator;
+                    frontRightPower = (y - x - rx) / denominator;
+                    backRightPower = (y + x - rx) / denominator;
+                    leftFront.setPower(frontLeftPower);
+                    leftRear.setPower(backLeftPower);
+                    rightFront.setPower(frontRightPower);
+                    rightRear.setPower(backRightPower);
                 }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 position4 = .6;
                 liftWrist.setPosition(position4);
+                position5 = .18;
+                armGrip.setPosition(position5);
             }
             // Display the current value
             telemetry.addData("spinOne Servo Position", "%5.2f", position1);

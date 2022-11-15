@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name = "Operator Controls")
 
-public class Operator_Controls extends LinearOpMode {
+public class Driver_and_Operator_Controls extends LinearOpMode {
 
     static final double SCALE       = 0.01;
     static final double MAX_POS     =  1.0;
@@ -25,6 +26,10 @@ public class Operator_Controls extends LinearOpMode {
     Servo  armGrip;
     DcMotor slideOne;
     DcMotor slideTwo;
+    DcMotor leftFront;
+    DcMotor leftRear;
+    DcMotor rightFront;
+    DcMotor rightRear;
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
@@ -35,9 +40,10 @@ public class Operator_Controls extends LinearOpMode {
     double  position5 = 0.0;
     int desiredPos = 0;
     public static final double ARM_POWER    =  1 ;
+    static final double INCREMENT = 0.01;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
 
         // Servo names in hardware map on Control or Expansion Hubs
         rearDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
@@ -49,8 +55,13 @@ public class Operator_Controls extends LinearOpMode {
         armRote = hardwareMap.get(Servo.class, "armRote");
         liftWrist = hardwareMap.get(Servo.class, "liftWrist");
         armGrip = hardwareMap.get(Servo.class, "armGrip");
+
         slideOne = hardwareMap.get(DcMotor.class, "slideOne");
         slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
+        DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
+        DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
+        DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
+        DcMotor rightRear = hardwareMap.dcMotor.get("rightRear");
 
         // Directions
         spinOne.setDirection(Servo.Direction.FORWARD);
@@ -62,15 +73,32 @@ public class Operator_Controls extends LinearOpMode {
         slideTwo.setDirection(DcMotor.Direction.FORWARD);
         slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         // Wait for the start button
         telemetry.addData(">", "Press Start to move Servos with left joystick and triggers." );
         telemetry.update();
 
         waitForStart();
+        if (isStopRequested()) return;
 
         while(opModeIsActive()){
+            double y = -gamepad2.left_stick_y;
+            double x = gamepad2.left_stick_x * 1.1;
+            double rx = gamepad2.right_stick_x;
 
+            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+            double frontLeftPower = (y + x + rx) / denominator;
+            double backLeftPower = (y - x + rx) / denominator;
+            double frontRightPower = (y - x - rx) / denominator;
+            double backRightPower = (y + x - rx) / denominator;
+
+            leftFront.setPower(frontLeftPower);
+            leftRear.setPower(backLeftPower);
+            rightFront.setPower(frontRightPower);
+            rightRear.setPower(backRightPower);
             if (gamepad1.left_stick_y != 0) {
                 position1 += gamepad1.left_stick_y * SCALE;
                 position2 += gamepad1.left_stick_y * SCALE;
@@ -87,14 +115,17 @@ public class Operator_Controls extends LinearOpMode {
                     position2 = MIN_POS;
                 }
             }
-            if ((gamepad1.right_stick_x != 0) && (gamepad1.right_stick_button==false)) { //armRotate
-                position3 += gamepad1.right_stick_x * SCALE;
-                if (position3 >= MAX_POS) {
-                    position3 = MAX_POS;
-                }
-                if (position3 <= MIN_POS) {
-                    position3 = MIN_POS;
-                }
+            if((gamepad1.right_stick_y < 0)&&(gamepad1.right_stick_button==false)&&(slideOne.getCurrentPosition()<4900)&&(slideTwo.getCurrentPosition()<4900)){ //slides up
+                slideOne.setPower(-gamepad1.right_stick_y);
+                slideTwo.setPower(-gamepad1.right_stick_y);
+            }
+            else if((gamepad1.right_stick_y > 0)&&(gamepad1.right_stick_button==false)&&(slideOne.getCurrentPosition()>10)&&(slideTwo.getCurrentPosition()>10)) {
+                slideOne.setPower(-gamepad1.right_stick_y);
+                slideTwo.setPower(-gamepad1.right_stick_y);
+            }
+            else {
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
             }
             if (gamepad1.left_bumper) {
                 position5 = .15;

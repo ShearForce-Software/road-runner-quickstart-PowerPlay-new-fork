@@ -77,6 +77,8 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Wait for the start button
         telemetry.addData(">", "Press Start to move Servos with left joystick and triggers." );
         telemetry.update();

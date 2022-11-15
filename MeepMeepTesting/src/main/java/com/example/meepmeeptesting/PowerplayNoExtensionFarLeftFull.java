@@ -5,10 +5,9 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class PowerPlay_no_extension_far_left {
+public class PowerplayNoExtensionFarLeftFull {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
-
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(70, 70, Math.toRadians(248), Math.toRadians(180), 13.5)

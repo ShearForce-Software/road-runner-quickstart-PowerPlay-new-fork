@@ -110,7 +110,7 @@ public class Operator_Controls extends LinearOpMode {
                 position5 = 0;
                 position1 = .80;
                 position2 = .80;
-                desiredPos = 1244;
+                desiredPos = 1400;
                 armGrip.setPosition(position5);
                 sleep(200);
                 slideOne.setTargetPosition(desiredPos);
@@ -187,7 +187,7 @@ public class Operator_Controls extends LinearOpMode {
                 position2 = .48;
                 position3 = .83;
                 position4 = .82;
-                desiredPos = 2176;
+                desiredPos = 2953;
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
                 slideOne.setPower(ARM_POWER);
@@ -201,7 +201,7 @@ public class Operator_Controls extends LinearOpMode {
 
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(1000);
+                sleep(500);
                 armRote.setPosition(position3);
                 liftWrist.setPosition(position4);
                 sleep(400);
@@ -219,13 +219,13 @@ public class Operator_Controls extends LinearOpMode {
                 desiredPos = 5;
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(3000);
+                sleep(500);
                 armGrip.setPosition(position5);
                 liftWrist.setPosition(position4);
                 armRote.setPosition(position3);
                 position1 = .95;
                 position2 = .95;
-                sleep(3000);
+                sleep(700);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
                 slideOne.setTargetPosition(desiredPos);

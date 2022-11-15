@@ -128,7 +128,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideTwo.setPower(0);
             }
             if (gamepad1.left_bumper) {
-                position5 = .15;
+                position5 = .18;
             }
             if (gamepad1.right_bumper) {
                 position5 = 0;

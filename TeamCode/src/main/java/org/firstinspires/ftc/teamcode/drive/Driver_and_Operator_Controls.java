@@ -157,7 +157,6 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
 
-
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
             }
@@ -278,6 +277,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
             }
+            //ground pos
             if (gamepad1.b){
                 position1 = .48;
                 position2 = .48;

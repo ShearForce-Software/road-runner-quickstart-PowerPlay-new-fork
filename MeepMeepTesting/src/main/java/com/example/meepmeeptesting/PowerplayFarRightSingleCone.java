@@ -15,6 +15,7 @@ public class PowerplayFarRightSingleCone {
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 60, Math.toRadians(-90)))
                                 .splineToSplineHeading(new Pose2d(-22, 35, Math.toRadians(-45)), Math.toRadians(0))
                                 .splineToLinearHeading(new Pose2d(-8, 32, Math.toRadians(-45)), Math.toRadians(-45))
+                                .turn(Math.toRadians(180))
                                 .build()
                 );
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

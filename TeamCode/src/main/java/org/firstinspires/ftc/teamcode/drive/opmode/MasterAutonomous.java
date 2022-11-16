@@ -43,6 +43,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.List;
 
@@ -69,18 +70,38 @@ public class MasterAutonomous extends LinearOpMode {
     public String label;
 
     @Override
-    public void runOpMode() {
-        initWebcam();
+    public void runOpMode() throws InterruptedException {
+        //initWebcam();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        while (!isStarted()) {
+        Pose2d startPose = new Pose2d(-36, 60, Math.toRadians(-90));
+        drive.setPoseEstimate(startPose);
+        //first try
+        TrajectorySequence autoSeq1 = drive.trajectorySequenceBuilder(startPose)
+                .forward(24)
+                .build();
+        waitForStart();
+        if(!isStopRequested()){
+            drive.followTrajectorySequence(autoSeq1);
+
+         /*while (!isStarted()) {
             tfodDetection();
         }
+        */
+        //second try
+        /*
         waitForStart();
+        if (isStopRequested()) return;
+            TrajectorySequence autoSeq2 = drive.trajectorySequenceBuilder(startPose)
+                    .forward(24)
+                    .build();
+            drive.followTrajectorySequence(autoSeq2);*/
+            //end second try
+        }
 
+        /*
         if (opModeIsActive()) {
             //INITIAL AUTO ROUTES
             //single preloaded Right
-            /*
             drive.followTrajectorySequence(
                     drive.trajectorySequenceBuilder(new Pose2d(-36, 62, Math.toRadians(-90)))
                             //.splineToSplineHeading(new Pose2d(-22, 35, Math.toRadians(-45)), Math.toRadians(0))
@@ -89,8 +110,7 @@ public class MasterAutonomous extends LinearOpMode {
                             .forward(24)
                             .build()
             );
-            */
-            /*
+
             Trajectory traj = drive.trajectoryBuilder(new Pose2d(-36,62, Math.toRadians(-90)))
                     /*.splineToSplineHeading(new Pose2d(-22, 35, Math.toRadians(-45)), Math.toRadians(0))
                     .splineToLinearHeading(new Pose2d(-8, 32, Math.toRadians(-45)), Math.toRadians(-45))
@@ -98,10 +118,10 @@ public class MasterAutonomous extends LinearOpMode {
                     .build();
 
             drive.followTrajectory(traj);
-            */
+
 
             //single preloaded Left
-                /*
+
                 drive.followTrajectorySequence(
                         drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-90)))
                                 .splineToSplineHeading(new Pose2d(22, 35, Math.toRadians(-135)), Math.toRadians(180))
@@ -109,9 +129,9 @@ public class MasterAutonomous extends LinearOpMode {
                                 //jacob servo and motor code added in using markers
                                 .build()
                 );
-                */
+
             //PARKING BASED OFF OF SIGNAL - Right Side
-            /*
+
             if (label.equals("Checkered1")){
                 //to first spot
                 drive.followTrajectorySequence(
@@ -138,8 +158,8 @@ public class MasterAutonomous extends LinearOpMode {
                                 .build()
                 );
             }
-             */
-        }
+
+        }*/
     }
     public void tfodDetection () {
         if (tfod != null) {

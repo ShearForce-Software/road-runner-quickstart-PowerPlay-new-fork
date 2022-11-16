@@ -30,6 +30,8 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -76,17 +78,29 @@ public class MasterAutonomous extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            while (opModeIsActive()) {
-                //INITIAL AUTO ROUTES
-                //single preloaded Right
-                drive.followTrajectorySequence(
-                        drive.trajectorySequenceBuilder(new Pose2d(-36, 36, Math.toRadians(-90)))
-                                .splineToSplineHeading(new Pose2d(-22, 35, Math.toRadians(-45)), Math.toRadians(0))
-                                .splineToLinearHeading(new Pose2d(-8, 32, Math.toRadians(-45)), Math.toRadians(-45))
-                                //jacob servo and motor code added in using markers
-                                .build()
-                );
-                //single preloaded Left
+            //INITIAL AUTO ROUTES
+            //single preloaded Right
+            /*
+            drive.followTrajectorySequence(
+                    drive.trajectorySequenceBuilder(new Pose2d(-36, 62, Math.toRadians(-90)))
+                            //.splineToSplineHeading(new Pose2d(-22, 35, Math.toRadians(-45)), Math.toRadians(0))
+                            //.splineToLinearHeading(new Pose2d(-8, 32, Math.toRadians(-45)), Math.toRadians(-45))
+                            //jacob servo and motor code added in using markers
+                            .forward(24)
+                            .build()
+            );
+            */
+            /*
+            Trajectory traj = drive.trajectoryBuilder(new Pose2d(-36,62, Math.toRadians(-90)))
+                    /*.splineToSplineHeading(new Pose2d(-22, 35, Math.toRadians(-45)), Math.toRadians(0))
+                    .splineToLinearHeading(new Pose2d(-8, 32, Math.toRadians(-45)), Math.toRadians(-45))
+                    .forward(24)
+                    .build();
+
+            drive.followTrajectory(traj);
+            */
+
+            //single preloaded Left
                 /*
                 drive.followTrajectorySequence(
                         drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-90)))
@@ -96,34 +110,35 @@ public class MasterAutonomous extends LinearOpMode {
                                 .build()
                 );
                 */
-                //PARKING BASED OFF OF SIGNAL - Right Side
-                if (label.equals("Checkered1")){
-                    //to first spot
-                    drive.followTrajectorySequence(
-                            drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-45)))
-                                    .lineToLinearHeading(new Pose2d(-12, 36, Math.toRadians(90)))
-                                    .build()
-                    );
-                }
-                else if(label.equals("Logo3")) {
-                    //to third spot
-                    drive.followTrajectorySequence(
-                            drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-45)))
-                                    .splineToSplineHeading(new Pose2d(-24, 36, Math.toRadians(0)), Math.toRadians(180))
-                                    .lineToLinearHeading(new Pose2d(-60, 36, Math.toRadians(0)))
-                                    .build()
-                    );
-                }
-                else{
-                    //to second spot
-                    drive.followTrajectorySequence(
-                            drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-45)))
-                                    .setReversed(true)
-                                    .lineToLinearHeading(new Pose2d(-36, 36, Math.toRadians(0)))
-                                    .build()
-                    );
-                }
+            //PARKING BASED OFF OF SIGNAL - Right Side
+            /*
+            if (label.equals("Checkered1")){
+                //to first spot
+                drive.followTrajectorySequence(
+                        drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-45)))
+                                .lineToLinearHeading(new Pose2d(-12, 36, Math.toRadians(90)))
+                                .build()
+                );
             }
+            else if(label.equals("Logo3")) {
+                //to third spot
+                drive.followTrajectorySequence(
+                        drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-45)))
+                                .splineToSplineHeading(new Pose2d(-24, 36, Math.toRadians(0)), Math.toRadians(180))
+                                .lineToLinearHeading(new Pose2d(-60, 36, Math.toRadians(0)))
+                                .build()
+                );
+            }
+            else{
+                //to second spot
+                drive.followTrajectorySequence(
+                        drive.trajectorySequenceBuilder(new Pose2d(36, 36, Math.toRadians(-45)))
+                                .setReversed(true)
+                                .lineToLinearHeading(new Pose2d(-36, 36, Math.toRadians(0)))
+                                .build()
+                );
+            }
+             */
         }
     }
     public void tfodDetection () {

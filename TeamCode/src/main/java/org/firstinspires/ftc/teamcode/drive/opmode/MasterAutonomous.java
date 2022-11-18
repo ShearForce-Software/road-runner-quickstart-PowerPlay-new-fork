@@ -47,7 +47,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.List;
 
-
+@Disabled
 @TeleOp(name="Master Autonomous")
 //@Disabled
 public class MasterAutonomous extends LinearOpMode {

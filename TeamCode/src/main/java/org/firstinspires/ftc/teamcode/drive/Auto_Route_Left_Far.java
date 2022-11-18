@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.drive.CustomModelWebcam;
@@ -10,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /*
  * This is an example of a more complex path to really test the tuning.
  */
+@Disabled
 @TeleOp(name = "Auto Route Left Far")
 public class Auto_Route_Left_Far extends LinearOpMode {
     private CustomModelWebcam customModelWebcam = new CustomModelWebcam();

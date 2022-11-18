@@ -2,17 +2,16 @@ package org.firstinspires.ftc.teamcode.drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "MAIN_DRIVER_CONTROL_PROGRAM")
+@TeleOp(name = "ALEX_AND_MADDIE_REVERSE_DRIVING")
 
-public class Driver_and_Operator_Controls extends LinearOpMode {
+public class REVERSE_DRIVING_ALEX_AND_MADDIE extends LinearOpMode {
 
     static final double SCALE       = 0.01;
     static final double MAX_POS     =  1.0;
@@ -87,9 +86,9 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
         if (isStopRequested()) return;
 
         while(opModeIsActive()){
-            double y = -gamepad2.left_stick_y;
-            double x = gamepad2.left_stick_x * 1.1;
-            double rx = gamepad2.right_stick_x;
+            double y = gamepad2.left_stick_y;
+            double x = -gamepad2.left_stick_x * 1.1;
+            double rx = -gamepad2.right_stick_x;
 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double frontLeftPower = (y + x + rx) / denominator;

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,26 +8,26 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
+@Disabled
 @TeleOp(name = "Operator_Controls")
-
-class RunnableDemo implements Runnable {
-    private Thread t;
-    private String threadName;
-
-    RunnableDemo(String name){
-        threadName = name;
-    }
-    public void run(){
-        // code here?
-    }
-    public void start(){
-        if(t == null){
-            t = new Thread(this, threadName);
-            t.start();
-        }
-    }
-}
+//
+//class RunnableDemo implements Runnable {
+//    private Thread t;
+//    private String threadName;
+//
+//    RunnableDemo(String name){
+//        threadName = name;
+//    }
+//    public void run(){
+//        // code here?
+//    }
+//    public void start(){
+//        if(t == null){
+//            t = new Thread(this, threadName);
+//            t.start();
+//        }
+//    }
+//}
 
 public class Operator_Controls extends LinearOpMode {
 

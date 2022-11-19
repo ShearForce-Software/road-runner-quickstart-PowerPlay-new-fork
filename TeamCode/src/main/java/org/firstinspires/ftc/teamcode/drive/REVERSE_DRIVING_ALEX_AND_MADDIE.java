@@ -88,7 +88,7 @@ public class REVERSE_DRIVING_ALEX_AND_MADDIE extends LinearOpMode {
         while(opModeIsActive()){
             double y = gamepad2.left_stick_y;
             double x = -gamepad2.left_stick_x * 1.1;
-            double rx = -gamepad2.right_stick_x;
+            double rx = gamepad2.right_stick_x;
 
             double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
             double frontLeftPower = (y + x + rx) / denominator;

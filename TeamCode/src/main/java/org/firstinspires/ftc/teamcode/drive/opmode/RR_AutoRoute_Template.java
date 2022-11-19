@@ -56,8 +56,8 @@ public class RR_AutoRoute_Template extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "model_20221103_190954.tflite";
     private static final String[] LABELS = {
             "Checkered1",
-            "Squig2",
-            "Logo3"
+            "Logo3",
+            "Squig2"
     };
     private static final String VUFORIA_KEY =
             "AYjyN7v/////AAABmZkzDnVgYED5uG0oVjDFNPU/IVXNIkVpEj5VY0d385xq3MN8tk1R/zBRduVWZPRSZBzSAyuJoJpgI79HeoJoMFQd/p0ZcytKFDckit+NkdDBJaBa1RXvpH8JufADNrmBkF8WhyUkFrROxOoCRsq1/TFrGaxicoJahSo6XUIk0YTfvIp5vJjzFWruq+IiAoWzChKdEA3GIEZE9Fufr2omudFjgF/k5JkIzQU01ou6Nrj59p0sndgCl+tIFKsDY/+WW28UpdFRz4lyR3apWeS+rtflqR52ofXjCF7sh08J7ZQ4Cqblwq2dOb0r/MoabLLxdSJdW15MH12ZDNNTxWttAkwgRxLdiiK44ogzcDByFAtb";
@@ -118,7 +118,7 @@ public class RR_AutoRoute_Template extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.minResultConfidence = 0.65f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
@@ -128,7 +128,6 @@ public class RR_AutoRoute_Template extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        initWebcam();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         spinOne = hardwareMap.get(Servo.class, "spinOne");
@@ -158,8 +157,7 @@ public class RR_AutoRoute_Template extends LinearOpMode {
         armRote.setPosition(position3);
         liftWrist.setPosition(position4);
 
-        idle();
-
+        initWebcam();
         while (!isStarted()) {
             tfodDetection();
         }
@@ -172,7 +170,7 @@ public class RR_AutoRoute_Template extends LinearOpMode {
             if (label == "Checkered1"){
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(36)
+                        .forward(26)
                         .strafeLeft(24)
                         .build();
                 drive.followTrajectorySequence(Park1);
@@ -180,7 +178,7 @@ public class RR_AutoRoute_Template extends LinearOpMode {
             else if(label == "Logo3") {
                 //to third spot
                 TrajectorySequence Park3 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(36)
+                        .forward(26)
                         .strafeRight(24)
                         .build();
                 drive.followTrajectorySequence(Park3);

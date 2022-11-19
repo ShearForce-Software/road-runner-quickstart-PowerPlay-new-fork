@@ -10,13 +10,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+import java.util.concurrent.TimeUnit;
+
 @TeleOp(name = "MAIN_DRIVER_CONTROL_PROGRAM")
 
 public class Driver_and_Operator_Controls extends LinearOpMode {
-
-    static final double SCALE       = 0.01;
-    static final double MAX_POS     =  1.0;
-    static final double MIN_POS     =  0.0;
 
     // Define class members
     Servo  spinOne;
@@ -33,6 +31,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
+
     double  position1 = 0.95;
     double  position2 = 0.95;
     double  position3 = 0.13;
@@ -45,78 +44,15 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        // Servo names in hardware map on Control or Expansion Hubs
-        rearDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
-        clawDistance = hardwareMap.get(DistanceSensor.class, "clawDistance");
-        frontDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
-
-        spinOne = hardwareMap.get(Servo.class, "spinOne");
-        spinTwo = hardwareMap.get(Servo.class, "spinTwo");
-        armRote = hardwareMap.get(Servo.class, "armRote");
-        liftWrist = hardwareMap.get(Servo.class, "liftWrist");
-        armGrip = hardwareMap.get(Servo.class, "armGrip");
-
-        slideOne = hardwareMap.get(DcMotor.class, "slideOne");
-        slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
-        DcMotor leftFront = hardwareMap.dcMotor.get("leftFront");
-        DcMotor leftRear = hardwareMap.dcMotor.get("leftRear");
-        DcMotor rightFront = hardwareMap.dcMotor.get("rightFront");
-        DcMotor rightRear = hardwareMap.dcMotor.get("rightRear");
-
-        // Directions
-        spinOne.setDirection(Servo.Direction.FORWARD);
-        spinTwo.setDirection(Servo.Direction.REVERSE);
-        armRote.setDirection(Servo.Direction.FORWARD);
-        liftWrist.setDirection(Servo.Direction.FORWARD);
-        armGrip.setDirection(Servo.Direction.FORWARD);
-        slideOne.setDirection(DcMotor.Direction.FORWARD);
-        slideTwo.setDirection(DcMotor.Direction.FORWARD);
-        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
-        slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // Wait for the start button
-        telemetry.addData(">", "Press Start to move Servos with left joystick and triggers." );
-        telemetry.update();
+        hardwareMap();
+        motorInit();
 
         waitForStart();
         if (isStopRequested()) return;
 
         while(opModeIsActive()){
-            double y = -gamepad2.left_stick_y;
-            double x = gamepad2.left_stick_x * 1.1;
-            double rx = gamepad2.right_stick_x;
+            driveControls(leftFront, leftRear, rightFront, rightRear);
 
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
-
-            leftFront.setPower(frontLeftPower);
-            leftRear.setPower(backLeftPower);
-            rightFront.setPower(frontRightPower);
-            rightRear.setPower(backRightPower);
-//            if (gamepad1.left_stick_y != 0) {
-//                position1 += gamepad1.left_stick_y * SCALE;
-//                position2 += gamepad1.left_stick_y * SCALE;
-//                if (position1 >= MAX_POS) {
-//                    position1 = MAX_POS;
-//                }
-//                if (position1 <= MIN_POS) {
-//                    position1 = MIN_POS;
-//                }
-//                if (position2 >= MAX_POS) {
-//                    position2 = MAX_POS;
-//                }
-//                if (position2 <= MIN_POS) {
-//                    position2 = MIN_POS;
-//                }
-//            }
             if (gamepad1.left_bumper) {
                 position5 = .18;
             }
@@ -129,135 +65,125 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
 
             //AutoGrab
             if ((((rangeClaw < 2.75) && (position5 == .18)) && (slideOne.getCurrentPosition() <= 100) && (slideTwo.getCurrentPosition() <= 100))) {
-                x = 0;
-                y = 0;
-                rx = 0;
                 position5 = 0;
                 position1 = .80;
                 position2 = .80;
                 desiredPos = 1400;
                 armGrip.setPosition(position5);
-                sleep(200);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(200); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 slideOne.setTargetPosition(desiredPos);
                 slideTwo.setTargetPosition(desiredPos);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                y = -gamepad2.left_stick_y;
-                x = gamepad2.left_stick_x * 1.1;
-                rx = gamepad2.right_stick_x;
             }
             //High
             if (gamepad1.y){
-                y = 0;
-                x = 0;
-                rx = 0;
                 position5 = 0;
                 position1 = .11;
                 position2 = .11;
                 position3 = .83;
                 position4 = .13;
-                desiredPos = 1900;
                 armGrip.setPosition(position5);
-                slideOne.setTargetPosition(desiredPos);
-                slideTwo.setTargetPosition(desiredPos);
+                slideOne.setTargetPosition(1738);
+                slideTwo.setTargetPosition(1738);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(1000);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(1000); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 armRote.setPosition(position3);
                 liftWrist.setPosition(position4);
-                y = -gamepad2.left_stick_y;
-                x = gamepad2.left_stick_x * 1.1;
-                rx = gamepad2.right_stick_x;
             }
             //Medium
             if (gamepad1.x){
-                x = 0;
-                y = 0;
-                rx = 0;
                 position5 = 0;
                 position1 = .48;
                 position2 = .48;
                 position3 = .83;
                 position4 = .86;
-                desiredPos = 3777;
                 armGrip.setPosition(position5);
-                slideOne.setTargetPosition(desiredPos);
-                slideTwo.setTargetPosition(desiredPos);
+                slideOne.setTargetPosition(3681);
+                slideTwo.setTargetPosition(3681);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(300);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(300); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 armRote.setPosition(position3);
                 liftWrist.setPosition(position4);
-                sleep(400);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(400); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 position1 = .83;
                 position2 = .83;
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                y = -gamepad2.left_stick_y;
-                x = gamepad2.left_stick_x * 1.1;
-                rx = gamepad2.right_stick_x;
             }
             //Low
             if (gamepad1.a){
-                x = 0;
-                y = 0;
-                rx = 0;
                 position5 = 0;
                 position1 = .48;
                 position2 = .48;
                 position3 = .83;
                 position4 = .82;
-                desiredPos = 2176;
                 armGrip.setPosition(position5);
-                slideOne.setTargetPosition(desiredPos);
-                slideTwo.setTargetPosition(desiredPos);
+                slideOne.setTargetPosition(2090);
+                slideTwo.setTargetPosition(2090);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(500);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(500); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 armRote.setPosition(position3);
                 liftWrist.setPosition(position4);
-                sleep(400);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(400); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 position1 = .83;
                 position2 = .83;
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                y = -gamepad2.left_stick_y;
-                x = gamepad2.left_stick_x * 1.1;
-                rx = gamepad2.right_stick_x;
             }
             //ground pos
             if (gamepad1.b){
-                x = 0;
-                y = 0;
-                rx = 0;
                 position5 = 0;
                 position1 = .48;
                 position2 = .48;
@@ -268,13 +194,17 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 armGrip.setPosition(position5);
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                sleep(500);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(500); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 armGrip.setPosition(position5);
                 liftWrist.setPosition(position4);
                 armRote.setPosition(position3);
                 position1 = .95;
                 position2 = .95;
-                sleep(700);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(700); stop>System.nanoTime();) {
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
                 slideOne.setTargetPosition(desiredPos);
@@ -283,16 +213,15 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
                 slideTwo.setPower(ARM_POWER);
                 slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                }
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 position4 = .6;
                 liftWrist.setPosition(position4);
                 position5 = .18;
                 armGrip.setPosition(position5);
-                y = -gamepad2.left_stick_y;
-                x = gamepad2.left_stick_x * 1.1;
-                rx = gamepad2.right_stick_x;
             }
 
             // Display the current value
@@ -314,5 +243,64 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
             armGrip.setPosition(position5);
             idle();
         }
+    }
+
+    private void motorInit() {
+        // Directions
+        spinOne.setDirection(Servo.Direction.FORWARD);
+        spinTwo.setDirection(Servo.Direction.REVERSE);
+        armRote.setDirection(Servo.Direction.FORWARD);
+        liftWrist.setDirection(Servo.Direction.FORWARD);
+        armGrip.setDirection(Servo.Direction.FORWARD);
+        slideOne.setDirection(DcMotor.Direction.FORWARD);
+        slideTwo.setDirection(DcMotor.Direction.FORWARD);
+        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Wait for the start button
+        telemetry.addData(">", "Press Start to move Servos with gamepad1." );
+        telemetry.update();
+    }
+
+    private void hardwareMap() {
+        // Servo names in hardware map on Control or Expansion Hubs
+        rearDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
+        clawDistance = hardwareMap.get(DistanceSensor.class, "clawDistance");
+        frontDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
+
+        spinOne = hardwareMap.get(Servo.class, "spinOne");
+        spinTwo = hardwareMap.get(Servo.class, "spinTwo");
+        armRote = hardwareMap.get(Servo.class, "armRote");
+        liftWrist = hardwareMap.get(Servo.class, "liftWrist");
+        armGrip = hardwareMap.get(Servo.class, "armGrip");
+
+        slideOne = hardwareMap.get(DcMotor.class, "slideOne");
+        slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
+        leftFront = hardwareMap.dcMotor.get("leftFront");
+        leftRear = hardwareMap.dcMotor.get("leftRear");
+        rightFront = hardwareMap.dcMotor.get("rightFront");
+        rightRear = hardwareMap.dcMotor.get("rightRear");
+    }
+
+    private void driveControls(DcMotor leftFront, DcMotor leftRear, DcMotor rightFront, DcMotor rightRear) {
+        double y = gamepad2.left_stick_y;
+        double x = -gamepad2.left_stick_x * 1.1;
+        double rx = gamepad2.right_stick_x;
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower);
+        leftRear.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightRear.setPower(backRightPower);
     }
 }

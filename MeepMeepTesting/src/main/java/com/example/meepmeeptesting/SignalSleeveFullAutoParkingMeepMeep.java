@@ -19,7 +19,7 @@ public class SignalSleeveFullAutoParkingMeepMeep {
     }
 
     public static RoadRunnerBotEntity ParkRobot(MeepMeep meepMeep) {
-        String label = "awer";
+        String label = "chesdfgck";
         RoadRunnerBotEntity myBot;
 
         if (label.equals("check")) {
@@ -27,8 +27,8 @@ public class SignalSleeveFullAutoParkingMeepMeep {
                     // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                     .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                     .followTrajectorySequence(drive ->
-                            drive.trajectorySequenceBuilder(new Pose2d(-8, 16, 45))
-                                    .lineToLinearHeading(new Pose2d(-12, 12, Math.toRadians(0)))
+                            drive.trajectorySequenceBuilder(new Pose2d(-8, 20, Math.toRadians(205)))
+                                    .lineToLinearHeading(new Pose2d(-12, 12, Math.toRadians(180)))
                                     .build()
                     );
         } else if (label.equals("logo")){
@@ -36,8 +36,8 @@ public class SignalSleeveFullAutoParkingMeepMeep {
                     // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                     .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                     .followTrajectorySequence(drive ->
-                            drive.trajectorySequenceBuilder(new Pose2d(-8, 16, 45))
-                                    .lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(0)))
+                            drive.trajectorySequenceBuilder(new Pose2d(-8, 20, Math.toRadians(205)))
+                                    .splineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(180)), Math.toRadians(180))
                                     .build()
                     );
         } else {
@@ -45,8 +45,8 @@ public class SignalSleeveFullAutoParkingMeepMeep {
                     // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                     .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                     .followTrajectorySequence(drive ->
-                            drive.trajectorySequenceBuilder(new Pose2d(-8, 16, 45))
-                                    .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(0)))
+                            drive.trajectorySequenceBuilder(new Pose2d(-8, 20, Math.toRadians(205)))
+                                    .splineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(180)), Math.toRadians(180))
                                     .build()
                     );
         }

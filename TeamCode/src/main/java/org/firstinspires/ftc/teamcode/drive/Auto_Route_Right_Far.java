@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /*
  * This is an example of a more complex path to really test the tuning.
  */
+@Disabled
 @TeleOp(name = "Auto Route Right Far")
 public class Auto_Route_Right_Far extends LinearOpMode {
     @Override

@@ -5,7 +5,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class SignalSleeveParking1MeepMeep {
+public class SignalSleeveSingleAutoParkingMeepMeep {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 
@@ -19,25 +19,31 @@ public class SignalSleeveParking1MeepMeep {
     }
 
     public static RoadRunnerBotEntity ParkRobot(MeepMeep meepMeep) {
-        String label = "Logoadsf3";
+        String label = "check";
         RoadRunnerBotEntity myBot;
-
-        if (label.equals("Checkered1")) {
+        //This is all set up for far right
+        if (label.equals("check")) {
             myBot = new DefaultBotBuilder(meepMeep)
                     // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                     .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                     .followTrajectorySequence(drive ->
-                            drive.trajectorySequenceBuilder(new Pose2d(-8, 16, 45))
-                                    .lineToLinearHeading(new Pose2d(-12, 12, Math.toRadians(0)))
+                            drive.trajectorySequenceBuilder(new Pose2d(-8, 32, Math.toRadians(-45))) //set up for far right, use -135 for left
+                                    .lineToLinearHeading(new Pose2d(-12, 36, Math.toRadians(90))) //far right
+                                    //.lineToLinearHeading(new Pose2d(12, 36, Math.toRadians(90))) //far left
                                     .build()
                     );
-        } else if (label.equals("Logo3")){
+        } else if (label.equals("logo")){
             myBot = new DefaultBotBuilder(meepMeep)
                     // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                     .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                     .followTrajectorySequence(drive ->
-                            drive.trajectorySequenceBuilder(new Pose2d(-8, 16, 45))
-                                    .lineToLinearHeading(new Pose2d(-36, 12, Math.toRadians(0)))
+                            drive.trajectorySequenceBuilder(new Pose2d(-8, 32, Math.toRadians(-45))) //set up for far right, use -135 for left
+                                    //far right
+                                    .setReversed(true)
+                                    .splineToSplineHeading(new Pose2d(-24, 36, Math.toRadians(0)), Math.toRadians(180))
+                                    .lineToLinearHeading(new Pose2d(-60, 36, Math.toRadians(0)))
+                                    //far left
+
                                     .build()
                     );
         } else {
@@ -45,8 +51,11 @@ public class SignalSleeveParking1MeepMeep {
                     // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                     .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                     .followTrajectorySequence(drive ->
-                            drive.trajectorySequenceBuilder(new Pose2d(-8, 16, 45))
-                                    .lineToLinearHeading(new Pose2d(-60, 12, Math.toRadians(0)))
+                            drive.trajectorySequenceBuilder(new Pose2d(-8, 32, -45)) //set up for far right, use -135 for left
+                                    //far right
+                                    .setReversed(true)
+                                    .lineToLinearHeading(new Pose2d(-36, 36, Math.toRadians(0)))
+                                    //far left
                                     .build()
                     );
         }

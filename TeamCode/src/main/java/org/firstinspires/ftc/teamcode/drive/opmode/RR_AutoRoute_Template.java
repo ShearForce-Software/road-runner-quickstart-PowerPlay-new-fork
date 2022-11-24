@@ -12,13 +12,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.drive.CustomModelWebcam;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.util.AprilTagDetectionPipeline;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -36,6 +38,25 @@ import java.util.List;
 @Config
 @Autonomous(name = "AutoRoute")
 public class RR_AutoRoute_Template extends LinearOpMode {
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+
+    static final double FEET_PER_METER = 3.28084;
+
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+
+    AprilTagDetection tagOfInterest = null;
+
     Servo spinOne;
     Servo  spinTwo;
     Servo  armRote;
@@ -52,82 +73,120 @@ public class RR_AutoRoute_Template extends LinearOpMode {
     double  position4 = 0.6;
     double  position5 = 0.0;
     private ElapsedTime runtime = new ElapsedTime();
-    private CustomModelWebcam customModelWebcam = new CustomModelWebcam();
-    private static final String TFOD_MODEL_ASSET = "model_20221103_190954.tflite";
-    private static final String[] LABELS = {
-            "Checkered1",
-            "Logo3",
-            "Squig2"
-    };
-    private static final String VUFORIA_KEY =
-            "AYjyN7v/////AAABmZkzDnVgYED5uG0oVjDFNPU/IVXNIkVpEj5VY0d385xq3MN8tk1R/zBRduVWZPRSZBzSAyuJoJpgI79HeoJoMFQd/p0ZcytKFDckit+NkdDBJaBa1RXvpH8JufADNrmBkF8WhyUkFrROxOoCRsq1/TFrGaxicoJahSo6XUIk0YTfvIp5vJjzFWruq+IiAoWzChKdEA3GIEZE9Fufr2omudFjgF/k5JkIzQU01ou6Nrj59p0sndgCl+tIFKsDY/+WW28UpdFRz4lyR3apWeS+rtflqR52ofXjCF7sh08J7ZQ4Cqblwq2dOb0r/MoabLLxdSJdW15MH12ZDNNTxWttAkwgRxLdiiK44ogzcDByFAtb";
-    private VuforiaLocalizer vuforia;
-    private TFObjectDetector tfod;
-    public String label;
-
-    public void initWebcam() {
-        initVuforia();
-        initTfod();
-        if (tfod != null) {
-            tfod.activate();
-            tfod.setZoom(1.0, 16.0 / 9.0);
-        }
-        /* Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-    }
-
-    public void tfodDetection() {
-        if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null) {
-                telemetry.addData("# Objects Detected", updatedRecognitions.size());
-
-                // step through the list of recognitions and display image position/size information for each one
-                // Note: "Image number" refers to the randomized image orientation/number
-                for (Recognition recognition : updatedRecognitions) {
-                    double col = (recognition.getLeft() + recognition.getRight()) / 2;
-                    double row = (recognition.getTop() + recognition.getBottom()) / 2;
-                    double width = Math.abs(recognition.getRight() - recognition.getLeft());
-                    double height = Math.abs(recognition.getTop() - recognition.getBottom());
-
-                    telemetry.addData("", " ");
-                    label = recognition.getLabel();
-                    telemetry.addData("Image", "%s (%.0f %% Conf.)", label, recognition.getConfidence() * 100);
-                    telemetry.addData("- Position (Row/Col)", "%.0f / %.0f", row, col);
-                    telemetry.addData("- Size (Width/Height)", "%.0f / %.0f", width, height);
-                }
-                telemetry.update();
-            }
-        }
-    }
-
-    private void initVuforia() {
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-    }
-
-    private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.65f;
-        tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 300;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-    }
 
     @Override
     public void runOpMode() throws InterruptedException {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
+        telemetry.setMsTransmissionInterval(50);
+        while (!isStarted() && !isStopRequested())
+        {
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+            if(currentDetections.size() != 0)
+            {
+                boolean tagFound = false;
+
+                for(AprilTagDetection tag : currentDetections)
+                {
+                    if(tag.id == 11 || tag.id == 14 || tag.id == 19)
+                    {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
+                }
+
+                if(tagFound)
+                {
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    tagToTelemetry(tagOfInterest);
+                }
+                else
+                {
+                    telemetry.addLine("Don't see tag of interest :(");
+
+                    if(tagOfInterest == null)
+                    {
+                        telemetry.addLine("(The tag has never been seen)");
+                    }
+                    else
+                    {
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        tagToTelemetry(tagOfInterest);
+                    }
+                }
+
+            }
+            else
+            {
+                telemetry.addLine("Don't see tag of interest :(");
+
+                if(tagOfInterest == null)
+                {
+                    telemetry.addLine("(The tag has never been seen)");
+                }
+                else
+                {
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    tagToTelemetry(tagOfInterest);
+                }
+
+            }
+
+            telemetry.update();
+            sleep(20);
+        }
+
+        /*
+         * The START command just came in: now work off the latest snapshot acquired
+         * during the init loop.
+         */
+
+        /* Update the telemetry */
+        if(tagOfInterest != null)
+        {
+            telemetry.addLine("Tag snapshot:\n");
+            tagToTelemetry(tagOfInterest);
+            telemetry.update();
+        }
+        else
+        {
+            telemetry.addLine("No tag snapshot available, it was never sighted during the init loop :(");
+            telemetry.update();
+        }
+
+        /* Actually do something useful */
+        if(tagOfInterest == null){
+            /*
+             * Insert your autonomous code here, presumably running some default configuration
+             * since the tag was never sighted during INIT
+             */
+        }
+        else{
+            /*
+             * Insert your autonomous code here, probably using the tag pose to decide your configuration.
+             */
+
+            // e.g.
+        }
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         spinOne = hardwareMap.get(Servo.class, "spinOne");
@@ -157,17 +216,13 @@ public class RR_AutoRoute_Template extends LinearOpMode {
         armRote.setPosition(position3);
         liftWrist.setPosition(position4);
 
-        initWebcam();
-        while (!isStarted()) {
-            tfodDetection();
-        }
         // Starting position of robot on field
         Pose2d startPose = new Pose2d(-36, 60, Math.toRadians(-90));
         drive.setPoseEstimate(startPose);
         waitForStart();
         if (isStopRequested()) return;
         if (opModeIsActive()) {
-            if (label == "Checkered1"){
+            if (tagOfInterest.id==11){
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(startPose)
                         .forward(26)
@@ -175,7 +230,14 @@ public class RR_AutoRoute_Template extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequence(Park1);
             }
-            else if(label == "Logo3") {
+            else if (tagOfInterest.id==14){
+                //to second spot
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(startPose)
+                        .forward(36)
+                        .build();
+                drive.followTrajectorySequence(Park2);
+            }
+            else if(tagOfInterest.id==19) {
                 //to third spot
                 TrajectorySequence Park3 = drive.trajectorySequenceBuilder(startPose)
                         .forward(26)
@@ -184,12 +246,15 @@ public class RR_AutoRoute_Template extends LinearOpMode {
                 drive.followTrajectorySequence(Park3);
             }
             else{
-                //to second spot
+                //if it don't read
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(36)
+                        .forward(26)
                         .build();
                 drive.followTrajectorySequence(Park2);
             }
         }
+    }
+    void tagToTelemetry(AprilTagDetection detection){
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
     }
 }

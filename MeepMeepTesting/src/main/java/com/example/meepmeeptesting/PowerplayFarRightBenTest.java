@@ -11,10 +11,15 @@ public class PowerplayFarRightBenTest {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 //--->hopefully this is more optimized for points<---
-                .setConstraints(68, 68, Math.toRadians(248), Math.toRadians(180), 13.5)
+                .setConstraints(60, 68, Math.toRadians(248), Math.toRadians(180), 13.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-36, 60, Math.toRadians(-90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, -60, Math.toRadians(90)))
                                 //preloaded cone - low 1: 6pts
+                                .forward(12)
+                                .turn(Math.toRadians(180))
+                                .setReversed(true)
+                                .splineToSplineHeading(new Pose2d(-30, -6, Math.toRadians(-135)), Math.toRadians(45))
+                                /*
                                 .splineToSplineHeading(new Pose2d(-32, 52, Math.toRadians(155)), Math.toRadians(0))
                                 .waitSeconds(.75)
                                 .strafeLeft(12)
@@ -53,6 +58,7 @@ public class PowerplayFarRightBenTest {
                                 .setReversed(true)
                                 .splineToSplineHeading(new Pose2d(-8, 20, Math.toRadians(205)), Math.toRadians(25))
                                 .setReversed(false)
+                                */
                                 .build()
                         //max total pts: 40. This assumes each junction remains in our control
                         //minimum points: 25. This assumes each junction is in enemy control

@@ -19,7 +19,7 @@ public class SignalSleeveFullAutoParkingMeepMeep {
     }
 
     public static RoadRunnerBotEntity ParkRobot(MeepMeep meepMeep) {
-        String label = "chesdfgck";
+        String label = "hj";
         RoadRunnerBotEntity myBot;
 
         if (label.equals("check")) {

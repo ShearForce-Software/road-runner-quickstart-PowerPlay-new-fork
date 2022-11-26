@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-//import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -21,7 +20,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Op mode to experiment with Road Runner Autonomous Routes.
@@ -36,8 +35,8 @@ import java.util.List;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoRoute")
-public class RR_AutoRoute_Template extends LinearOpMode {
+@Autonomous(name = "AutoRouteTest")
+public class markerTest extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -76,6 +75,124 @@ public class RR_AutoRoute_Template extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        AprilTags();
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
+        InitServosMotors();
+
+        // Starting position of robot on field
+        Pose2d startPose = new Pose2d(-36, -60, Math.toRadians(90));
+        drive.setPoseEstimate(startPose);
+        waitForStart();
+        if (isStopRequested()) return;
+        if (opModeIsActive()) {
+            if (tagOfInterest.id==11){
+                //to first spot
+                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(startPose)
+                        .forward(26)
+                        .strafeLeft(24)
+                        .build();
+                drive.followTrajectorySequence(Park1);
+            }
+            else if (tagOfInterest.id==14){
+                //to second spot
+                TrajectorySequence Start2 = drive.trajectorySequenceBuilder(startPose)
+                        .forward(12)
+                        .turn(Math.toRadians(180))
+                        .build();
+                drive.followTrajectorySequence(Start2);
+                while(drive.isBusy()){}
+                position5 = 0;
+                position1 = .80;
+                position2 = .80;
+                armGrip.setPosition(position5);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(200); stop>System.nanoTime();) {}
+                slideOne.setTargetPosition(1400);
+                slideTwo.setTargetPosition(1400);
+                slideOne.setPower(1);
+                slideTwo.setPower(1);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+                spinOne.setPosition(position1);
+                spinTwo.setPosition(position2);
+                position5 = 0;
+                position1 = .11;
+                position2 = .11;
+                position3 = .83;
+                position4 = .13;
+                armGrip.setPosition(position5);
+                slideOne.setTargetPosition(1738);
+                slideTwo.setTargetPosition(1738);
+                slideOne.setPower(1);
+                slideTwo.setPower(1);
+                slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+                spinOne.setPosition(position1);
+                spinTwo.setPosition(position2);
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(1000); stop>System.nanoTime();) {}
+                armRote.setPosition(position3);
+                liftWrist.setPosition(position4);
+                startPose = new Pose2d(-36,-48, Math.toRadians(-90));
+                TrajectorySequence Spin2 = drive.trajectorySequenceBuilder(startPose)
+                        .setReversed(true)
+                        .splineToSplineHeading(new Pose2d(-30, -6, Math.toRadians(-135)), Math.toRadians(45))
+                        .build();
+                drive.followTrajectorySequence(Spin2);
+            }
+            else if(tagOfInterest.id==19) {
+                //to third spot
+                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(startPose)
+                        .forward(26)
+                        .strafeRight(24)
+                        .build();
+                drive.followTrajectorySequence(Park3);
+            }
+            else{
+                //if it don't read
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(startPose)
+                        .forward(26)
+                        .build();
+                drive.followTrajectorySequence(Park2);
+            }
+        }
+    }
+
+    private void InitServosMotors() {
+        spinOne = hardwareMap.get(Servo.class, "spinOne");
+        spinTwo = hardwareMap.get(Servo.class, "spinTwo");
+        armRote = hardwareMap.get(Servo.class, "armRote");
+        liftWrist = hardwareMap.get(Servo.class, "liftWrist");
+        armGrip = hardwareMap.get(Servo.class, "armGrip");
+        slideOne = hardwareMap.get(DcMotor.class, "slideOne");
+        slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
+
+        spinOne.setDirection(Servo.Direction.FORWARD);
+        spinTwo.setDirection(Servo.Direction.REVERSE);
+        armRote.setDirection(Servo.Direction.FORWARD);
+        liftWrist.setDirection(Servo.Direction.FORWARD);
+        armGrip.setDirection(Servo.Direction.FORWARD);
+        slideOne.setDirection(DcMotor.Direction.FORWARD);
+        slideTwo.setDirection(DcMotor.Direction.FORWARD);
+        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        armGrip.setPosition(position5);
+        sleep(2000);
+        spinOne.setPosition(position1);
+        spinTwo.setPosition(position2);
+        armRote.setPosition(position3);
+        liftWrist.setPosition(position4);
+    }
+
+    private void AprilTags() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -187,73 +304,8 @@ public class RR_AutoRoute_Template extends LinearOpMode {
 
             // e.g.
         }
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
-        spinOne = hardwareMap.get(Servo.class, "spinOne");
-        spinTwo = hardwareMap.get(Servo.class, "spinTwo");
-        armRote = hardwareMap.get(Servo.class, "armRote");
-        liftWrist = hardwareMap.get(Servo.class, "liftWrist");
-        armGrip = hardwareMap.get(Servo.class, "armGrip");
-        slideOne = hardwareMap.get(DcMotor.class, "slideOne");
-        slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
-
-        spinOne.setDirection(Servo.Direction.FORWARD);
-        spinTwo.setDirection(Servo.Direction.REVERSE);
-        armRote.setDirection(Servo.Direction.FORWARD);
-        liftWrist.setDirection(Servo.Direction.FORWARD);
-        armGrip.setDirection(Servo.Direction.FORWARD);
-        slideOne.setDirection(DcMotor.Direction.FORWARD);
-        slideTwo.setDirection(DcMotor.Direction.FORWARD);
-        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        armGrip.setPosition(position5);
-        sleep(2000);
-        spinOne.setPosition(position1);
-        spinTwo.setPosition(position2);
-        armRote.setPosition(position3);
-        liftWrist.setPosition(position4);
-
-        // Starting position of robot on field
-        Pose2d startPose = new Pose2d(-36, 60, Math.toRadians(-90));
-        drive.setPoseEstimate(startPose);
-        waitForStart();
-        if (isStopRequested()) return;
-        if (opModeIsActive()) {
-            if (tagOfInterest.id==11){
-                //to first spot
-                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(26)
-                        .strafeLeft(24)
-                        .build();
-                drive.followTrajectorySequence(Park1);
-            }
-            else if (tagOfInterest.id==14){
-                //to second spot
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(36)
-                        .build();
-                drive.followTrajectorySequence(Park2);
-            }
-            else if(tagOfInterest.id==19) {
-                //to third spot
-                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(26)
-                        .strafeRight(24)
-                        .build();
-                drive.followTrajectorySequence(Park3);
-            }
-            else{
-                //if it don't read
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(26)
-                        .build();
-                drive.followTrajectorySequence(Park2);
-            }
-        }
     }
+
     void tagToTelemetry(AprilTagDetection detection){
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
     }

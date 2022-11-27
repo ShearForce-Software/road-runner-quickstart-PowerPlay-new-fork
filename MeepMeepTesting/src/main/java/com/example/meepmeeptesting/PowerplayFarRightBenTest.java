@@ -1,6 +1,7 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -13,16 +14,11 @@ public class PowerplayFarRightBenTest {
                 //--->hopefully this is more optimized for points<---
                 .setConstraints(60, 68, Math.toRadians(248), Math.toRadians(180), 13.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-36, -60, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(-36, 60, Math.toRadians(-90)))
                                 //preloaded cone - low 1: 6pts
-                                .forward(12)
-                                .turn(Math.toRadians(180))
-                                .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-30, -6, Math.toRadians(-135)), Math.toRadians(45))
-                                /*
                                 .splineToSplineHeading(new Pose2d(-32, 52, Math.toRadians(155)), Math.toRadians(0))
                                 .waitSeconds(.75)
-                                .strafeLeft(12)
+                                .lineToSplineHeading(new Pose2d(-36,36, Math.toRadians(180)))
                                 .splineToSplineHeading(new Pose2d(-36, 20, Math.toRadians(180)), Math.toRadians(-90))
                                 .splineToLinearHeading(new Pose2d(-58, 12, Math.toRadians(180)), Math.toRadians(180))
                                 .waitSeconds(.75)
@@ -58,7 +54,6 @@ public class PowerplayFarRightBenTest {
                                 .setReversed(true)
                                 .splineToSplineHeading(new Pose2d(-8, 20, Math.toRadians(205)), Math.toRadians(25))
                                 .setReversed(false)
-                                */
                                 .build()
                         //max total pts: 40. This assumes each junction remains in our control
                         //minimum points: 25. This assumes each junction is in enemy control

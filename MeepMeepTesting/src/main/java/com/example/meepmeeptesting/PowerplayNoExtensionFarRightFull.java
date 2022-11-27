@@ -14,8 +14,9 @@ public class PowerplayNoExtensionFarRightFull {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, 60, Math.toRadians(-90)))
                                 //preloaded cone
-                                .forward(8)
-                                .splineToSplineHeading(new Pose2d(-8, 32, Math.toRadians(135)), Math.toRadians(0))
+                                .forward(11)
+                                .splineToSplineHeading(new Pose2d(-16, 33, Math.toRadians(-90)), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(-8, 32, Math.toRadians(135)), Math.toRadians(-25))
                                 .setReversed(false)
                                 .waitSeconds(.75)
                                 .splineToSplineHeading(new Pose2d(-36, 24, Math.toRadians(-90)), Math.toRadians(-90))

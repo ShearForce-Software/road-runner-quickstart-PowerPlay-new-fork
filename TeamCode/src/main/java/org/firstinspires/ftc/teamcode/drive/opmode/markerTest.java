@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoRouteTest")
+@Autonomous(name = "AutoRouteWithArm")
 public class markerTest extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -50,7 +50,6 @@ public class markerTest extends LinearOpMode {
     double fy = 578.272;
     double cx = 402.145;
     double cy = 221.506;
-
     // UNITS ARE METERS
     double tagsize = 0.166;
 

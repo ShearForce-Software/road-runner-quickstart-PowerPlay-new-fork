@@ -80,6 +80,8 @@ public class markerTest_no_while_isbusy extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         InitServosMotors();
+        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH);
+        SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
         // Starting position of robot on field
         Pose2d startPose = new Pose2d(-36, -60, Math.toRadians(90));
@@ -149,14 +151,23 @@ public class markerTest_no_while_isbusy extends LinearOpMode {
                         })
 
                         // move forward 12 inches
-                        .forward(12)
+                        .forward(12,
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         // rotate 180 degree for cone delivery
-                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90))
+                        .splineToSplineHeading(
+                                new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         // position LG for junction pole delivery (fast)
-                        .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(45))
+                        .splineToSplineHeading(
+                                new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(45),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         // drive LG at slower speed toward junction pole
-                        .splineToSplineHeading(new Pose2d(-30, -6, Math.toRadians(-135)), Math.toRadians(45), SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                        .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45),
+                                SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
 
                 drive.followTrajectorySequence(Start2);

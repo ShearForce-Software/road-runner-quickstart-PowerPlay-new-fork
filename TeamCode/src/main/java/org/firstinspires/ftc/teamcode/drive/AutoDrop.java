@@ -15,14 +15,12 @@ public class AutoDrop extends LinearOpMode {
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
 
         rearDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
         clawDistance = hardwareMap.get(DistanceSensor.class, "clawDistance");
         frontDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
-
         telemetry.addData(">", "Press Start and move the sensor to activate the servos." );
         telemetry.update();
         // wait for the start button to be pressed.
@@ -38,7 +36,6 @@ public class AutoDrop extends LinearOpMode {
             telemetry.addData("rearDistance (cm): ","%.02f", rearRange);
             telemetry.addData("clawDistance (cm): ","%.02f", clawRange);
             telemetry.addData("frontDistance (cm): ","%.02f", frontRange);
-
             telemetry.update();
         }
     }

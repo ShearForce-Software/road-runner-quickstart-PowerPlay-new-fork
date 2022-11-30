@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -35,8 +36,8 @@ import java.util.concurrent.TimeUnit;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoRouteTest with Markers")
-public class markerTest_no_while_isbusy extends LinearOpMode {
+@Autonomous(name = "Distance marker autotest")
+public class  distanceTestWithMarker extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -55,6 +56,9 @@ public class markerTest_no_while_isbusy extends LinearOpMode {
     double tagsize = 0.166;
 
     AprilTagDetection tagOfInterest = null;
+
+    //travel distance decided by sensor
+    double sensedDist;
 
     Servo spinOne;
     Servo spinTwo;
@@ -140,7 +144,7 @@ public class markerTest_no_while_isbusy extends LinearOpMode {
                             spinTwo.setPosition(position2);     // swing arm to high position
                         })
 
-                          // need to allow time for the swing arm to move cone to high position before next action ~1 seconds
+                        // need to allow time for the swing arm to move cone to high position before next action ~1 seconds
                         .addTemporalMarker(2.65, () -> {
                             slideOne.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
                             slideTwo.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
@@ -168,6 +172,13 @@ public class markerTest_no_while_isbusy extends LinearOpMode {
                         .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45),
                                 SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
+                        // senses distance and calculates distance from one inch
+                        .addTemporalMarker(1, () -> {
+                            sensedDist = frontDistance.getDistance(DistanceUnit.INCH) - 1;
+                        })
+                        // drives to sensed distance
+                        .forward(sensedDist)
+
                         .build();
 
                 drive.followTrajectorySequence(Start2);

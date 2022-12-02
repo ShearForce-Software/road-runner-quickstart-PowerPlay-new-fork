@@ -195,20 +195,11 @@ public class MAINAUTONOMOUS extends LinearOpMode {
         if (opModeIsActive()) {
 
             drive.followTrajectorySequence(MainDrive);
-            Pose2d newPose = new Pose2d(-31,-3,Math.toRadians(-135));
+            Pose2d parkPose = new Pose2d(-31,-3,Math.toRadians(-135));
 
             if (tagOfInterest.id==11){
                 //to first spot
-                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(newPose)
-                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
-                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(15))
-                        .build();
-                drive.followTrajectorySequence(Park1);
-            }
-            else if (tagOfInterest.id==14){
-                //to second spot
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(newPose)
+                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(parkPose)
                         .setReversed(false)
                         .splineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
@@ -220,11 +211,20 @@ public class MAINAUTONOMOUS extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
+                drive.followTrajectorySequence(Park1);
+            }
+            else if (tagOfInterest.id==14){
+                //to second spot
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
+                        .build();
                 drive.followTrajectorySequence(Park2);
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
-                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(newPose)
+                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(parkPose)
                         .setReversed(false)
                         .splineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
@@ -240,8 +240,10 @@ public class MAINAUTONOMOUS extends LinearOpMode {
             }
             else{
                 //if it don't read
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(newPose)
-                        .forward(26)
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
                 drive.followTrajectorySequence(Park2);
             }

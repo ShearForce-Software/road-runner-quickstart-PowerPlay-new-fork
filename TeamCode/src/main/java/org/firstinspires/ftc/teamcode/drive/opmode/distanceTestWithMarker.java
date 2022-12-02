@@ -165,7 +165,7 @@ public class  distanceTestWithMarker extends LinearOpMode {
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         // position LG for junction pole delivery (fast)
                         .splineToSplineHeading(
-                                new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(45),
+                                new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         // drive LG at slower speed toward junction pole

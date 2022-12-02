@@ -14,11 +14,20 @@ public class PowerplayFarRightBenTest {
                 //--->hopefully this is more optimized for points<---
                 .setConstraints(15, 15, Math.toRadians(248), Math.toRadians(180), 13.5)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-31, -3, Math.toRadians(-135)))
+                        drive.trajectorySequenceBuilder(new Pose2d(36, -60, Math.toRadians(90)))
+
+                                //right
+                                .forward(12)
+                                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(36, -12, Math.toRadians(-45)), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(31, -3, Math.toRadians(-45)), Math.toRadians(135))
+                                /*
+                                //left
                                 .forward(12)
                                 .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45))
+                                 */
                                 /*
                                 //preloaded cone - low 1: 6pts
                                 .splineToSplineHeading(new Pose2d(-32, 52, Math.toRadians(155)), Math.toRadians(0))

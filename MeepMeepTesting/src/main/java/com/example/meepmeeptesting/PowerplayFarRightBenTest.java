@@ -20,6 +20,8 @@ public class PowerplayFarRightBenTest {
                                 .forward(12)
                                 .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(36, -12, Math.toRadians(-45)), Math.toRadians(90))
+                                .addSpatialMarker(new Vector2d(36, -24), () -> {
+                                })
                                 .splineToSplineHeading(new Pose2d(31, -3, Math.toRadians(-45)), Math.toRadians(135))
                                 /*
                                 //left

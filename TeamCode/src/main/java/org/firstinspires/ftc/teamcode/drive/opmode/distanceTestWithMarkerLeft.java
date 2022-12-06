@@ -36,8 +36,8 @@ import java.util.concurrent.TimeUnit;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "Distance marker autotest")
-public class  distanceTestWithMarker extends LinearOpMode {
+@Autonomous(name = "DistanceTestW/MarkersLeft")
+public class distanceTestWithMarkerLeft extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -54,11 +54,9 @@ public class  distanceTestWithMarker extends LinearOpMode {
 
     // UNITS ARE METERS
     double tagsize = 0.166;
+    double sensedDist;
 
     AprilTagDetection tagOfInterest = null;
-
-    //travel distance decided by sensor
-    double sensedDist;
 
     Servo spinOne;
     Servo spinTwo;
@@ -91,157 +89,174 @@ public class  distanceTestWithMarker extends LinearOpMode {
         Pose2d startPose = new Pose2d(-36, -60, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
+        TrajectorySequence MainDrive = drive.trajectorySequenceBuilder(startPose)
+                // claw is closed as part of init
+                // added "run to position" mode in init code
+                // marker tells slides to lift cone (no while or isbusy) at time 0
+                .addTemporalMarker(0, () -> {
+                    position5 = 0;                      // armGrip position
+                    armGrip.setPosition(position5);     // make sure claw is closed
+                    slideOne.setTargetPosition(1400);   // set slide height
+                    slideTwo.setTargetPosition(1400);   // set slide height
+                    slideOne.setPower(1);               // raise slide elevator
+                    slideTwo.setPower(1);               // raise slide elevator
+                })
+
+                // since there is no isbusy loop - need to allow time for slide to extend before swinging arm
+                // estimating slide extension will take 1.5 seconds - this is the start time of the next marker
+                .addTemporalMarker(1.5, () -> {
+                    slideOne.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
+                    slideTwo.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
+                    position1 = .80;                    // spinOne position
+                    position2 = .80;                    // spinTwo position
+                    spinOne.setPosition(position1);     // swing arm to stow position
+                    spinTwo.setPosition(position2);     // swing arm to stow position
+                })
+
+                // need to allow time for the swing arm to stow cone before next action ~0.15 seconds
+                .addTemporalMarker(1.65, () -> {
+                    position5 = 0;                      // armGrip position
+                    armGrip.setPosition(position5);     // make sure claw is still closed
+                    slideOne.setTargetPosition(1738);   // set slide height
+                    slideTwo.setTargetPosition(1738);   // set slide height
+                    slideOne.setPower(1);               // raise slide elevator
+                    slideTwo.setPower(1);               // raise slide elevator
+                    position1 = .11;                    // spinOne position
+                    position2 = .11;                    // spinTwo position
+                    spinOne.setPosition(position1);     // swing arm to high position
+                    spinTwo.setPosition(position2);     // swing arm to high position
+                })
+                // need to allow time for the swing arm to move cone to high position before next action ~1 seconds
+                .addTemporalMarker(2.65, () -> {
+                    slideOne.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
+                    slideTwo.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
+                    position3 = .83;                    // armRote position
+                    position4 = .13;                    // liftWrist position
+                    armRote.setPosition(position3);     // rotate arm 180 degrees
+                    liftWrist.setPosition(position4);   // set wrist position for cone delivery
+                })
+                .addTemporalMarker(12, () -> {
+                    position5 = 0;
+                    position1 = .48;
+                    position2 = .48;
+                    position3 = .13;
+                    position4 = .74;
+                    position5 = .18;
+                    armGrip.setPosition(position5);     // open claw
+                    spinOne.setPosition(position1);     // rotate arm
+                    spinTwo.setPosition(position2);     // rotate arm
+                })
+                .addTemporalMarker(13, () -> {
+                    liftWrist.setPosition(position4);   //
+                    armRote.setPosition(position3);
+                    position1 = .95;
+                    position2 = .95;
+                })
+                .addTemporalMarker(14, () -> {
+                    spinOne.setPosition(position1);
+                    spinTwo.setPosition(position2);
+                    slideOne.setTargetPosition(5);
+                    slideTwo.setTargetPosition(5);
+                    slideOne.setPower(1);
+                    slideTwo.setPower(1);
+                    slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .addTemporalMarker(15.5, () -> {
+                    slideOne.setPower(0);
+                    slideTwo.setPower(0);
+                    position4 = .6;
+                    liftWrist.setPosition(position4);
+                    position5 = .18;
+                    armGrip.setPosition(position5);
+                })
+                // move forward 12 inches
+                .forward(12,
+                        SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                // rotate 180 degree for cone delivery
+                .splineToSplineHeading(
+                        new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90),
+                        SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                // position LG for junction pole delivery (fast)
+                .splineToSplineHeading(
+                        new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90),
+                        SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                // drive LG at slower speed toward junction pole
+                .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45),
+                        SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                // senses distance and calculates distance from one inch
+                .addDisplacementMarker(() -> {
+                    sensedDist = frontDistance.getDistance(DistanceUnit.INCH) - 1;
+                })
+                // drives to sensed distance
+                .forward(sensedDist,
+                        SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                .addDisplacementMarker(() -> {
+                    //open claw to drop cone
+                })
+                .build();//MainTrajectorySequence
+
         waitForStart();
 
         if (isStopRequested()) return;
 
         if (opModeIsActive()) {
+
+            drive.followTrajectorySequence(MainDrive);
+            Pose2d parkPose = new Pose2d(-31,-3,Math.toRadians(-135));
+
             if (tagOfInterest.id==11){
                 //to first spot
-                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(26)
-                        .strafeLeft(24)
+                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(parkPose)
+                        .setReversed(false)
+                        .splineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
+                        .forward(12,
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
+                        .strafeRight(24,
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
                 drive.followTrajectorySequence(Park1);
             }
             else if (tagOfInterest.id==14){
                 //to second spot
-                TrajectorySequence Start2 = drive.trajectorySequenceBuilder(startPose)
-                        // claw is closed as part of init
-                        // added "run to position" mode in init code
-                        // marker tells slides to lift cone (no while or isbusy) at time 0
-                        .addTemporalMarker(0, () -> {
-                            position5 = 0;                      // armGrip position
-                            armGrip.setPosition(position5);     // make sure claw is closed
-                            slideOne.setTargetPosition(1400);   // set slide height
-                            slideTwo.setTargetPosition(1400);   // set slide height
-                            slideOne.setPower(1);               // raise slide elevator
-                            slideTwo.setPower(1);               // raise slide elevator
-                        })
-
-                        // since there is no isbusy loop - need to allow time for slide to extend before swinging arm
-                        // estimating slide extension will take 1.5 seconds - this is the start time of the next marker
-                        .addTemporalMarker(1.5, () -> {
-                            slideOne.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
-                            slideTwo.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
-                            position1 = .80;                    // spinOne position
-                            position2 = .80;                    // spinTwo position
-                            spinOne.setPosition(position1);     // swing arm to stow position
-                            spinTwo.setPosition(position2);     // swing arm to stow position
-                        })
-
-                        // need to allow time for the swing arm to stow cone before next action ~0.15 seconds
-                        .addTemporalMarker(1.65, () -> {
-                            position5 = 0;                      // armGrip position
-                            armGrip.setPosition(position5);     // make sure claw is still closed
-                            slideOne.setTargetPosition(1738);   // set slide height
-                            slideTwo.setTargetPosition(1738);   // set slide height
-                            slideOne.setPower(1);               // raise slide elevator
-                            slideTwo.setPower(1);               // raise slide elevator
-                            position1 = .11;                    // spinOne position
-                            position2 = .11;                    // spinTwo position
-                            spinOne.setPosition(position1);     // swing arm to high position
-                            spinTwo.setPosition(position2);     // swing arm to high position
-                        })
-
-                        // need to allow time for the swing arm to move cone to high position before next action ~1 seconds
-                        .addTemporalMarker(2.65, () -> {
-                            slideOne.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
-                            slideTwo.setPower(0);               // set slide motor power to zero (don't know if this is really needed or not)
-                            position3 = .83;                    // armRote position
-                            position4 = .13;                    // liftWrist position
-                            armRote.setPosition(position3);     // rotate arm 180 degrees
-                            liftWrist.setPosition(position4);   // set wrist position for cone delivery
-                        })
-
-                        // move forward 12 inches
-                        .forward(12,
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
-                        // rotate 180 degree for cone delivery
-                        .splineToSplineHeading(
-                                new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90),
-                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(15))
-                        // position LG for junction pole delivery (fast)
-                        .splineToSplineHeading(
-                                new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90),
-                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(15))
-                        // drive LG at slower speed toward junction pole
-                        .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45),
-                                SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(15))
-                        // senses distance and calculates distance from one inch
-                        .addTemporalMarker(1, () -> {
-                            sensedDist = frontDistance.getDistance(DistanceUnit.INCH) - 1;
-                        })
-                        // drives to sensed distance
-                        .forward(sensedDist)
-
                         .build();
-
-                drive.followTrajectorySequence(Start2);
-
-                //        .forward(12)
-                //        .turn(Math.toRadians(180))
-                //        .build();
-                //while(drive.isBusy()){}
-                //position5 = 0;
-                //position1 = .80;
-                //position2 = .80;
-                // armGrip.setPosition(position5);
-                //for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(200); stop>System.nanoTime();) {}
-                //slideOne.setTargetPosition(1400);
-                //slideTwo.setTargetPosition(1400);
-                //slideOne.setPower(1);
-                //slideTwo.setPower(1);
-                //slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
-                //slideOne.setPower(0);
-                //slideTwo.setPower(0);
-                //spinOne.setPosition(position1);
-                //spinTwo.setPosition(position2);
-                //position5 = 0;
-                //position1 = .11;
-                //position2 = .11;
-                //position3 = .83;
-                //position4 = .13;
-                //armGrip.setPosition(position5);
-                //slideOne.setTargetPosition(1738);
-                //slideTwo.setTargetPosition(1738);
-                //slideOne.setPower(1);
-                //slideTwo.setPower(1);
-                //slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                //while ((slideOne.isBusy()) && (slideTwo.isBusy())){}
-                //slideOne.setPower(0);
-                //slideTwo.setPower(0);
-                //spinOne.setPosition(position1);
-                //spinTwo.setPosition(position2);
-                //for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(1000); stop>System.nanoTime();) {}
-                //armRote.setPosition(position3);
-                //liftWrist.setPosition(position4);
-                //startPose = new Pose2d(-36,-48, Math.toRadians(-90));
-                //TrajectorySequence Spin2 = drive.trajectorySequenceBuilder(startPose)
-                //        .setReversed(true)
-                //        .splineToSplineHeading(new Pose2d(-30, -6, Math.toRadians(-135)), Math.toRadians(45))
-                //        .build();
-                //drive.followTrajectorySequence(Spin2);
+                drive.followTrajectorySequence(Park2);
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
-                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(26)
-                        .strafeRight(24)
+                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(parkPose)
+                        .setReversed(false)
+                        .splineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
+                        .forward(12,
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
+                        .strafeLeft(24,
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
                 drive.followTrajectorySequence(Park3);
             }
             else{
                 //if it don't read
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(startPose)
-                        .forward(26)
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                                SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
                 drive.followTrajectorySequence(Park2);
             }

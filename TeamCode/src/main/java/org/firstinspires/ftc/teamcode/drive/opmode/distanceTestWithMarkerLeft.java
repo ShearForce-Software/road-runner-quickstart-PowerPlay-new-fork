@@ -224,7 +224,7 @@ public class distanceTestWithMarkerLeft extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park1);
+                //drive.followTrajectorySequence(Park1);
             }
             else if (tagOfInterest.id==14){
                 //to second spot
@@ -233,7 +233,7 @@ public class distanceTestWithMarkerLeft extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park2);
+                //drive.followTrajectorySequence(Park2);
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
@@ -249,7 +249,7 @@ public class distanceTestWithMarkerLeft extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park3);
+                //drive.followTrajectorySequence(Park3);
             }
             else{
                 //if it don't read
@@ -258,7 +258,7 @@ public class distanceTestWithMarkerLeft extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park2);
+                //drive.followTrajectorySequence(Park2);
             }
         }
     }

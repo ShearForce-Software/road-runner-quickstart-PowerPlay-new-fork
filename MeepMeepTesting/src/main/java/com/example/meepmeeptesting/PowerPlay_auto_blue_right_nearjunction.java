@@ -5,7 +5,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class PowerPlay_no_extension {
+public class PowerPlay_auto_blue_right_nearjunction {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
 

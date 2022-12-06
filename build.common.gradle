@@ -1,4 +1,4 @@
-/**
+/*
  * build.common.gradle
  *
  * Try to avoid editing this file, as it may be updated from time to time as the FTC SDK
@@ -61,7 +61,7 @@ android {
         targetSdkVersion 28
         multiDexEnabled !useProguard
 
-        /**
+        /*
          * We keep the versionCode and versionName of robot controller applications in sync with
          * the master information published in the AndroidManifest.xml file of the FtcRobotController
          * module. This helps avoid confusion that might arise from having multiple versions of
@@ -97,7 +97,7 @@ android {
             signingConfig signingConfigs.release
 
             ndk {
-                abiFilters "armeabi-v7a"
+                abiFilters "armeabi-v7a" // , "arm64-v8a" commented out for OpenCV
             }
 
             if (useProguard) {
@@ -111,7 +111,7 @@ android {
             debuggable true
             jniDebuggable true
             ndk {
-                abiFilters "armeabi-v7a"
+                abiFilters "armeabi-v7a" // , "arm64-v8a" commented out for OpenCV
             }
 
             if (useProguard) {

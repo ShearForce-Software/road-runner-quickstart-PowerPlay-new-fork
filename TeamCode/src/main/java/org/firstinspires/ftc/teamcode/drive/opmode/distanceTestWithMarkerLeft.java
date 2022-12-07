@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -20,6 +21,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /*
  * Op mode to experiment with Road Runner Autonomous Routes.
@@ -34,8 +36,8 @@ import java.util.ArrayList;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoRouteRight")
-public class MAINAUTONOMOUS2 extends LinearOpMode {
+@Autonomous(name = "DistanceTestW/MarkersLeft")
+public class distanceTestWithMarkerLeft extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -52,6 +54,7 @@ public class MAINAUTONOMOUS2 extends LinearOpMode {
 
     // UNITS ARE METERS
     double tagsize = 0.166;
+    double sensedDist;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -83,7 +86,7 @@ public class MAINAUTONOMOUS2 extends LinearOpMode {
         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
         // Starting position of robot on field
-        Pose2d startPose = new Pose2d(36, -60, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-36, -60, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence MainDrive = drive.trajectorySequenceBuilder(startPose)
@@ -173,18 +176,29 @@ public class MAINAUTONOMOUS2 extends LinearOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // rotate 180 degree for cone delivery
                 .splineToSplineHeading(
-                        new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90),
+                        new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // position LG for junction pole delivery (fast)
                 .splineToSplineHeading(
-                        new Pose2d(36, -12, Math.toRadians(-45)), Math.toRadians(90),
+                        new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // drive LG at slower speed toward junction pole
-                .splineToSplineHeading(new Pose2d(31, -3, Math.toRadians(-45)), Math.toRadians(135),
+                .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45),
                         SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
+                // senses distance and calculates distance from one inch
+                .addDisplacementMarker(() -> {
+                    sensedDist = frontDistance.getDistance(DistanceUnit.INCH) - 1;
+                })
+                // drives to sensed distance
+                .forward(sensedDist,
+                        SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
+                .addDisplacementMarker(() -> {
+                    //open claw to drop cone
+                })
                 .build();//MainTrajectorySequence
 
         waitForStart();
@@ -194,13 +208,13 @@ public class MAINAUTONOMOUS2 extends LinearOpMode {
         if (opModeIsActive()) {
 
             drive.followTrajectorySequence(MainDrive);
-            Pose2d parkPose = new Pose2d(31,-3,Math.toRadians(-45));
+            Pose2d parkPose = new Pose2d(-31,-3,Math.toRadians(-135));
 
             if (tagOfInterest.id==11){
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(parkPose)
                         .setReversed(false)
-                        .splineToLinearHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .forward(12,
@@ -210,22 +224,22 @@ public class MAINAUTONOMOUS2 extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park1);
+                //drive.followTrajectorySequence(Park1);
             }
             else if (tagOfInterest.id==14){
                 //to second spot
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
-                        .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park2);
+                //drive.followTrajectorySequence(Park2);
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
                 TrajectorySequence Park3 = drive.trajectorySequenceBuilder(parkPose)
                         .setReversed(false)
-                        .splineToLinearHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToLinearHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .forward(12,
@@ -235,16 +249,16 @@ public class MAINAUTONOMOUS2 extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park3);
+                //drive.followTrajectorySequence(Park3);
             }
             else{
                 //if it don't read
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
-                        .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
-                drive.followTrajectorySequence(Park2);
+                //drive.followTrajectorySequence(Park2);
             }
         }
     }

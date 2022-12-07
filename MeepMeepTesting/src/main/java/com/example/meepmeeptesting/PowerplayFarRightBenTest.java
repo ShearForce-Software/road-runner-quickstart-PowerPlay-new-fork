@@ -12,11 +12,10 @@ public class PowerplayFarRightBenTest {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 //--->hopefully this is more optimized for points<---
-                .setConstraints(15, 15, Math.toRadians(248), Math.toRadians(180), 13.5)
+                .setConstraints(60, 60, Math.toRadians(248), Math.toRadians(180), 13.5)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(36, -60, Math.toRadians(90)))
-
-                                //right
+                                //right of red
                                 .forward(12)
                                 .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(36, -12, Math.toRadians(-45)), Math.toRadians(90))

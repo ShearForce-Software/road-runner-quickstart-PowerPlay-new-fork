@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Config
 @Autonomous(name = "AutoRouteLeft")
-public class MAINAUTONOMOUS extends LinearOpMode {
+public class MAINAUTONOMOUSLeft extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 

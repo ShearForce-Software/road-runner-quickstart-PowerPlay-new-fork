@@ -115,8 +115,8 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
                 .addTemporalMarker(1.65, () -> {
                     position5 = 0;                      // armGrip position
                     armGrip.setPosition(position5);     // make sure claw is still closed
-                    slideOne.setTargetPosition(1738);   // set slide height
-                    slideTwo.setTargetPosition(1738);   // set slide height
+                    slideOne.setTargetPosition(1550);   // set slide height
+                    slideTwo.setTargetPosition(1550);   // set slide height
                     slideOne.setPower(1);               // raise slide elevator
                     slideTwo.setPower(1);               // raise slide elevator
                     position1 = .11;                    // spinOne position
@@ -133,7 +133,7 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
                     armRote.setPosition(position3);     // rotate arm 180 degrees
                     liftWrist.setPosition(position4);   // set wrist position for cone delivery
                 })
-                .addTemporalMarker(12, () -> {
+                .addTemporalMarker(9, () -> {
                     position5 = 0;
                     position1 = .48;
                     position2 = .48;
@@ -142,15 +142,17 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
                     position5 = .18;
                     armGrip.setPosition(position5);     // open claw
                 })
-                .addTemporalMarker(14, () -> {
+                .addTemporalMarker(11, () -> {
+                    position5 = 0;
+                    armGrip.setPosition(position5);     // close claw
                     spinOne.setPosition(position1);     // rotate arm
-                    spinTwo.setPosition(position2);
-                    liftWrist.setPosition(position4);   //
+                    spinTwo.setPosition(position2);     // rotate arm
+                    liftWrist.setPosition(position4);
                     armRote.setPosition(position3);
                     position1 = .95;
                     position2 = .95;
                 })
-                .addTemporalMarker(15, () -> {
+                .addTemporalMarker(12, () -> {
                     spinOne.setPosition(position1);
                     spinTwo.setPosition(position2);
                     slideOne.setTargetPosition(5);
@@ -160,13 +162,11 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
                     slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 })
-                .addTemporalMarker(16.5, () -> {
+                .addTemporalMarker(13.5, () -> {
                     slideOne.setPower(0);
                     slideTwo.setPower(0);
                     position4 = .6;
                     liftWrist.setPosition(position4);
-                    position5 = .18;
-                    armGrip.setPosition(position5);
                 })
                 // move forward 12 inches
                 .forward(12,
@@ -183,13 +183,14 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // drive LG at slower speed toward junction pole
-                .splineToSplineHeading(new Pose2d(-31, -3, Math.toRadians(-135)), Math.toRadians(45),
+                .splineToSplineHeading(new Pose2d(-30, -2, Math.toRadians(-135)), Math.toRadians(45),
                         SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
+                .waitSeconds(.5)
                 .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
-                .forward(12,
+                .forward(8,
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 .build();//MainTrajectorySequence
@@ -201,7 +202,7 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
         if (opModeIsActive()) {
 
             drive.followTrajectorySequence(MainDrive);
-            Pose2d parkPose = new Pose2d(-31,-3,Math.toRadians(-135));
+            Pose2d parkPose = new Pose2d(-36,-32,Math.toRadians(-90));
 
             if (tagOfInterest.id==11){
                 //to first spot
@@ -214,9 +215,7 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
             }
             else if (tagOfInterest.id==14){
                 //to second spot
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
-                        .build();
-                drive.followTrajectorySequence(Park2);
+                //LITERALLY NOTHING
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
@@ -226,12 +225,6 @@ public class MAINAUTONOMOUSLeft extends LinearOpMode {
                                 SampleMecanumDrive.getAccelerationConstraint(15))
                         .build();
                 drive.followTrajectorySequence(Park3);
-            }
-            else{
-                //if it don't read
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(parkPose)
-                        .build();
-                drive.followTrajectorySequence(Park2);
             }
         }
     }

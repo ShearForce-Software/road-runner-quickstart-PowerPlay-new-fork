@@ -42,12 +42,13 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
     long  rotate_time = 2000;
     int START_POS = 5;
     int STOW_POS = 1400;
-    int LOW_POS = 2090;
-    int MED_POS = 3681;
-    int HIGH_POS = 1738;
+    int LOW_POS = 1850; //2090;
+    int MED_POS = 3560; //3681;
+    int HIGH_POS = 1550; //1738;
     boolean high = false;
     boolean movingDown = false;
     boolean stow = false;
+    boolean ready = false;
     public static final double ARM_POWER    =  1 ;
 
     @Override
@@ -73,6 +74,15 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
             //----------------------------------------------------------------
+            // AutoDrop
+            //----------------------------------------------------------------
+            if((rangeRear < 2.5)&&(ready)){
+                //************************************************************
+                // open claw when pole is detected by distance sensor
+                //************************************************************
+                position5 = .18;
+            }
+            //----------------------------------------------------------------
             // AutoGrab
             //----------------------------------------------------------------
             if ((((rangeClaw < 2.75) && (position5 == .18)) && (slideOne.getCurrentPosition() <= 100) && (slideTwo.getCurrentPosition() <= 100))) {
@@ -87,8 +97,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 // wait for claw to close
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(claw_time); stop>System.nanoTime();) {
                     // check driver input while claw is moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
-
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
                 //************************************************************
                 // raise slide to cone stow position height
                 //************************************************************
@@ -98,7 +108,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 slideTwo.setPower(ARM_POWER);
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
                     // check driver input while slides are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
 
@@ -112,7 +123,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 // wait for wrist to straighten
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(wrist_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
 
                 //************************************************************
                 // spin arm to safe cone rotate position
@@ -126,7 +138,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 // wait for arm to swing
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(spin_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
 
                 //************************************************************
                 // rotate arm 180 degrees to flip cone
@@ -138,7 +151,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 // wait for arm to rotate
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(rotate_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
 
                 //************************************************************
                 // wrist to delivery angle (low / Medium)
@@ -150,7 +164,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 // wait for wrist to move to delivery angle
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(wrist_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
 
                 //************************************************************
                 // spin arm to safe stow position
@@ -164,8 +179,8 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 // wait for arm to swing
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(spin_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
-
+                    driveControls(leftFront, leftRear, rightFront, rightRear);
+                    slideHeight();}
                 // set stow variable to true
                 stow = true;
             }
@@ -201,7 +216,7 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
                 position2 = .11;
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                spin_time =400; //1000
+                spin_time = 400; //1000
 
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(spin_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
@@ -215,6 +230,7 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
 
                 // set stow variable to false
                 stow = false;
+                ready = true;
             }
 
             //----------------------------------------------------------------
@@ -269,6 +285,7 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
 
                 // set stow variable to false
                 stow = false;
+                ready = true;
             }
             //----------------------------------------------------------------
             // Low - move to low junction position from stow
@@ -322,14 +339,15 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
 
                 // set stow variable to false
                 stow = false;
+                ready = true;
             }
 
             //----------------------------------------------------------------
             // ground pos - reset to cone intake position from high, medium, and low positions only
             //----------------------------------------------------------------
             if ((gamepad1.b)&&(!(stow))&&((slideOne.getCurrentPosition()>5)||(slideTwo.getCurrentPosition()>5))){
+                ready = false;
                 if (!high) {
-
                     //************************************************************
                     // Close claw
                     //************************************************************
@@ -492,6 +510,42 @@ public class Driver_and_Operator_Controls_120322 extends LinearOpMode {
             liftWrist.setPosition(position4);
             armGrip.setPosition(position5);
             idle();
+        }
+    }
+
+    private void slideHeight() {
+        if(gamepad1.a){
+            slideOne.setTargetPosition(LOW_POS);
+            slideTwo.setTargetPosition(LOW_POS);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                // check driver input while slides are moving
+                driveControls(leftFront, leftRear, rightFront, rightRear);}
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+        }
+        if(gamepad1.x){
+            slideOne.setTargetPosition(MED_POS);
+            slideTwo.setTargetPosition(MED_POS);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                // check driver input while slides are moving
+                driveControls(leftFront, leftRear, rightFront, rightRear);}
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+        }
+        if(gamepad1.y){
+            slideOne.setTargetPosition(HIGH_POS);
+            slideTwo.setTargetPosition(HIGH_POS);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            while ((slideOne.isBusy()) && (slideTwo.isBusy())){
+                // check driver input while slides are moving
+                driveControls(leftFront, leftRear, rightFront, rightRear);}
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
         }
     }
 

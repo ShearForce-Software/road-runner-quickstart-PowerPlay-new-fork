@@ -339,7 +339,7 @@ public class Driver_and_Operator_Controls extends LinearOpMode {
         }
     }
 
-    private void motorInit() {
+      private void motorInit() {
         // Directions
         spinOne.setDirection(Servo.Direction.FORWARD);
         spinTwo.setDirection(Servo.Direction.REVERSE);

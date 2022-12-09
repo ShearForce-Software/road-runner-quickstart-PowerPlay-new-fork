@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,13 +8,12 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 import java.util.concurrent.TimeUnit;
-@Disabled
-@TeleOp(name = "Main Driver Field Centric_old")
 
-public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
+@TeleOp(name = "1) Main Driver Robot Centric (Manual Drop)")
+
+public class Driver_and_Operator_Controls_Robot_Centric_Manual_Drop extends LinearOpMode {
 
     // Define class members
     Servo  spinOne;
@@ -33,7 +30,6 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
-    BNO055IMU imu;
 
     double  position1 = 0.95;
     double  position2 = 0.95;
@@ -50,9 +46,9 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
     int MED_POS = 3560;   //3681
     int HIGH_POS = 1550;  //1738
     boolean high = false;
-    boolean movingDown = false;
     boolean stow = false;
     boolean ready = false;
+    boolean intake = true;
     public static final double ARM_POWER    =  1 ;
 
     @Override
@@ -78,16 +74,6 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
             //----------------------------------------------------------------
-            // AutoDrop
-            //----------------------------------------------------------------
-            if((rangeRear < 2)&&(ready)){
-                //************************************************************
-                // open claw when pole is detected by distance sensor
-                //************************************************************
-                position5 = .18;
-            }
-
-            //----------------------------------------------------------------
             // AutoGrab
             //----------------------------------------------------------------
             if ((((rangeClaw < 2.75) && (position5 == .18)) && (slideOne.getCurrentPosition() <= 100) && (slideTwo.getCurrentPosition() <= 100))) {
@@ -103,7 +89,7 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(claw_time); stop>System.nanoTime();) {
                     // check driver input while claw is moving
                     driveControls(leftFront, leftRear, rightFront, rightRear);}
-                    //slideHeight();}
+
                 //************************************************************
                 // raise slide to cone stow position height
                 //************************************************************
@@ -114,12 +100,11 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                 while ((slideOne.isBusy()) && (slideTwo.isBusy())){
                     // check driver input while slides are moving
                     driveControls(leftFront, leftRear, rightFront, rightRear);}
-                    //slideHeight();}
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
 
                 //************************************************************
-                // straighten wrist before spinning arm
+                // straighten wrist before rotating 180 degrees
                 //************************************************************
                 position4 = .35;                    // liftWrist straight position
                 liftWrist.setPosition(position4);   // straighten wrist
@@ -127,21 +112,6 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
 
                 // wait for wrist to straighten
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(wrist_time); stop>System.nanoTime();) {
-                    // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
-                    //slideHeight();}
-
-                //************************************************************
-                // spin arm to safe cone rotate position
-                //************************************************************
-                position1 = .72;                // spinOne safe cone rotate position
-                position2 = .72;                // spinTwo safe cone rotate position
-                spinOne.setPosition(position1); // spin arm to safe cone rotate position
-                spinTwo.setPosition(position2); // spin arm to safe cone rotate position
-                spin_time = 500; //500         // spin arm time
-
-                // wait for arm to swing
-                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(spin_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
                     driveControls(leftFront, leftRear, rightFront, rightRear);}
                     //slideHeight();}
@@ -160,40 +130,28 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                     //slideHeight();}
 
                 //************************************************************
-                // wrist to delivery angle (low / Medium)
+                // spin arm to cone stow rotate position
                 //************************************************************
-                position4 = .86;        // 0.77     // liftWrist delivery position
-                liftWrist.setPosition(position4);   // wrist to delivery angle
-                wrist_time = 0; //200            // wrist move time
+                position1 = .84; //.72;                // spinOne cone stow rotate position
+                position2 = .84; //.72;                // spinTwo cone stow rotate position
+                spinOne.setPosition(position1); // spin arm to cone stow rotate position
+                spinTwo.setPosition(position2); // spin arm to cone stow rotate position
+                spin_time = 0; //500         // spin arm time
 
-                // wait for wrist to move to delivery angle
-                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(wrist_time); stop>System.nanoTime();) {
-                    // check driver input while servos are moving
-                    driveControls(leftFront, leftRear, rightFront, rightRear);}
-                    //slideHeight();}
-
-                //************************************************************
-                // spin arm to safe stow position
-                //************************************************************
-                position1 = .92;                // spinOne safe stow position
-                position2 = .92;                // spinTwo safe stow position
-                spinOne.setPosition(position1); // spin arm to safe stow position
-                spinTwo.setPosition(position2); // spin arm to safe stow position
-                spin_time = 200; //200         // spin arm time
-
-                // wait for arm to swing
+                // wait for arm to spin
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(spin_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
                     driveControls(leftFront, leftRear, rightFront, rightRear);}
-                    //slideHeight();}
 
                 // set stow variable to true
                 stow = true;
+                // set input variable to false
+                intake = false;
             }
             //----------------------------------------------------------------
             // High - move to high junction position from stow
             //----------------------------------------------------------------
-            if ((gamepad1.y) && (stow)) {
+            if ((gamepad1.y) && (!intake)) {
                 high = true;        // set position variable for return
 
                 //************************************************************
@@ -222,7 +180,7 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                 position2 = .11;
                 spinOne.setPosition(position1);
                 spinTwo.setPosition(position2);
-                spin_time =400; //1000
+                spin_time = 0; //1000
 
                 for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(spin_time); stop>System.nanoTime();) {
                     // check driver input while servos are moving
@@ -236,13 +194,14 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
 
                 // set stow variable to false
                 stow = false;
+                // set ready for delivery variable to true
                 ready = true;
             }
 
             //----------------------------------------------------------------
             // Medium - move to medium junction position from stow
             //----------------------------------------------------------------
-            if ((gamepad1.x) && (stow)){
+            if ((gamepad1.x) && (!intake)){
                 high = false;       // set position variable for return
 
                 //************************************************************
@@ -291,12 +250,13 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
 
                 // set stow variable to false
                 stow = false;
+                // set ready for delivery variable to true
                 ready = true;
             }
             //----------------------------------------------------------------
             // Low - move to low junction position from stow
             //----------------------------------------------------------------
-            if ((gamepad1.a) && (stow)){
+            if ((gamepad1.a) && (!intake)){
                 high = false;       // set position variable for return
 
                 //************************************************************
@@ -345,6 +305,7 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
 
                 // set stow variable to false
                 stow = false;
+                // set ready for delivery variable to true
                 ready = true;
             }
 
@@ -424,13 +385,14 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                         safetyCheck(rangeClaw);}
                     slideOne.setPower(0);
                     slideTwo.setPower(0);
-                    movingDown = false;
 
                     //************************************************************
                     // Open claw
                     //************************************************************
                     position5 = .18;
                     armGrip.setPosition(position5);
+
+                    intake = true;
 
                 }
                 else if(high){
@@ -440,7 +402,6 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                     //************************************************************
                     position5 = 0;
                     armGrip.setPosition(position5);
-
 
                     //************************************************************
                     // rotate arm 180 degrees (so gripper is backwards)
@@ -488,13 +449,14 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
                         safetyCheck(rangeClaw);}
                     slideOne.setPower(0);
                     slideTwo.setPower(0);
-                    movingDown = false;
 
                     //************************************************************
                     // Open claw
                     //************************************************************
                     position5 = .18;
                     armGrip.setPosition(position5);
+
+                    intake = true;
 
                 }
             }
@@ -518,42 +480,6 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
             idle();
         }
     }
-
-//    private void slideHeight() {
-//        if(gamepad1.a){
-//            slideOne.setTargetPosition(LOW_POS);
-//            slideTwo.setTargetPosition(LOW_POS);
-//            slideOne.setPower(ARM_POWER);
-//            slideTwo.setPower(ARM_POWER);
-//            while ((slideOne.isBusy()) && (slideTwo.isBusy())){
-//                // check driver input while slides are moving
-//                driveControls(leftFront, leftRear, rightFront, rightRear);}
-//            slideOne.setPower(0);
-//            slideTwo.setPower(0);
-//        }
-//        if(gamepad1.x){
-//            slideOne.setTargetPosition(MED_POS);
-//            slideTwo.setTargetPosition(MED_POS);
-//            slideOne.setPower(ARM_POWER);
-//            slideTwo.setPower(ARM_POWER);
-//            while ((slideOne.isBusy()) && (slideTwo.isBusy())){
-//                // check driver input while slides are moving
-//                driveControls(leftFront, leftRear, rightFront, rightRear);}
-//            slideOne.setPower(0);
-//            slideTwo.setPower(0);
-//        }
-//        if(gamepad1.y){
-//            slideOne.setTargetPosition(HIGH_POS);
-//            slideTwo.setTargetPosition(HIGH_POS);
-//            slideOne.setPower(ARM_POWER);
-//            slideTwo.setPower(ARM_POWER);
-//            while ((slideOne.isBusy()) && (slideTwo.isBusy())){
-//                // check driver input while slides are moving
-//                driveControls(leftFront, leftRear, rightFront, rightRear);}
-//            slideOne.setPower(0);
-//            slideTwo.setPower(0);
-//        }
-//    }
 
     private void safetyCheck(double rangeClaw) {
         if (rangeClaw < 0)//a number)
@@ -624,33 +550,23 @@ public class Driver_and_Operator_Controls_Field_Centric extends LinearOpMode {
         rightFront = hardwareMap.dcMotor.get("rightFront");
         rightRear = hardwareMap.dcMotor.get("rightRear");
 
-        // IMU hardware for driver centric control
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.RADIANS;
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
     }
 
     private void driveControls(DcMotor leftFront, DcMotor leftRear, DcMotor rightFront, DcMotor rightRear) {
-        double y = -gamepad2.left_stick_y;
-        double x = gamepad2.left_stick_x * 1.1;
+        double y = gamepad2.left_stick_y;
+        double x = -gamepad2.left_stick_x * 1.1;
         double rx = gamepad2.right_stick_x;
 
-        double botHeading = -imu.getAngularOrientation().firstAngle;
-
-        double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
-        double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
-
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
-        double frontRightPower = (rotY - rotX - rx) / denominator;
-        double backRightPower = (rotY + rotX - rx) / denominator;
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
 
         leftFront.setPower(frontLeftPower);
         leftRear.setPower(backLeftPower);
         rightFront.setPower(frontRightPower);
         rightRear.setPower(backRightPower);
+
     }
 }

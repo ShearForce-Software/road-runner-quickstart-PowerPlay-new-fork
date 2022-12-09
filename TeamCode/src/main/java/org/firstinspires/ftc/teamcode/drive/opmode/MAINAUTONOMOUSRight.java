@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoRouteRight")
+@Autonomous(name = "2) AutoRouteRight")
 public class MAINAUTONOMOUSRight extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;

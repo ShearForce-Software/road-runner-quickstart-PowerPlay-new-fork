@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,9 +11,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name = "4) Main Driver Field Centric (Auto Drop)")
+@TeleOp(name = "Main Driver Robot Centric (2)")
 
-public class Driver_and_Operator_Controls_Field_Centric_Auto_Drop extends LinearOpMode {
+public class Driver_and_Operator_Controls_Robot_Centric_2 extends LinearOpMode {
 
     // Define class members
     Servo  spinOne;
@@ -31,7 +30,6 @@ public class Driver_and_Operator_Controls_Field_Centric_Auto_Drop extends Linear
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
-    BNO055IMU imu;
 
     double  position1 = 0.95;
     double  position2 = 0.95;
@@ -562,12 +560,6 @@ public class Driver_and_Operator_Controls_Field_Centric_Auto_Drop extends Linear
         rightFront = hardwareMap.dcMotor.get("rightFront");
         rightRear = hardwareMap.dcMotor.get("rightRear");
 
-        // IMU hardware for driver centric control
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.RADIANS;
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
     }
 
     private void driveControls(DcMotor leftFront, DcMotor leftRear, DcMotor rightFront, DcMotor rightRear) {
@@ -575,20 +567,16 @@ public class Driver_and_Operator_Controls_Field_Centric_Auto_Drop extends Linear
         double x = -gamepad2.left_stick_x * 1.1;
         double rx = gamepad2.right_stick_x;
 
-        double botHeading = -imu.getAngularOrientation().firstAngle;
-
-        double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
-        double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
-
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
-        double frontRightPower = (rotY - rotX - rx) / denominator;
-        double backRightPower = (rotY + rotX - rx) / denominator;
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
 
         leftFront.setPower(frontLeftPower);
         leftRear.setPower(backLeftPower);
         rightFront.setPower(frontRightPower);
         rightRear.setPower(backRightPower);
+
     }
 }

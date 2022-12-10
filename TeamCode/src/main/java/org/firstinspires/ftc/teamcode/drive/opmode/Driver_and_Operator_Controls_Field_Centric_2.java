@@ -12,9 +12,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name = "3) Main Driver Field Centric (Manual Drop)")
+@TeleOp(name = "Main Driver Field Centric (2)")
 
-public class Driver_and_Operator_Controls_Field_Centric_Manual_Drop extends LinearOpMode {
+public class Driver_and_Operator_Controls_Field_Centric_2 extends LinearOpMode {
 
     // Define class members
     Servo  spinOne;
@@ -74,6 +74,16 @@ public class Driver_and_Operator_Controls_Field_Centric_Manual_Drop extends Line
             double rangeRear = rearDistance.getDistance(DistanceUnit.CM);
             double rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
             double rangeFront = frontDistance.getDistance(DistanceUnit.CM);
+
+            //----------------------------------------------------------------
+            // AutoDrop
+            //----------------------------------------------------------------
+            if((rangeRear < 2) && (ready)){
+                //************************************************************
+                // open claw when pole is detected by distance sensor
+                //************************************************************
+                position5 = .18;
+            }
 
             //----------------------------------------------------------------
             // AutoGrab

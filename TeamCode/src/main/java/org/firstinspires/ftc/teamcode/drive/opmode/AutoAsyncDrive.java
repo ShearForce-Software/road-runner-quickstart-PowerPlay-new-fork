@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.AprilTagDetectionPipeline;
@@ -72,11 +73,21 @@ public class AutoAsyncDrive extends LinearOpMode {
     double  position5 = 0.0;
     private ElapsedTime runtime = new ElapsedTime();
 
+    int START_POS = 5;
+    int STOW_POS = 1400;
+    int LOW_POS = 1850;   //2090
+    int MED_POS = 3560;   //3681
+    int HIGH_POS = 1550;  //1738
+    boolean high = false;
+    boolean movingDown = false;
+    boolean stow = false;
+    boolean ready = false;
+    public static final double ARM_POWER    =  1 ;
+
     @Override
     public void runOpMode() throws InterruptedException {
         AprilTags();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
         InitServosMotors();
 
         // Starting position of robot on field
@@ -91,34 +102,94 @@ public class AutoAsyncDrive extends LinearOpMode {
             // the way to the first junction.
             TrajectorySequence Start2 = drive.trajectorySequenceBuilder(startPose)
                     //.setConstraints(10, 10, Math.toRadians(180), Math.toRadians(180), 12)
-                    .forward(18)
-                    .turn(Math.toRadians(180))
+                    .forward(12,
+                            SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(15))
+                    // rotate 180 degree for cone delivery
+                    .splineToSplineHeading(
+                            new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90),
+                            SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(15))
+                    // position LG for junction pole delivery (fast)
+                    .splineToSplineHeading(
+                            new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90),
+                            SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(15))
+                    // drive LG at slower speed toward junction pole
+                    .splineToSplineHeading(new Pose2d(-30, -2, Math.toRadians(-135)), Math.toRadians(45),
+                            SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(15))
+                    .waitSeconds(.5)
+                    .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                            SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(15))
+                    .forward(8,
+                            SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(15))
                     .build();
             drive.followTrajectorySequenceAsync(Start2);
 
             // Keep in mind portions of code that do the same thing can be refactored to methods.
             // or refactor to methods just for readability.
-            // TODO: Set arm grip
-            if (!SpecialSleep(drive, 200)) return;
-            // TODO: Start slides
+            // armGrip close position
+            armGrip.setPosition(0); // close claw
+            if (!WaitForServo(drive, armGrip, 0)) return;
+            //************************************************************
+            // raise slide to cone stow position height
+            //************************************************************
+            telemetry.addData("slide target pos before",slideOne.getTargetPosition());
+            slideOne.setTargetPosition(STOW_POS);
+            slideTwo.setTargetPosition(STOW_POS);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            telemetry.addData("slide target pos after",slideOne.getTargetPosition());
             if (!WaitForSlides(drive)) return;
-            // TODO: Do arm movements, then wait for slide again?
-            if (!WaitForSlides(drive)) return;
-            // TODO: More arm movements
-            if (!SpecialSleep(drive, 1000)) return;
-            // TODO: More arm and wrist action
-            if (!WaitForTrajectoryToFinish(drive)) return;
-
-            // TODO: Seek for junction (if necessary) and Drop code
-
-            // TODO: Start next trajectory async to stack of cones.
-            //drive.followTrajectorySequenceAsync(blah);
-            // TODO: Move arm while driving
-            if (!WaitForTrajectoryToFinish(drive)) return;
-
-            // TODO: Seek and pickup cone
-
-            // TODO: Start next trajectory to next junction and move arm while driving.
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+            //************************************************************
+            // straighten wrist before rotating 180 degrees
+            //************************************************************
+            // liftWrist straight position
+            liftWrist.setPosition(.35);   // straighten wrist
+            if (!WaitForServo(drive, liftWrist, .35)) return;
+            //slideHeight();}
+            //************************************************************
+            // rotate arm 180 degrees to flip cone
+            //***********`*************************************************
+            // armRote position
+            armRote.setPosition(.82); // rotate arm 180 degrees
+            if (!WaitForServo(drive, armRote, .82)) return;
+            //slideHeight();}
+            //************************************************************
+            // spin arm to cone stow rotate position
+            //*************************************
+            // position1 = .84; //.72;                // spinOne cone stow rotate position
+            // spinTwo cone stow rotate position
+            spinOne.setPosition(.84); // spin arm to cone stow rotate position
+            spinTwo.setPosition(.84); // spin arm to cone stow rotate position
+//
+//            if (!SpecialSleep(drive, 0)) return;
+//            // TODO: Set arm grip
+//            if (!SpecialSleep(drive, 200)) return;
+//            // TODO: Start slides
+//            if (!WaitForSlides(drive)) return;
+//            // TODO: Do arm movements, then wait for slide again?
+//            if (!WaitForSlides(drive)) return;
+//            // TODO: More arm movements
+//            if (!SpecialSleep(drive, 1000)) return;
+//            // TODO: More arm and wrist action
+//            if (!WaitForTrajectoryToFinish(drive)) return;
+//
+//            // TODO: Seek for junction (if necessary) and Drop code
+//
+//            // TODO: Start next trajectory async to stack of cones.
+//            //drive.followTrajectorySequenceAsync(blah);
+//            // TODO: Move arm while driving
+//            if (!WaitForTrajectoryToFinish(drive)) return;
+//
+//            // TODO: Seek and pickup cone
+//
+//            // TODO: Start next trajectory to next junction and move arm while driving.
             // Once picked up, you can call a method you create that stows and/or raises to the
             // junction position you want.
             // Make sure to use our special wait and sleep methods.
@@ -133,7 +204,8 @@ public class AutoAsyncDrive extends LinearOpMode {
         return true;
     }
 
-    private boolean WaitForSlides(SampleMecanumDrive drive) {
+    private boolean
+    WaitForSlides(SampleMecanumDrive drive) {
         while ((slideOne.isBusy()) || (slideTwo.isBusy())) {
             if (ShouldStop()) return false;
             drive.update();
@@ -141,11 +213,15 @@ public class AutoAsyncDrive extends LinearOpMode {
         return true;
     }
 
-    private boolean SpecialSleep(SampleMecanumDrive drive, long milliseconds) {
-        for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
-            if (ShouldStop()) return false;
-            drive.update();
-        }
+    private boolean WaitForServo(SampleMecanumDrive drive, Servo servo, double target) {
+//        for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
+//            if (ShouldStop()) return false;
+//            drive.update();
+//        }
+          while(servo.getController().getServoPosition(servo.getPortNumber())!=target){
+              if (ShouldStop()) return false;
+              drive.update();
+          }
         return true;
     }
 
@@ -172,6 +248,10 @@ public class AutoAsyncDrive extends LinearOpMode {
         slideTwo.setDirection(DcMotor.Direction.FORWARD);
         slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

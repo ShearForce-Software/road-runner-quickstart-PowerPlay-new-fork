@@ -1,20 +1,14 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.acmerobotics.roadrunner.drive.Drive;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-import java.sql.Savepoint;
 import java.util.concurrent.TimeUnit;
 
 public class ArmControl {
@@ -119,10 +113,20 @@ public class ArmControl {
         armGrip.setPosition(0);
     }
 
-    public void GrabConeAndStowFromIntake(SampleMecanumDrive drive) {
+    public void GrabConeFromStack(SampleMecanumDrive drive) {
+        // If slides greater than START_POS and front sensor detects stack, lower slides.
+        // Claw is open, claw sensor detects cone, stops slides, closes claw (waits 300),
+        // raises slides to clear stack.
+        // Consider disarming wheels.
+    }
+
+    public void GrabConeAndStow(SampleMecanumDrive drive) {
+        // If slides at START_POS and front sensor detects cone
+        // Claw is open, claw sensor detects one, closes claw (waits 300)
+        // raises slides to STOW_POS, stows cone
 
         //************************************************************
-        // close claw when cone is detected by distance sensor
+        // close claw after cone is detected by distance sensor
         //************************************************************
         armGrip.setPosition(0); // close claw
         claw_time = 300;        // claw close time
@@ -162,8 +166,6 @@ public class ArmControl {
         stow = true;              // set stow variable to true
         intake = false;           // set input variable to false
     }
-
-    public void GrabConeAndStowFromStack(SampleMecanumDrive drive) {}
 
     public void GoToHigh(SampleMecanumDrive drive) {
 
@@ -270,11 +272,18 @@ public class ArmControl {
         ready = true;           // set ready for delivery variable to true
     }
 
-    public void GoToGround(SampleMecanumDrive drive) {}
+    public void GoToGround(SampleMecanumDrive drive) {
+        // Future movement to deliver to Ground Junction
+    }
 
-    public void GoToClawStow(SampleMecanumDrive drive) {}
+    public void GoToClawStow(SampleMecanumDrive drive) {
+        // Future movement to stow claw for safety
+        // Driver Control function - driver button push to stow claw
+    }
 
-    public void ReturnFromHighToIntake(SampleMecanumDrive drive) {
+    public void ReturnFromHigh(SampleMecanumDrive drive) {
+        // Check Drive Mode Parameter - if null - lower to 5 cone height
+        // otherwise lower to START_POS
 
         //************************************************************
         // Close claw
@@ -321,7 +330,9 @@ public class ArmControl {
         intake = true;
     }
 
-    public void ReturnFromLowMediumToIntake(SampleMecanumDrive drive) {
+    public void ReturnFromLowMedium(SampleMecanumDrive drive) {
+        // Check Drive Mode Parameter - if null - lower to 5 cone height
+        // otherwise lower to START_POS
 
         //************************************************************
         // Close claw
@@ -377,17 +388,15 @@ public class ArmControl {
         intake = true;
     }
 
-    public void ReturnFromGroundToIntake(SampleMecanumDrive drive) {
+    public void ReturnFromGround(SampleMecanumDrive drive) {
         // Future movement to return from Ground Junction
-    }
-
-    public void ReturnFromHighToStack(SampleMecanumDrive drive) {
-        // same as ReturnFromHighToIntake except stops at 5 high cone encoder height
-        // then jumps to GrabConeAndStowFromStack
+        // Check Drive Mode Parameter - if null - lower to 5 cone height
+        // otherwise lower to START_POS
     }
 
     public void ReturnFromClawStowToIntake(SampleMecanumDrive drive) {
-        // Driver button push to return claw to intake
+        // Future movement to return stow claw to intake
+        // Driver Control function - driver button push to return claw to intake
     }
 
     private void driveControlsRobotCentric() {

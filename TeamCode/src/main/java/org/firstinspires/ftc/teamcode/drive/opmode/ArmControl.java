@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.acmerobotics.roadrunner.drive.Drive;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -32,6 +33,7 @@ public class ArmControl {
     DistanceSensor rearDistance;
     DistanceSensor clawDistance;
     DistanceSensor frontDistance;
+    BNO055IMU imu;
 
     long  claw_time = 2000;
     long  wrist_time = 2000;
@@ -47,11 +49,13 @@ public class ArmControl {
     boolean ready = false;
     boolean intake = true;
     boolean IsDriverControl;
+    boolean IsFieldCentric;
     OpMode opMode;
     public static final double ARM_POWER    =  1 ;
 
-    public ArmControl(boolean isDriverControl, OpMode opMode) {
+    public ArmControl(boolean isDriverControl, boolean isFieldCentric, OpMode opMode) {
         this.IsDriverControl = isDriverControl;
+        this.IsFieldCentric = isFieldCentric;
         this.opMode = opMode;
     }
 
@@ -86,6 +90,12 @@ public class ArmControl {
         slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+
         StartPosition();
     }
 
@@ -141,7 +151,7 @@ public class ArmControl {
 
     public void ReturnFromLowMedium() {}
 
-    private void driveControls() {
+    private void driveControlsRobotCentric() {
         double y = opMode.gamepad2.left_stick_y;
         double x = -opMode.gamepad2.left_stick_x * 1.1;
         double rx = opMode.gamepad2.right_stick_x;
@@ -158,11 +168,34 @@ public class ArmControl {
         rightRear.setPower(backRightPower);
     }
 
+    private void driveControlsFieldCentric() {
+        double y = -opMode.gamepad2.left_stick_y;
+        double x = opMode.gamepad2.left_stick_x * 1.1;
+        double rx = opMode.gamepad2.right_stick_x;
+
+        double botHeading = -imu.getAngularOrientation().firstAngle;
+
+        double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
+        double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (rotY + rotX + rx) / denominator;
+        double backLeftPower = (rotY - rotX + rx) / denominator;
+        double frontRightPower = (rotY - rotX - rx) / denominator;
+        double backRightPower = (rotY + rotX - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower);
+        leftRear.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightRear.setPower(backRightPower);
+    }
+
     private void WaitForTrajectoryToFinish(SampleMecanumDrive drive) {
         while(drive.isBusy()) {
-            drive.update();
+            if(drive != null) drive.update();
             if (IsDriverControl) {
-                driveControls();
+                if(IsFieldCentric) driveControlsFieldCentric();
+                if(!IsFieldCentric) driveControlsRobotCentric();
             }
         }
     }
@@ -171,7 +204,8 @@ public class ArmControl {
         while ((slideOne.isBusy()) || (slideTwo.isBusy())) {
             drive.update();
             if (IsDriverControl) {
-                driveControls();
+                if(IsFieldCentric) driveControlsFieldCentric();
+                if(!IsFieldCentric) driveControlsRobotCentric();
             }
         }
     }
@@ -180,7 +214,8 @@ public class ArmControl {
         for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
             drive.update();
             if (IsDriverControl) {
-                driveControls();
+                if(IsFieldCentric) driveControlsFieldCentric();
+                if(!IsFieldCentric) driveControlsRobotCentric();
             }
         }
     }

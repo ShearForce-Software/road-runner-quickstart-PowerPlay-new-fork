@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class AutoAsyncDrive extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-    ArmControl armControl = new ArmControl();
+    ArmControl armControl = new ArmControl(false, this);
 
     static final double FEET_PER_METER = 3.28084;
 

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class AutoAsyncDrive extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    ArmControl armControl = new ArmControl();
 
     static final double FEET_PER_METER = 3.28084;
 
@@ -56,39 +58,18 @@ public class AutoAsyncDrive extends LinearOpMode {
 
     AprilTagDetection tagOfInterest = null;
 
-    Servo spinOne;
-    Servo  spinTwo;
-    Servo  armRote;
-    Servo  liftWrist;
-    Servo  armGrip;
-    DcMotor slideOne;
-    DcMotor slideTwo;
-    DistanceSensor rearDistance;
-    DistanceSensor clawDistance;
-    DistanceSensor frontDistance;
     double  position1 = 0.95;
     double  position2 = 0.95;
-    double  position3 = 0.13;
+    double  position3 = 0.11;
     double  position4 = 0.6;
     double  position5 = 0.0;
     private ElapsedTime runtime = new ElapsedTime();
-
-    int START_POS = 5;
-    int STOW_POS = 1400;
-    int LOW_POS = 1850;   //2090
-    int MED_POS = 3560;   //3681
-    int HIGH_POS = 1550;  //1738
-    boolean high = false;
-    boolean movingDown = false;
-    boolean stow = false;
-    boolean ready = false;
-    public static final double ARM_POWER    =  1 ;
 
     @Override
     public void runOpMode() throws InterruptedException {
         AprilTags();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        InitServosMotors();
+        armControl.Init(hardwareMap);
 
         // Starting position of robot on field
         Pose2d startPose = new Pose2d(-36, -60, Math.toRadians(90));
@@ -129,44 +110,44 @@ public class AutoAsyncDrive extends LinearOpMode {
                     .build();
             drive.followTrajectorySequenceAsync(Start2);
 
-            // Keep in mind portions of code that do the same thing can be refactored to methods.
-            // or refactor to methods just for readability.
-            // armGrip close position
-            armGrip.setPosition(0); // close claw
-            if (!WaitForServo(drive, armGrip, 0)) return;
-            //************************************************************
-            // raise slide to cone stow position height
-            //************************************************************
-            telemetry.addData("slide target pos before",slideOne.getTargetPosition());
-            slideOne.setTargetPosition(STOW_POS);
-            slideTwo.setTargetPosition(STOW_POS);
-            slideOne.setPower(ARM_POWER);
-            slideTwo.setPower(ARM_POWER);
-            telemetry.addData("slide target pos after",slideOne.getTargetPosition());
-            if (!WaitForSlides(drive)) return;
-            slideOne.setPower(0);
-            slideTwo.setPower(0);
-            //************************************************************
-            // straighten wrist before rotating 180 degrees
-            //************************************************************
-            // liftWrist straight position
-            liftWrist.setPosition(.35);   // straighten wrist
-            if (!WaitForServo(drive, liftWrist, .35)) return;
-            //slideHeight();}
-            //************************************************************
-            // rotate arm 180 degrees to flip cone
-            //***********`*************************************************
-            // armRote position
-            armRote.setPosition(.82); // rotate arm 180 degrees
-            if (!WaitForServo(drive, armRote, .82)) return;
-            //slideHeight();}
-            //************************************************************
-            // spin arm to cone stow rotate position
-            //*************************************
-            // position1 = .84; //.72;                // spinOne cone stow rotate position
-            // spinTwo cone stow rotate position
-            spinOne.setPosition(.84); // spin arm to cone stow rotate position
-            spinTwo.setPosition(.84); // spin arm to cone stow rotate position
+//            // Keep in mind portions of code that do the same thing can be refactored to methods.
+//            // or refactor to methods just for readability.
+//            // armGrip close position
+//            armGrip.setPosition(0); // close claw
+//            if (!WaitForServo(drive, armGrip, 0)) return;
+//            //************************************************************
+//            // raise slide to cone stow position height
+//            //************************************************************
+//            telemetry.addData("slide target pos before",slideOne.getTargetPosition());
+//            slideOne.setTargetPosition(STOW_POS);
+//            slideTwo.setTargetPosition(STOW_POS);
+//            slideOne.setPower(ARM_POWER);
+//            slideTwo.setPower(ARM_POWER);
+//            telemetry.addData("slide target pos after",slideOne.getTargetPosition());
+//            if (!WaitForSlides(drive)) return;
+//            slideOne.setPower(0);
+//            slideTwo.setPower(0);
+//            //************************************************************
+//            // straighten wrist before rotating 180 degrees
+//            //************************************************************
+//            // liftWrist straight position
+//            liftWrist.setPosition(.35);   // straighten wrist
+//            if (!WaitForServo(drive, liftWrist, .35)) return;
+//            //slideHeight();}
+//            //************************************************************
+//            // rotate arm 180 degrees to flip cone
+//            //***********`*************************************************
+//            // armRote position
+//            armRote.setPosition(.82); // rotate arm 180 degrees
+//            if (!WaitForServo(drive, armRote, .82)) return;
+//            //slideHeight();}
+//            //************************************************************
+//            // spin arm to cone stow rotate position
+//            //*************************************
+//            // position1 = .84; //.72;                // spinOne cone stow rotate position
+//            // spinTwo cone stow rotate position
+//            spinOne.setPosition(.84); // spin arm to cone stow rotate position
+//            spinTwo.setPosition(.84); // spin arm to cone stow rotate position
 //
 //            if (!SpecialSleep(drive, 0)) return;
 //            // TODO: Set arm grip
@@ -204,15 +185,6 @@ public class AutoAsyncDrive extends LinearOpMode {
         return true;
     }
 
-    private boolean
-    WaitForSlides(SampleMecanumDrive drive) {
-        while ((slideOne.isBusy()) || (slideTwo.isBusy())) {
-            if (ShouldStop()) return false;
-            drive.update();
-        }
-        return true;
-    }
-
     private boolean WaitForServo(SampleMecanumDrive drive, Servo servo, double target) {
 //        for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
 //            if (ShouldStop()) return false;
@@ -228,39 +200,6 @@ public class AutoAsyncDrive extends LinearOpMode {
     private boolean ShouldStop() {
         // Should we stop at 29 seconds to account for human delay pressing start?
         return !opModeIsActive() || isStopRequested() || runtime.seconds() >= 30;
-    }
-
-    private void InitServosMotors() {
-        spinOne = hardwareMap.get(Servo.class, "spinOne");
-        spinTwo = hardwareMap.get(Servo.class, "spinTwo");
-        armRote = hardwareMap.get(Servo.class, "armRote");
-        liftWrist = hardwareMap.get(Servo.class, "liftWrist");
-        armGrip = hardwareMap.get(Servo.class, "armGrip");
-        slideOne = hardwareMap.get(DcMotor.class, "slideOne");
-        slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
-
-        spinOne.setDirection(Servo.Direction.FORWARD);
-        spinTwo.setDirection(Servo.Direction.REVERSE);
-        armRote.setDirection(Servo.Direction.FORWARD);
-        liftWrist.setDirection(Servo.Direction.FORWARD);
-        armGrip.setDirection(Servo.Direction.FORWARD);
-        slideOne.setDirection(DcMotor.Direction.FORWARD);
-        slideTwo.setDirection(DcMotor.Direction.FORWARD);
-        slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        armGrip.setPosition(position5);
-        sleep(2000);
-        spinOne.setPosition(position1);
-        spinTwo.setPosition(position2);
-        armRote.setPosition(position3);
-        liftWrist.setPosition(position4);
     }
 
     private void AprilTags() {

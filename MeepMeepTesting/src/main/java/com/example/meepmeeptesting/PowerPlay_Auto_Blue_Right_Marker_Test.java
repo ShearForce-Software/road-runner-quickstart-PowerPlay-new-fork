@@ -40,7 +40,7 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 // chassis distance sensor to release cone
 
                                 .setReversed(false)
-                                .splineToLinearHeading(new Pose2d(-48, -12, Math.toRadians(-180)), Math.toRadians(-180))
+                                .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(-180)), Math.toRadians(-180))
                                 .addTemporalMarker(3.0, () -> {
                                     // close claw
                                 })

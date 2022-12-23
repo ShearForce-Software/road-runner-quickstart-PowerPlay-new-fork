@@ -141,15 +141,142 @@ public class ArmControl {
         ready = true;
     }
 
-    public void GoToHigh() {}
+    public void GoToMedium(SampleMecanumDrive drive) {
+        high = false;       // set position variable for return
+        //************************************************************
+        // verify claw is closed
+        //************************************************************
+        armGrip.setPosition(0);
+        //************************************************************
+        // raise slides to medium junction delivery height
+        //************************************************************
+        slideOne.setTargetPosition(MED_POS);
+        slideTwo.setTargetPosition(MED_POS);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+        //************************************************************
+        // spin arm to medium junction position
+        //************************************************************
+        spinOne.setPosition(0.83);
+        spinTwo.setPosition(0.83);
+        //************************************************************
+        // wrist to delivery angle (Medium)
+        //************************************************************
+        liftWrist.setPosition(0.86); // wrist to delivery angle
+        // set stow variable to false
+        stow = false;
+        // set ready for delivery variable to true
+        ready = true;}
 
-    public void GoToMedium() {}
+    public void GoToLow(SampleMecanumDrive drive) {
+        high = false;       // set position variable for return
+        //************************************************************
+        // verify claw is closed
+        //************************************************************
+        armGrip.setPosition(0);
+        //************************************************************
+        // raise slides to low junction delivery height
+        //************************************************************
+        slideOne.setTargetPosition(LOW_POS);
+        slideTwo.setTargetPosition(LOW_POS);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+        //************************************************************
+        // spin arm to low junction position
+        //************************************************************
+        spinOne.setPosition(0.83);
+        spinTwo.setPosition(0.83);
+        //************************************************************
+        // wrist to delivery angle (Low)
+        //************************************************************
+        liftWrist.setPosition(0.86); // wrist to delivery angle
+        // set stow variable to false
+        stow = false;
+        // set ready for delivery variable to true
+        ready = true;
+    }
 
-    public void GoToLow() {}
+    public void ReturnFromHigh(SampleMecanumDrive drive) {
+        //************************************************************
+        // Close claw
+        //************************************************************
+        armGrip.setPosition(0);
+        claw_time = 200;
+        WaitForSlides(drive);
+        //************************************************************
+        // spin arm to safe return position
+        //************************************************************
+        spinOne.setPosition(0.95);
+        spinTwo.setPosition(0.95);
+        //************************************************************
+        // straighten wrist
+        //************************************************************
+        liftWrist.setPosition(0.35);
+        //************************************************************
+        // rotate arm 180 degrees
+        //************************************************************
+        armRote.setPosition(0.11);
+        //************************************************************
+        // wrist to cone pickup position
+        //************************************************************
+        liftWrist.setPosition(0.6);
+        //************************************************************
+        // lower slides to cone intake height
+        //************************************************************
+        slideOne.setTargetPosition(START_POS);
+        slideTwo.setTargetPosition(START_POS);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+        //************************************************************
+        // Open claw
+        //************************************************************
+        armGrip.setPosition(0.18);
+        intake = true;
+    }
 
-    public void ReturnFromHigh() {}
-
-    public void ReturnFromLowMedium() {}
+    public void ReturnFromLowMedium(SampleMecanumDrive drive) {
+        //************************************************************
+        // Close claw
+        //************************************************************
+        armGrip.setPosition(0);
+        //************************************************************
+        // rotate arm 180 degrees (so gripper is backwards)
+        //************************************************************
+        armRote.setPosition(0.11);
+        //************************************************************
+        // spin arm to cone pickup position
+        //************************************************************
+        spinOne.setPosition(0.95);
+        spinTwo.setPosition(0.95);
+        //************************************************************
+        // wrist to cone pickup position
+        //************************************************************
+        liftWrist.setPosition(0.6);
+        //************************************************************
+        // lower slides to cone intake height
+        //************************************************************
+        slideOne.setTargetPosition(START_POS);
+        slideTwo.setTargetPosition(START_POS);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+        //************************************************************
+        // Open claw
+        //************************************************************
+        armGrip.setPosition(0.18);
+        intake = true;
+    }
 
     private void driveControlsRobotCentric() {
         double y = opMode.gamepad2.left_stick_y;

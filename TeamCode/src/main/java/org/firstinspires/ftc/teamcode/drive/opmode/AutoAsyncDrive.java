@@ -109,6 +109,7 @@ public class AutoAsyncDrive extends LinearOpMode {
                             SampleMecanumDrive.getAccelerationConstraint(15))
                     .build();
             drive.followTrajectorySequenceAsync(Start2);
+            armControl.GoToHigh(drive);
 
 //            // Keep in mind portions of code that do the same thing can be refactored to methods.
 //            // or refactor to methods just for readability.

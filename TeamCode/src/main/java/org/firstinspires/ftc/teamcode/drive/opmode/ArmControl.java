@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.concurrent.TimeUnit;
 
-
 public class ArmControl {
     // Define class members
     Servo  spinOne;
@@ -202,7 +201,7 @@ public class ArmControl {
         ready = true;
     }
 
-    public void ReturnFromHigh(SampleMecanumDrive drive) {
+    public void ReturnFromLowMedium(SampleMecanumDrive drive) {
         //************************************************************
         // Close claw
         //************************************************************
@@ -243,7 +242,7 @@ public class ArmControl {
         intake = true;
     }
 
-    public void ReturnFromLowMedium(SampleMecanumDrive drive) {
+    public void ReturnFromHigh(SampleMecanumDrive drive) {
         //************************************************************
         // Close claw
         //************************************************************
@@ -329,7 +328,7 @@ public class ArmControl {
 
     private void WaitForSlides(SampleMecanumDrive drive) {
         while ((slideOne.isBusy()) || (slideTwo.isBusy())) {
-            drive.update();
+            if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
                 if(!IsFieldCentric) driveControlsRobotCentric();
@@ -339,7 +338,7 @@ public class ArmControl {
 
     private void SpecialSleep(SampleMecanumDrive drive, long milliseconds) {
         for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
-            drive.update();
+            if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
                 if(!IsFieldCentric) driveControlsRobotCentric();

@@ -9,9 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
 import java.util.concurrent.TimeUnit;
+
 
 public class ArmControl {
     // Define class members
@@ -88,7 +91,7 @@ public class ArmControl {
 
     public void StartPosition() {
         armGrip.setPosition(0);
-        SpecialSleep(null, 200);
+        SpecialSleep(null, 300);
         spinOne.setPosition(.95);
         spinTwo.setPosition(.95);
         armRote.setPosition(.11);
@@ -128,15 +131,15 @@ public class ArmControl {
         ready = true;
     }
 
-    public void GoToMedium(SampleMecanumDrive drive) {}
+    public void GoToHigh() {}
 
-    public void GoToLow(SampleMecanumDrive drive) {}
+    public void GoToMedium() {}
 
-    public void ReturnFromHigh(SampleMecanumDrive drive) {}
+    public void GoToLow() {}
 
-    public void ReturnFromLowMedium(SampleMecanumDrive drive) {}
+    public void ReturnFromHigh() {}
 
-    public void Stow(SampleMecanumDrive drive) {}
+    public void ReturnFromLowMedium() {}
 
     private void driveControls() {
         double y = opMode.gamepad2.left_stick_y;

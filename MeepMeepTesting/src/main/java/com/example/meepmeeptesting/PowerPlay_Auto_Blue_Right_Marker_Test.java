@@ -9,7 +9,6 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
         Pose2d junctionPos = new Pose2d(-30,-2, Math.toRadians(-135));
-
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)

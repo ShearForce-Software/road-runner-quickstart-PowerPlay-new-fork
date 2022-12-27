@@ -41,10 +41,10 @@ public class Driver_and_Operator_Controls_Robot_Centric_Manual_Drop extends Line
     long  spin_time = 2000;
     long  rotate_time = 2000;
     int START_POS = 5;
-    int STOW_POS = 1400;
-    int LOW_POS = 1850;   //2090
-    int MED_POS = 3560;   //3681
-    int HIGH_POS = 1550;  //1738
+    int STOW_POS = 1080;
+    int LOW_POS = 1250;   //2090
+    int MED_POS = 2370;   //3681
+    int HIGH_POS = 865;  //1738
     boolean high = false;
     boolean stow = false;
     boolean ready = false;

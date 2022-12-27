@@ -34,24 +34,27 @@ public class ArmControl {
     DistanceSensor frontDistance;
     BNO055IMU imu;
 
+    double rangeRear;
+    double rangeClaw;
+    double rangeFront;
+
     long  claw_time = 2000;
     long  wrist_time = 2000;
     long  spin_time = 2000;
     long  rotate_time = 2000;
     int START_POS = 5;
-    int STOW_POS = 1400;
-    int LOW_POS = 1850;   //2090
-    int MED_POS = 3560;   //3681
-    int HIGH_POS = 1550;  //1738
-    boolean high = false;
-    boolean stow = false;
-    boolean ready = false;
-    boolean intake = true;
+    int STOW_POS = 1080; //1400
+    int LOW_POS = 1250;   //1850
+    int MED_POS = 2370;   //3560
+    int HIGH_POS = 865;  //1550
+    public boolean high = false;
+    public boolean stow = false;
+    public boolean ready = false;
+    public boolean intake = true;
     boolean IsDriverControl;
     boolean IsFieldCentric;
     OpMode opMode;
-    public static final double ARM_POWER    =  1 ;
-
+    public static final double ARM_POWER =  1 ;
     public ArmControl(boolean isDriverControl, boolean isFieldCentric, OpMode opMode) {
         this.IsDriverControl = isDriverControl;
         this.IsFieldCentric = isFieldCentric;
@@ -260,6 +263,7 @@ public class ArmControl {
         // wrist to cone pickup position
         //************************************************************
         liftWrist.setPosition(0.6);
+        SpecialSleep(drive, 600);
         //************************************************************
         // lower slides to cone intake height
         //************************************************************
@@ -277,10 +281,58 @@ public class ArmControl {
         intake = true;
     }
 
-    private void driveControlsRobotCentric() {
+    public void StowCone(SampleMecanumDrive drive){
+        //************************************************************
+        // close claw when cone is detected by distance sensor
+        //************************************************************
+        // armGrip close position
+        armGrip.setPosition(0); // close claw
+        // wait for claw to close
+        SpecialSleep(drive, 300);
+        //************************************************************
+        // raise slide to cone stow position height
+        //************************************************************
+        slideOne.setTargetPosition(STOW_POS);
+        slideTwo.setTargetPosition(STOW_POS);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+        //************************************************************
+        // straighten wrist before rotating 180 degrees
+        //************************************************************
+        // liftWrist straight position
+        liftWrist.setPosition(.35);   // straighten wrist
+        // wait for wrist to straighten
+        SpecialSleep(drive, 200);
+        //slideHeight();}
+        //************************************************************
+        // rotate arm 180 degrees to flip cone
+        //************************************************************
+        // armRote position
+        armRote.setPosition(.82); // rotate arm 180 degrees
+        // wait for arm to rotate
+        SpecialSleep(drive, 600);
+        //slideHeight();}
+        //************************************************************
+        // spin arm to cone stow rotate position
+        //************************************************************
+        spinOne.setPosition(.84); // spin arm to cone stow rotate position
+        spinTwo.setPosition(.84); // spin arm to cone stow rotate position
+        stow = true;
+        // set input variable to false
+        intake = false;
+    }
+
+    public void driveControlsRobotCentric() {
         double y = opMode.gamepad2.left_stick_y;
         double x = -opMode.gamepad2.left_stick_x * 1.1;
         double rx = opMode.gamepad2.right_stick_x;
+
+        rangeRear = rearDistance.getDistance(DistanceUnit.CM);
+        rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
+        rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double frontLeftPower = (y + x + rx) / denominator;
@@ -294,10 +346,14 @@ public class ArmControl {
         rightRear.setPower(backRightPower);
     }
 
-    private void driveControlsFieldCentric() {
+    public void driveControlsFieldCentric() {
         double y = -opMode.gamepad2.left_stick_y;
         double x = opMode.gamepad2.left_stick_x * 1.1;
         double rx = opMode.gamepad2.right_stick_x;
+
+        rangeRear = rearDistance.getDistance(DistanceUnit.CM);
+        rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
+        rangeFront = frontDistance.getDistance(DistanceUnit.CM);
 
         double botHeading = -imu.getAngularOrientation().firstAngle;
 
@@ -315,6 +371,10 @@ public class ArmControl {
         rightFront.setPower(frontRightPower);
         rightRear.setPower(backRightPower);
     }
+
+    public void closeClaw(){armGrip.setPosition(0);}
+
+    public void openClaw(){armGrip.setPosition(.18);}
 
     private void WaitForTrajectoryToFinish(SampleMecanumDrive drive) {
         while(drive.isBusy()) {

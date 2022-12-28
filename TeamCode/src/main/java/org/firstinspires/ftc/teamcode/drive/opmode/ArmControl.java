@@ -38,10 +38,6 @@ public class ArmControl {
     double rangeClaw;
     double rangeFront;
 
-    long  claw_time = 2000;
-    long  wrist_time = 2000;
-    long  spin_time = 2000;
-    long  rotate_time = 2000;
     int START_POS = 5;
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
@@ -97,8 +93,6 @@ public class ArmControl {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
-        StartPosition();
     }
 
     public void StartPosition() {
@@ -209,7 +203,6 @@ public class ArmControl {
         // Close claw
         //************************************************************
         armGrip.setPosition(0);
-        claw_time = 200;
         WaitForSlides(drive);
         //************************************************************
         // spin arm to safe return position

@@ -21,7 +21,6 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
     ArmControl armControl = new ArmControl(true, false, this);
     @Override
     public void runOpMode() throws InterruptedException {
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         armControl.Init(hardwareMap);
         armControl.StartPosition();
 
@@ -38,8 +37,9 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
             if (gamepad1.right_bumper) {
                 armControl.closeClaw();
             }
+
             if ((((armControl.rangeClaw < 2.75) && (armControl.armGrip.getPosition() == .18)) && (armControl.slideOne.getCurrentPosition() <= 100) && (armControl.slideTwo.getCurrentPosition() <= 100))) {
-                armControl.StowCone(drive);
+                armControl.StowCone(null);
             }
             //----------------------------------------------------------------
             // AutoGrab
@@ -48,19 +48,19 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
             // High - move to high junction position from stow
             //----------------------------------------------------------------
             if ((gamepad1.y) && (!armControl.intake)) {
-                armControl.GoToHigh(drive);
+                armControl.GoToHigh(null);
             }
             //----------------------------------------------------------------
             // Medium - move to medium junction position from stow
             //----------------------------------------------------------------
             if ((gamepad1.x) && (!armControl.intake)){
-                armControl.GoToMedium(drive);
+                armControl.GoToMedium(null);
             }
             //----------------------------------------------------------------
             // Low - move to low junction position from stow
             //----------------------------------------------------------------
             if ((gamepad1.a) && (!armControl.intake)){
-                armControl.GoToLow(drive);
+                armControl.GoToLow(null);
             }
 
             //----------------------------------------------------------------
@@ -69,10 +69,10 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
             if ((gamepad1.b)&&(!(armControl.stow))&&((armControl.slideOne.getCurrentPosition()>5)||(armControl.slideTwo.getCurrentPosition()>5))){
                 armControl.ready = false;
                 if (!armControl.high) {
-                    armControl.ReturnFromLowMedium(drive);
+                    armControl.ReturnFromLowMedium(null);
                 }
                 else if(armControl.high){
-                    armControl.ReturnFromHigh(drive);
+                    armControl.ReturnFromHigh(null);
                 }
             }
             // Display the current value

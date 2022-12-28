@@ -1,19 +1,10 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-
-import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
 
@@ -38,7 +29,7 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
                 armControl.closeClaw();
             }
 
-            if ((((armControl.rangeClaw < 2.75) && (armControl.armGrip.getPosition() == .18)) && (armControl.slideOne.getCurrentPosition() <= 100) && (armControl.slideTwo.getCurrentPosition() <= 100))) {
+            if ((((armControl.rangeClaw < 3) && (armControl.armGrip.getPosition() == .18)) && (armControl.slideOne.getCurrentPosition() <= 100) && (armControl.slideTwo.getCurrentPosition() <= 100))) {
                 armControl.StowCone(null);
             }
             //----------------------------------------------------------------
@@ -67,7 +58,7 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
             // ground pos - reset to cone intake position from high, medium, and low positions only
             //----------------------------------------------------------------
             if ((gamepad1.b)&&(!(armControl.stow))&&((armControl.slideOne.getCurrentPosition()>5)||(armControl.slideTwo.getCurrentPosition()>5))){
-                armControl.ready = false;
+                armControl.readyToDrop = false;
                 if (!armControl.high) {
                     armControl.ReturnFromLowMedium(null);
                 }
@@ -76,6 +67,7 @@ public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop exte
                 }
             }
             // Display the current value
+
             telemetry.addData("spinOne Servo Position", "%5.2f", armControl.spinOne.getPosition());
             telemetry.addData("spinTwo Servo Position", "%5.2f", armControl.spinTwo.getPosition());
             telemetry.addData("armRote Servo Position", "%5.2f", armControl.armRote.getPosition());

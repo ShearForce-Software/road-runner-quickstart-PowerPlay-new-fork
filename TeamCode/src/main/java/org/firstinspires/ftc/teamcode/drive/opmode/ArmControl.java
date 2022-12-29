@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.acmerobotics.roadrunner.drive.Drive;
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -38,18 +34,14 @@ public class ArmControl {
     double rangeClaw;
     double rangeFront;
 
-    long  claw_time = 2000;
-    long  wrist_time = 2000;
-    long  spin_time = 2000;
-    long  rotate_time = 2000;
-    int START_POS = 5;
+    int START_POS = 10; //5
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
     int MED_POS = 2370;   //3560
-    int HIGH_POS = 865;  //1550
+    int HIGH_POS = 900;  //1550   865
     public boolean high = false;
     public boolean stow = false;
-    public boolean ready = false;
+    public boolean readyToDrop = false;
     public boolean intake = true;
     boolean IsDriverControl;
     boolean IsFieldCentric;
@@ -72,10 +64,13 @@ public class ArmControl {
         armGrip = hardwareMap.get(Servo.class, "armGrip");
         slideOne = hardwareMap.get(DcMotor.class, "slideOne");
         slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
-        leftFront = hardwareMap.dcMotor.get("leftFront");
-        leftRear = hardwareMap.dcMotor.get("leftRear");
-        rightFront = hardwareMap.dcMotor.get("rightFront");
-        rightRear = hardwareMap.dcMotor.get("rightRear");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+//        leftRear = hardwareMap.dcMotor.get("leftRear");
+//        rightFront = hardwareMap.dcMotor.get("rightFront");
+//        rightRear = hardwareMap.dcMotor.get("rightRear");
 
         spinOne.setDirection(Servo.Direction.FORWARD);
         spinTwo.setDirection(Servo.Direction.REVERSE);
@@ -92,13 +87,13 @@ public class ArmControl {
         slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-
-        StartPosition();
     }
 
     public void StartPosition() {
@@ -119,6 +114,12 @@ public class ArmControl {
         //************************************************************
         armGrip.setPosition(0);
         //************************************************************
+        // swinging arm to high junction position
+        //************************************************************
+        spinOne.setPosition(.11);
+        spinTwo.setPosition(.11);
+        SpecialSleep(drive, 300);
+        //************************************************************
         // raise slides to high junction delivery height
         //************************************************************
         slideOne.setTargetPosition(HIGH_POS);
@@ -129,18 +130,13 @@ public class ArmControl {
         slideOne.setPower(0);
         slideTwo.setPower(0);
         //************************************************************
-        // swinging arm to high junction position
-        //************************************************************
-        spinOne.setPosition(.11);
-        spinTwo.setPosition(.11);
-        //************************************************************
         // wrist to delivery angle (high)
         //************************************************************
         liftWrist.setPosition(.13);
         // set stow variable to false
         stow = false;
         // set ready for delivery variable to true
-        ready = true;
+        readyToDrop = true;
     }
 
     public void GoToMedium(SampleMecanumDrive drive) {
@@ -171,7 +167,7 @@ public class ArmControl {
         // set stow variable to false
         stow = false;
         // set ready for delivery variable to true
-        ready = true;}
+        readyToDrop = true;}
 
     public void GoToLow(SampleMecanumDrive drive) {
         high = false;       // set position variable for return
@@ -201,7 +197,7 @@ public class ArmControl {
         // set stow variable to false
         stow = false;
         // set ready for delivery variable to true
-        ready = true;
+        readyToDrop = true;
     }
 
     public void ReturnFromLowMedium(SampleMecanumDrive drive) {
@@ -209,25 +205,28 @@ public class ArmControl {
         // Close claw
         //************************************************************
         armGrip.setPosition(0);
-        claw_time = 200;
-        WaitForSlides(drive);
+        SpecialSleep(drive, 200);
         //************************************************************
         // spin arm to safe return position
         //************************************************************
         spinOne.setPosition(0.95);
         spinTwo.setPosition(0.95);
+        SpecialSleep(drive, 300);
         //************************************************************
         // straighten wrist
         //************************************************************
         liftWrist.setPosition(0.35);
+        SpecialSleep(drive, 300);
         //************************************************************
         // rotate arm 180 degrees
         //************************************************************
         armRote.setPosition(0.11);
+        SpecialSleep(drive,550);
         //************************************************************
         // wrist to cone pickup position
         //************************************************************
         liftWrist.setPosition(0.6);
+        SpecialSleep(drive, 200);
         //************************************************************
         // lower slides to cone intake height
         //************************************************************
@@ -257,6 +256,7 @@ public class ArmControl {
         //************************************************************
         // spin arm to cone pickup position
         //************************************************************
+        SpecialSleep(drive, 700);
         spinOne.setPosition(0.95);
         spinTwo.setPosition(0.95);
         //************************************************************
@@ -387,7 +387,7 @@ public class ArmControl {
     }
 
     private void WaitForSlides(SampleMecanumDrive drive) {
-        while ((slideOne.isBusy()) || (slideTwo.isBusy())) {
+        while ((slideOne.isBusy()) && (slideTwo.isBusy())) {
             if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();

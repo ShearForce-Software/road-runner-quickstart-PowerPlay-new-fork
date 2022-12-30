@@ -5,9 +5,9 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.SampleMecanumDrive;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
-//this is a test
 
-public class PowerPlay_Auto_Blue_Right_Marker_Test {
+
+public class PowerPlay_Auto_Left_StackToHigh6 {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
         Pose2d junctionPos = new Pose2d(-29,-8, Math.toRadians(-135));
@@ -68,6 +68,7 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
+                                .splineToSplineHeading(linePos, Math.toRadians(-180))
                                 .splineToLinearHeading(stackPos, Math.toRadians(-180))
                                 //>>>>>>>>>>>park<<<<<<<<<<<<<
                                 .back(48)

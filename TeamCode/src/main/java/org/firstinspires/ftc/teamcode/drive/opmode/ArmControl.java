@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -45,9 +46,9 @@ public class ArmControl {
     public boolean intake = true;
     boolean IsDriverControl;
     boolean IsFieldCentric;
-    OpMode opMode;
+    LinearOpMode opMode;
     public static final double ARM_POWER =  1 ;
-    public ArmControl(boolean isDriverControl, boolean isFieldCentric, OpMode opMode) {
+    public ArmControl(boolean isDriverControl, boolean isFieldCentric, LinearOpMode opMode) {
         this.IsDriverControl = isDriverControl;
         this.IsFieldCentric = isFieldCentric;
         this.opMode = opMode;
@@ -376,8 +377,8 @@ public class ArmControl {
 
     public void openClaw(){armGrip.setPosition(.18);}
 
-    private void WaitForTrajectoryToFinish(SampleMecanumDrive drive) {
-        while(drive.isBusy()) {
+    public void WaitForTrajectoryToFinish(SampleMecanumDrive drive) {
+        while(opMode.opModeIsActive() && !opMode.isStopRequested() && drive.isBusy()) {
             if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
@@ -386,8 +387,8 @@ public class ArmControl {
         }
     }
 
-    private void WaitForSlides(SampleMecanumDrive drive) {
-        while ((slideOne.isBusy()) && (slideTwo.isBusy())) {
+    public void WaitForSlides(SampleMecanumDrive drive) {
+        while (opMode.opModeIsActive() && !opMode.isStopRequested()  && (slideOne.isBusy()) && (slideTwo.isBusy())) {
             if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
@@ -396,8 +397,9 @@ public class ArmControl {
         }
     }
 
-    private void SpecialSleep(SampleMecanumDrive drive, long milliseconds) {
+    public void SpecialSleep(SampleMecanumDrive drive, long milliseconds) {
         for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
+            if (!opMode.opModeIsActive() || opMode.isStopRequested() ) return;
             if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();

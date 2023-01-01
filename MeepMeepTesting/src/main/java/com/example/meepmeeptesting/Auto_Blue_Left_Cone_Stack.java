@@ -3,11 +3,10 @@ package com.example.meepmeeptesting;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
-import com.noahbres.meepmeep.roadrunner.SampleMecanumDrive;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 //this is a test
 
-public class PowerPlay_Auto_Blue_Right_Marker_Test {
+public class Auto_Blue_Left_Cone_Stack {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
         Pose2d junctionPos = new Pose2d(-29,-8, Math.toRadians(-135));
@@ -22,18 +21,17 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(-180))
-
+                                .splineToSplineHeading(linePos, Math.toRadians(180))
                                 // slow down this portion of the trajectory
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .setReversed(true)
                                 //2nd cone
                                 .splineToSplineHeading(linePos, Math.toRadians(0))
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(-180))
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .splineToSplineHeading(linePos, Math.toRadians(180))
+                                .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(.75)
                                 .setReversed(true)
                                 //3rd cone
@@ -41,8 +39,8 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(-180))
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .splineToSplineHeading(linePos, Math.toRadians(180))
+                                .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(.75)
                                 .setReversed(true)
                                 //4th cone
@@ -50,8 +48,8 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(-180))
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .splineToSplineHeading(linePos, Math.toRadians(180))
+                                .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(.75)
                                 .setReversed(true)
                                 //5th cone
@@ -59,8 +57,8 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(-180))
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .splineToSplineHeading(linePos, Math.toRadians(180))
+                                .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(.75)
                                 .setReversed(true)
                                 //6th cone
@@ -68,7 +66,7 @@ public class PowerPlay_Auto_Blue_Right_Marker_Test {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 //>>>>>>>>>>>park<<<<<<<<<<<<<
                                 .back(48)
                                 .build()

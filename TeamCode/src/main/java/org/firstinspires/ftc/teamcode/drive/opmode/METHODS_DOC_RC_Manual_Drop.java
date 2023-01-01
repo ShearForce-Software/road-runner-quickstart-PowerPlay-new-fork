@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-
 @TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
 
-public class Methods_Driver_and_Operator_Controls_Robot_Centric_Manual_Drop extends LinearOpMode {
+public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
     ArmControl armControl = new ArmControl(true, false, this);
     @Override
     public void runOpMode() throws InterruptedException {

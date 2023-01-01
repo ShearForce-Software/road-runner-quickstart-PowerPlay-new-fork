@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "Stack Pickup Not Final")
 
-public class Driver_and_Operator_Controls_2 extends LinearOpMode {
+public class Stack_Grab extends LinearOpMode {
 
     // Define class members
     Servo spinOne;
@@ -78,23 +77,23 @@ public class Driver_and_Operator_Controls_2 extends LinearOpMode {
             coneStack = true;
             while (coneStack) {
                 ARM_POWER = .3;
-                desiredPos = 10;
-                position5 = 0;
-                slideOne.setPower(ARM_POWER);
-                slideTwo.setPower(ARM_POWER);
-                slideOne.setTargetPosition(desiredPos);
-                slideTwo.setTargetPosition(desiredPos);
-                rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
-                if (rangeClaw <= 3) {
-                    coneStack = false;
-                    slideOne.setPower(0);
-                    slideTwo.setPower(0);
-                    ARM_POWER = 1;
-                    armGrip.setPosition(position5);
-                    desiredPos = 1200;
-                    for (long stop = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(200); stop > System.nanoTime(); ) {
-                    }
+                    desiredPos = 10;
+                    position5 = 0;
                     slideOne.setPower(ARM_POWER);
+                    slideTwo.setPower(ARM_POWER);
+                    slideOne.setTargetPosition(desiredPos);
+                    slideTwo.setTargetPosition(desiredPos);
+                    rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
+                    if (rangeClaw <= 3) {
+                        coneStack = false;
+                        slideOne.setPower(0);
+                        slideTwo.setPower(0);
+                        ARM_POWER = 1;
+                        armGrip.setPosition(position5);
+                        desiredPos = 1200;
+                        for (long stop = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(200); stop > System.nanoTime(); ) {
+                        }
+                        slideOne.setPower(ARM_POWER);
                     slideTwo.setPower(ARM_POWER);
                     slideOne.setTargetPosition(desiredPos);
                     slideTwo.setTargetPosition(desiredPos);
@@ -103,7 +102,6 @@ public class Driver_and_Operator_Controls_2 extends LinearOpMode {
                     if (slideOne.getCurrentPosition() < 12) {
                         break;
                     }
-
                 }
             }
 

@@ -4,11 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -21,8 +16,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
 /*
  * Op mode to experiment with Road Runner Autonomous Routes.
  * Utilization of the dashboard is recommended to visualize routes and check path following.
@@ -36,8 +29,8 @@ import java.util.concurrent.TimeUnit;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoAsyncDrive")
-public class AutoAsyncDrive extends LinearOpMode {
+@Autonomous(name = "Cone Stack Auto Left")
+public class Cone_Stack_Left_Auto extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -110,28 +103,25 @@ public class AutoAsyncDrive extends LinearOpMode {
             // the way to the first junction.
             drive.followTrajectorySequenceAsync(FirstCone);
 
-            //************HACK FOR BUG IN ASYNC DRIVE****************//
-            armControl.slideOne.setTargetPosition(armControl.STOW_POS);
-            armControl.slideTwo.setTargetPosition(armControl.STOW_POS);
-            armControl.slideOne.setPower(armControl.ARM_POWER);
-            armControl.slideTwo.setPower(armControl.ARM_POWER);
-            armControl.WaitForSlides(drive);
-            armControl.slideOne.setPower(0);
-            armControl.slideTwo.setPower(0);
-
+            //**************ADDED HARD CODE FOR SLIDE MOVEMENTS**************//
+            SlidesToStowHardCode(armControl, drive);
             armControl.StowCone(drive);
+            SlidesToHighHardCode(armControl, drive);
             armControl.GoToHigh(drive);
             armControl.WaitForTrajectoryToFinish(drive);
             for (int i = 0; i <5; i++){
                 armControl.openClaw();
                 drive.followTrajectorySequenceAsync(ToStack);
                 armControl.SpecialSleep(drive, 1000);
-                armControl.ReturnFromHigh(drive);
+                armControl.closeClaw(); //god only knows why we need this here but it doesn't like to close the claw so
+                armControl.ReadyToGrabFromStack(drive);
                 armControl.WaitForTrajectoryToFinish(drive);
-                //grab from stack
+                armControl.GrabFromStack(drive);
                 drive.followTrajectorySequenceAsync(ToHighJunction);
                 armControl.SpecialSleep(drive, 500);
+                SlidesToStowHardCode(armControl, drive); //we love having trust issues with the slides
                 armControl.StowCone(drive);
+                SlidesToHighHardCode(armControl, drive); //love it sm
                 armControl.GoToHigh(drive);
                 armControl.WaitForTrajectoryToFinish(drive);
             }
@@ -158,6 +148,27 @@ public class AutoAsyncDrive extends LinearOpMode {
             // Make sure to use our special wait and sleep methods.
         }
     }
+
+    private void SlidesToStowHardCode(ArmControl armControl, SampleMecanumDrive drive) {
+        armControl.slideOne.setTargetPosition(armControl.STOW_POS);
+        armControl.slideTwo.setTargetPosition(armControl.STOW_POS);
+        armControl.slideOne.setPower(armControl.ARM_POWER);
+        armControl.slideTwo.setPower(armControl.ARM_POWER);
+        armControl.WaitForSlides(drive);
+        armControl.slideOne.setPower(0);
+        armControl.slideTwo.setPower(0);
+    }
+
+    private void SlidesToHighHardCode(ArmControl armControl, SampleMecanumDrive drive) {
+        armControl.slideOne.setTargetPosition(armControl.HIGH_POS);
+        armControl.slideTwo.setTargetPosition(armControl.HIGH_POS);
+        armControl.slideOne.setPower(armControl.ARM_POWER);
+        armControl.slideTwo.setPower(armControl.ARM_POWER);
+        armControl.WaitForSlides(drive);
+        armControl.slideOne.setPower(0);
+        armControl.slideTwo.setPower(0);
+    }
+
 
     private void AprilTags() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

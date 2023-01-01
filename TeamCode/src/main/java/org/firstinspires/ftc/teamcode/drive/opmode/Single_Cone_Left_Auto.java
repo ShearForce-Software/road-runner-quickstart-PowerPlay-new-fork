@@ -20,7 +20,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 /*
  * Op mode to experiment with Road Runner Autonomous Routes.
@@ -35,8 +34,8 @@ import java.util.concurrent.TimeUnit;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "AutoRouteRight")
-public class MAINAUTONOMOUSRight extends LinearOpMode {
+@Autonomous(name = "SingleConeLeft")
+public class Single_Cone_Left_Auto extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -84,7 +83,7 @@ public class MAINAUTONOMOUSRight extends LinearOpMode {
         SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
         // Starting position of robot on field
-        Pose2d startPose = new Pose2d(36, -60, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-36, -60, Math.toRadians(90));
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence MainDrive = drive.trajectorySequenceBuilder(startPose)
@@ -174,20 +173,20 @@ public class MAINAUTONOMOUSRight extends LinearOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // rotate 180 degree for cone delivery
                 .splineToSplineHeading(
-                        new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90),
+                        new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // position LG for junction pole delivery (fast)
                 .splineToSplineHeading(
-                        new Pose2d(36, -12, Math.toRadians(-45)), Math.toRadians(90),
+                        new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // drive LG at slower speed toward junction pole
-                .splineToSplineHeading(new Pose2d(30, -2, Math.toRadians(-45)), Math.toRadians(135),
+                .splineToSplineHeading(new Pose2d(-30, -2, Math.toRadians(-135)), Math.toRadians(45),
                         SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 .waitSeconds(.5)
-                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 .forward(8,
@@ -202,7 +201,7 @@ public class MAINAUTONOMOUSRight extends LinearOpMode {
         if (opModeIsActive()) {
 
             drive.followTrajectorySequence(MainDrive);
-            Pose2d parkPose = new Pose2d(36,-32,Math.toRadians(-90));
+            Pose2d parkPose = new Pose2d(-36,-32,Math.toRadians(-90));
 
             if (tagOfInterest.id==11){
                 //to first spot

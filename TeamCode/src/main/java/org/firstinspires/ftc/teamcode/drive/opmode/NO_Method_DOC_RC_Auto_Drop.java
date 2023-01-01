@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @TeleOp(name = "2) Main Driver Robot Centric (Auto Drop)")
 
-public class Driver_and_Operator_Controls_Robot_Centric_Auto_Drop extends LinearOpMode {
+public class NO_Method_DOC_RC_Auto_Drop extends LinearOpMode {
 
     // Define class members
     Servo  spinOne;

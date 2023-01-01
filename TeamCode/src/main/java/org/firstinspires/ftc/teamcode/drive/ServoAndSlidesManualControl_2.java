@@ -51,8 +51,6 @@ public class ServoAndSlidesManualControl_2 extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-
-
         // Slide Init
         slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -159,9 +157,7 @@ public class ServoAndSlidesManualControl_2 extends LinearOpMode {
                 slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
-                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(800); stop>System.nanoTime();) {
-
-                }
+                for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(800); stop>System.nanoTime();) {}
                 stackPickUp = true;
                 while (stackPickUp){
                     ARM_POWER = .75;
@@ -187,8 +183,6 @@ public class ServoAndSlidesManualControl_2 extends LinearOpMode {
                         slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         slideOne.setPower(0);
                         slideTwo.setPower(0);
-
-
                     }
                 }
             }

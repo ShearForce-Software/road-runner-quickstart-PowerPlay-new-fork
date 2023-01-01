@@ -44,6 +44,7 @@ public class ArmControl {
     public boolean stow = false;
     public boolean readyToDrop = false;
     public boolean intake = true;
+    public boolean coneStack = false;
     boolean IsDriverControl;
     boolean IsFieldCentric;
     LinearOpMode opMode;
@@ -105,8 +106,6 @@ public class ArmControl {
         armRote.setPosition(.11);
         liftWrist.setPosition(.6);
     }
-
-    public void GrabFromStack(SampleMecanumDrive drive) {}
 
     public void GoToHigh(SampleMecanumDrive drive) {
         high = true;        // set position variable for return
@@ -282,6 +281,52 @@ public class ArmControl {
         intake = true;
     }
 
+    public void ReadyToGrabFromStack(SampleMecanumDrive drive) {
+        armGrip.setPosition(0); // Close claw
+        armRote.setPosition(0.11); // rotate arm 180 degrees (so gripper is backwards)
+        SpecialSleep(drive, 700);
+        spinOne.setPosition(0.95); // spin arm to cone pickup position
+        spinTwo.setPosition(0.95);
+        liftWrist.setPosition(0.6); // wrist to cone pickup position
+        SpecialSleep(drive, 600);
+        slideOne.setTargetPosition(1500);
+        slideTwo.setTargetPosition(1500);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        armRote.setPosition(.13);
+        liftWrist.setPosition(.6);
+        SpecialSleep(drive, 800);
+        armGrip.setPosition(.18);
+    }
+
+    public void GrabFromStack(SampleMecanumDrive drive) {
+        coneStack = true;
+        while (coneStack) {
+            slideOne.setTargetPosition(10);
+            slideTwo.setTargetPosition(10);
+            slideOne.setPower(.3);
+            slideTwo.setPower(.3);
+            rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
+            if (rangeClaw <= 3) {
+                coneStack = false;
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+                armGrip.setPosition(0);
+                for (long stop = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(200); stop > System.nanoTime(); ) {
+                }
+                slideOne.setPower(ARM_POWER);
+                slideTwo.setPower(ARM_POWER);
+                slideOne.setTargetPosition(1200);
+                slideTwo.setTargetPosition(1200);
+                for (long stop = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(2000); stop > System.nanoTime(); ) {}
+                coneStack = true;
+                if (slideOne.getCurrentPosition() < 12) {
+                    break;
+                }
+            }
+        }
+    }
+
     public void StowCone(SampleMecanumDrive drive){
         //************************************************************
         // close claw when cone is detected by distance sensor
@@ -324,6 +369,14 @@ public class ArmControl {
         stow = true;
         // set input variable to false
         intake = false;
+    }
+
+    public void closeClaw(){
+        armGrip.setPosition(0);
+    }
+
+    public void openClaw(){
+        armGrip.setPosition(.18);
     }
 
     public void driveControlsRobotCentric() {
@@ -373,10 +426,6 @@ public class ArmControl {
         rightRear.setPower(backRightPower);
     }
 
-    public void closeClaw(){armGrip.setPosition(0);}
-
-    public void openClaw(){armGrip.setPosition(.18);}
-
     public void WaitForTrajectoryToFinish(SampleMecanumDrive drive) {
         while(opMode.opModeIsActive() && !opMode.isStopRequested() && drive.isBusy()) {
             if(drive != null) drive.update();
@@ -388,7 +437,7 @@ public class ArmControl {
     }
 
     public void WaitForSlides(SampleMecanumDrive drive) {
-        while (opMode.opModeIsActive() && !opMode.isStopRequested()  && (slideOne.isBusy()) && (slideTwo.isBusy())) {
+        while ((slideOne.isBusy()) && (slideTwo.isBusy()) && (!opMode.isStopRequested())) {
             if(drive != null) drive.update();
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();

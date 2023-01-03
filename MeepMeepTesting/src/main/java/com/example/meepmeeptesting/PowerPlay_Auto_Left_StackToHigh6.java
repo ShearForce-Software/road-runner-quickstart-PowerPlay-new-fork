@@ -16,15 +16,16 @@ public class PowerPlay_Auto_Left_StackToHigh6 {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-36, -64.5, Math.toRadians(90)))
-                                .forward(12)
+                        drive.trajectorySequenceBuilder(new Pose2d(-32, -64.5, Math.toRadians(90)))
+                                .splineToSplineHeading(new Pose2d(-34.5, -48, Math.toRadians(90)), Math.toRadians(90))
+                                .forward(6)
                                 .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
-                                .setReversed(false)
+                                .waitSeconds(.75)
                                 .splineToSplineHeading(linePos, Math.toRadians(-180))
-
                                 // slow down this portion of the trajectory
                                 .splineToLinearHeading(stackPos, Math.toRadians(-180))
+                                .waitSeconds(.75)
                                 .setReversed(true)
                                 //2nd cone
                                 .splineToSplineHeading(linePos, Math.toRadians(0))
@@ -67,10 +68,9 @@ public class PowerPlay_Auto_Left_StackToHigh6 {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(-180))
-                                .splineToLinearHeading(stackPos, Math.toRadians(-180))
                                 //>>>>>>>>>>>park<<<<<<<<<<<<<
-                                .back(48)
+                                .splineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(-90)), Math.toRadians(0))
+                                .strafeRight(-24)
                                 .build()
                 );
 

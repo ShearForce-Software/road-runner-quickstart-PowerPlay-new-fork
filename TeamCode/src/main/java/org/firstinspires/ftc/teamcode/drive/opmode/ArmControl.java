@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -39,7 +40,8 @@ public class ArmControl {
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
     int MED_POS = 2370;   //3560
-    int HIGH_POS = 900;  //1550   865
+    int HIGH_POS = 1080;  //1550     900
+    int STACK_POS = 1100;
     public boolean high = false;
     public boolean stow = false;
     public boolean readyToDrop = false;
@@ -101,8 +103,8 @@ public class ArmControl {
     public void StartPosition() {
         armGrip.setPosition(0);
         SpecialSleep(null, 300);
-        spinOne.setPosition(.95);
-        spinTwo.setPosition(.95);
+        spinOne.setPosition(.97);
+        spinTwo.setPosition(.97);
         armRote.setPosition(.11);
         liftWrist.setPosition(.6);
     }
@@ -116,8 +118,8 @@ public class ArmControl {
         //************************************************************
         // swinging arm to high junction position
         //************************************************************
-        spinOne.setPosition(.11);
-        spinTwo.setPosition(.11);
+        spinOne.setPosition(.14);
+        spinTwo.setPosition(.14);
         SpecialSleep(drive, 300);
         //************************************************************
         // raise slides to high junction delivery height
@@ -285,12 +287,12 @@ public class ArmControl {
         armGrip.setPosition(0); // Close claw
         armRote.setPosition(0.11); // rotate arm 180 degrees (so gripper is backwards)
         SpecialSleep(drive, 700);
-        spinOne.setPosition(0.95); // spin arm to cone pickup position
-        spinTwo.setPosition(0.95);
+        spinOne.setPosition(0.97); // spin arm to cone pickup position
+        spinTwo.setPosition(0.97);
         liftWrist.setPosition(0.6); // wrist to cone pickup position
         SpecialSleep(drive, 600);
-        slideOne.setTargetPosition(1500);
-        slideTwo.setTargetPosition(1500);
+        slideOne.setTargetPosition(STACK_POS);
+        slideTwo.setTargetPosition(STACK_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         armRote.setPosition(.13);
@@ -307,22 +309,22 @@ public class ArmControl {
             slideOne.setPower(.3);
             slideTwo.setPower(.3);
             rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
-            if (rangeClaw <= 3) {
+            if (rangeClaw <= 2.6) {
                 coneStack = false;
                 slideOne.setPower(0);
                 slideTwo.setPower(0);
                 armGrip.setPosition(0);
-                for (long stop = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(200); stop > System.nanoTime(); ) {
-                }
+                SpecialSleep(drive, 200);
                 slideOne.setPower(ARM_POWER);
                 slideTwo.setPower(ARM_POWER);
                 slideOne.setTargetPosition(1200);
                 slideTwo.setTargetPosition(1200);
-                for (long stop = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(2000); stop > System.nanoTime(); ) {}
-                coneStack = true;
-                if (slideOne.getCurrentPosition() < 12) {
-                    break;
-                }
+                WaitForSlides(drive);
+                slideOne.setPower(0);
+                slideTwo.setPower(0);
+            }
+            else if ((slideOne.getCurrentPosition() <= 10) || (slideTwo.getCurrentPosition() <= 10)){
+                coneStack = false;
             }
         }
     }
@@ -428,7 +430,15 @@ public class ArmControl {
 
     public void WaitForTrajectoryToFinish(SampleMecanumDrive drive) {
         while(opMode.opModeIsActive() && !opMode.isStopRequested() && drive.isBusy()) {
-            if(drive != null) drive.update();
+            if(drive != null){
+                drive.update();
+                Pose2d poseEstimate = drive.getPoseEstimate();
+                opMode.telemetry.addData("y", poseEstimate.getX());
+                opMode.telemetry.addData("x", poseEstimate.getY());
+                opMode.telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+                opMode.telemetry.addData("front distance", rangeClaw);
+                opMode.telemetry.update();
+            }
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
                 if(!IsFieldCentric) driveControlsRobotCentric();
@@ -438,7 +448,15 @@ public class ArmControl {
 
     public void WaitForSlides(SampleMecanumDrive drive) {
         while ((slideOne.isBusy()) && (slideTwo.isBusy()) && (!opMode.isStopRequested())) {
-            if(drive != null) drive.update();
+            if(drive != null) {
+                drive.update();
+                Pose2d poseEstimate = drive.getPoseEstimate();
+                opMode.telemetry.addData("y", poseEstimate.getX());
+                opMode.telemetry.addData("x", poseEstimate.getY());
+                opMode.telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+                opMode.telemetry.addData("front distance", rangeClaw);
+                opMode.telemetry.update();
+            }
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
                 if(!IsFieldCentric) driveControlsRobotCentric();
@@ -449,7 +467,15 @@ public class ArmControl {
     public void SpecialSleep(SampleMecanumDrive drive, long milliseconds) {
         for (long stop = System.nanoTime()+ TimeUnit.MILLISECONDS.toNanos(milliseconds); stop>System.nanoTime();) {
             if (!opMode.opModeIsActive() || opMode.isStopRequested() ) return;
-            if(drive != null) drive.update();
+            if(drive != null) {
+                drive.update();
+                Pose2d poseEstimate = drive.getPoseEstimate();
+                opMode.telemetry.addData("y", poseEstimate.getX());
+                opMode.telemetry.addData("x", poseEstimate.getY());
+                opMode.telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
+                opMode.telemetry.addData("front distance", rangeClaw);
+                opMode.telemetry.update();
+            }
             if (IsDriverControl) {
                 if(IsFieldCentric) driveControlsFieldCentric();
                 if(!IsFieldCentric) driveControlsRobotCentric();

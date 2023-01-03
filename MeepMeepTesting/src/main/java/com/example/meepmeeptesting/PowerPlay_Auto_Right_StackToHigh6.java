@@ -68,9 +68,10 @@ public class PowerPlay_Auto_Right_StackToHigh6 {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .waitSeconds(.75)
                                 .setReversed(false)
+                                .splineToSplineHeading(linePos, Math.toRadians(0))
+                                .splineToLinearHeading(stackPos, Math.toRadians(0))
                                 //>>>>>>>>>>>park<<<<<<<<<<<<<
-                                .splineToLinearHeading(new Pose2d(36, -12, Math.toRadians(-90)), Math.toRadians(180))
-                                .strafeRight(24)
+                                .back(48)
                                 .build()
                 );
 

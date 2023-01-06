@@ -5,7 +5,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class PowerPlay_Auto_Right_StackToHigh6 {
+public class Auto_Right_StackToHigh6_Edge {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
         Pose2d junctionPos = new Pose2d(29,-8, Math.toRadians(-45));
@@ -15,8 +15,8 @@ public class PowerPlay_Auto_Right_StackToHigh6 {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
-                                .forward(12)
+                        drive.trajectorySequenceBuilder(new Pose2d(40, -64.5, Math.toRadians(90)))
+                                .splineToSplineHeading(new Pose2d(36, -48, Math.toRadians(90)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .waitSeconds(.75)
@@ -68,10 +68,9 @@ public class PowerPlay_Auto_Right_StackToHigh6 {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(0))
-                                .splineToLinearHeading(stackPos, Math.toRadians(0))
                                 //>>>>>>>>>>>park<<<<<<<<<<<<<
-                                .back(48)
+                                .splineToLinearHeading(new Pose2d(36, -12, Math.toRadians(-90)), Math.toRadians(180))
+                                .strafeRight(24)
                                 .build()
                 );
 

@@ -21,7 +21,8 @@ public class PowerplayFarRightBenTest {
                                 //preloaded cone - low 1: 6pts
                                 .splineToSplineHeading(new Pose2d(-32, 52, Math.toRadians(155)), Math.toRadians(-25))
                                 .waitSeconds(.75)
-                                .splineToSplineHeading(new Pose2d(-35, 48, Math.toRadians(180)), Math.toRadians(-90))
+                                .strafeTo(new Vector2d(-35, 48))
+                                .strafeTo(new Vector2d(-35, 45))
                                 .splineToSplineHeading(new Pose2d(-35, 20, Math.toRadians(180)), Math.toRadians(-90))
                                 .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(.75)
@@ -51,7 +52,8 @@ public class PowerplayFarRightBenTest {
                                 .waitSeconds(.75)
                                 //5th cone - low 2: 6 pts
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-54, 17, Math.toRadians(-135)), Math.toRadians(90))
+                                .lineToLinearHeading(new Pose2d(-54, 17, Math.toRadians(-135)))
+                                //.splineToSplineHeading(new Pose2d(-54, 17, Math.toRadians(-135)), Math.toRadians(90))
                                 .waitSeconds(.75)
                                 .setReversed(false)
                                 .splineToLinearHeading(stackPos, Math.toRadians(180))

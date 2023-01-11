@@ -15,8 +15,8 @@ public class PowerPlay_Auto_Right_StackToHigh6 {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(40, -64.5, Math.toRadians(90)))
-                                .splineToSplineHeading(new Pose2d(34.5, -48, Math.toRadians(90)), Math.toRadians(90))
+                        drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
+                                .forward(12)
                                 .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .waitSeconds(.75)
@@ -68,9 +68,10 @@ public class PowerPlay_Auto_Right_StackToHigh6 {
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .waitSeconds(.75)
                                 .setReversed(false)
+                                .splineToSplineHeading(linePos, Math.toRadians(0))
+                                .splineToLinearHeading(stackPos, Math.toRadians(0))
                                 //>>>>>>>>>>>park<<<<<<<<<<<<<
-                                .splineToLinearHeading(new Pose2d(36, -12, Math.toRadians(-90)), Math.toRadians(0))
-                                .strafeRight(-24)
+                                .back(48)
                                 .build()
                 );
 

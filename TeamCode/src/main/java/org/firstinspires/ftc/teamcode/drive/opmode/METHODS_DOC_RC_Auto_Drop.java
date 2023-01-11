@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
+@TeleOp(name = "3) Methods Main Driver Robot Centric (Auto Drop)")
 
-public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
+public class METHODS_DOC_RC_Auto_Drop extends LinearOpMode {
     ArmControl armControl = new ArmControl(true, false, this);
     @Override
     public void runOpMode() throws InterruptedException {
@@ -18,6 +18,13 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
 
         while(opModeIsActive()){
             armControl.driveControlsRobotCentric();
+
+            if((armControl.rangeRear < 2) && (armControl.readyToDrop)){
+                //************************************************************
+                // open claw when pole is detected by distance sensor
+                //************************************************************
+                armControl.armGrip.setPosition(.18);
+            }
 
             if (gamepad1.left_bumper) {
                 armControl.openClaw();

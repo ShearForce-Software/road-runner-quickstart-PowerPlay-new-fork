@@ -54,11 +54,11 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
         ArmControl armControl = new ArmControl(false, false, this);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         // Starting position of robot on field
-        double stackY = -15;
+        double stackY = -13.8;
         armControl.STACK_POS = 1100;
         Pose2d startPose = new Pose2d(36, -64.5, Math.toRadians(90));
-        Pose2d junctionPos = new Pose2d(29,-8, Math.toRadians(-45));
-        Pose2d stackPos = new Pose2d(60, stackY, Math.toRadians(0));
+        Pose2d junctionPos = new Pose2d(29.9,-6.6, Math.toRadians(-45));
+        Pose2d stackPos = new Pose2d(62, stackY, Math.toRadians(0));
         Pose2d linePos = new Pose2d(40, stackY, Math.toRadians(0));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
@@ -66,7 +66,10 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
                 //.setConstraints(10, 10, Math.toRadians(180), Math.toRadians(180), 12)
-                .forward(7.5,
+                /*.splineToSplineHeading(new Pose2d(36.5, -48, Math.toRadians(90)), Math.toRadians(90),
+                        SampleMecanumDrive.getVelocityConstraint(35,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(35))*/
+                .forward(12,
                         SampleMecanumDrive.getVelocityConstraint(35,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(35))
                 .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90),
@@ -111,7 +114,7 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
             armControl.GoToHigh(drive);
             SlidesToHighHardCode(armControl, drive);
             armControl.WaitForTrajectoryToFinish(drive);
-            for (int i = 0; i < 5; i++){
+            for (int i = 0; i < 2; i++){
                 armControl.openClaw();
                 drive.followTrajectorySequenceAsync(ToStack);
                 armControl.SpecialSleep(drive, 1000);
@@ -136,7 +139,7 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
                         .splineToSplineHeading(new Pose2d(36, -26, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .forward(12,
+                        .forward(11,
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
                         .strafeRight(24,
@@ -151,7 +154,7 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
                         .splineToSplineHeading(new Pose2d(36, -26, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .forward(12,
+                        .forward(11,
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
                         .build();
@@ -163,7 +166,7 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
                         .splineToSplineHeading(new Pose2d(36, -26, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .forward(12,
+                        .forward(11,
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
                         .strafeLeft(24,

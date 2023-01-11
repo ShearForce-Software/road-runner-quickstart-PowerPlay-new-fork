@@ -13,7 +13,7 @@ public class PowerPlay_auto_blue_left_nearjunction {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(65, 65, Math.toRadians(200), Math.toRadians(200), 12.0)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(36, 60, Math.toRadians(-90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(32, 60, Math.toRadians(-90)))
                                 .forward(12)
                                 .setReversed(false)
                                 .splineToLinearHeading(new Pose2d(31, 7, Math.toRadians(45)), Math.toRadians(-135))

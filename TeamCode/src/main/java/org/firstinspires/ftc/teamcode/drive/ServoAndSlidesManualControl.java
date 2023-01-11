@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 // @Disabled
 @TeleOp(name = "Servo & Slides Manual Control")
-
+@Disabled
 public class ServoAndSlidesManualControl extends LinearOpMode {
 
     static final double SCALE       = 0.01;     // Joystick scaling for servo increment value

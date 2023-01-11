@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 // @Disabled
@@ -22,6 +23,10 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
     Servo  armGrip;
     DcMotor slideOne;
     DcMotor slideTwo;
+    DcMotor leftFront;
+    DcMotor leftRear;
+    DcMotor rightFront;
+    DcMotor rightRear;
     double  position1 = .95; //spinOne, left stick y
     double  position2 = .95; //spinTwo
     double  position3 = .11; //armRote, right stick x
@@ -39,6 +44,10 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
         armGrip = hardwareMap.get(Servo.class, "armGrip");
         slideOne = hardwareMap.get(DcMotor.class, "slideOne");
         slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotor.class, "LeftRear");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
 
         // Slide Init
         slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,6 +58,12 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
         slideTwo.setDirection(DcMotor.Direction.FORWARD);
         slideOne.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slideTwo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Chassis Motor Config
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Servo direction
         spinOne.setDirection(Servo.Direction.FORWARD);
@@ -64,6 +79,8 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
+
+            driveControls(leftFront, leftRear, rightFront, rightRear);
 
             if (gamepad1.left_bumper) {
                 position5 = .18;
@@ -141,5 +158,21 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
             armGrip.setPosition(position5);
             idle();
         }
+    }
+    private void driveControls(DcMotor leftFront, DcMotor leftRear, DcMotor rightFront, DcMotor rightRear) {
+        double y = gamepad2.left_stick_y;
+        double x = -gamepad2.left_stick_x * 1.1;
+        double rx = gamepad2.right_stick_x;
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower);
+        leftRear.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightRear.setPower(backRightPower);
     }
 }

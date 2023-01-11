@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @TeleOp(name = "Stack Pickup Not Final")
-
+@Disabled
 public class Stack_Grab extends LinearOpMode {
 
     // Define class members

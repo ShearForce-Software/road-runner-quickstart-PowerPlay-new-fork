@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
+@TeleOp(name = "2) Methods Main Driver Field Centric (Manual Drop)")
 
-public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
-    ArmControl armControl = new ArmControl(true, false, this);
+public class METHODS_DOC_FC_Manual_Drop extends LinearOpMode {
+    ArmControl armControl = new ArmControl(true, true, this);
     @Override
     public void runOpMode() throws InterruptedException {
         armControl.Init(hardwareMap);
@@ -17,7 +17,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
         if (isStopRequested()) return;
 
         while(opModeIsActive()){
-            armControl.driveControlsRobotCentric();
+            armControl.driveControlsFieldCentric();
 
             if (gamepad1.left_bumper) {
                 armControl.openClaw();

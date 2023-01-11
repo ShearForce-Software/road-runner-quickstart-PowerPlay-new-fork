@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 // @Disabled
 @TeleOp(name = "Stack Pickup 2")
-
+@Disabled
 public class ServoAndSlidesManualControl_2 extends LinearOpMode {
 
     static final double SCALE       = 0.01;     // Joystick scaling for servo increment value

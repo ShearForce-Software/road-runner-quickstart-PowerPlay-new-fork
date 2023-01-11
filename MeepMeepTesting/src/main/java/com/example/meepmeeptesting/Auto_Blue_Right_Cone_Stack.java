@@ -16,8 +16,8 @@ public class Auto_Blue_Right_Cone_Stack {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
-                                .forward(12)
+                        drive.trajectorySequenceBuilder(new Pose2d(40, -64.5, Math.toRadians(90)))
+                                .splineToSplineHeading(new Pose2d(36.5, -48, Math.toRadians(90)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .setReversed(false)

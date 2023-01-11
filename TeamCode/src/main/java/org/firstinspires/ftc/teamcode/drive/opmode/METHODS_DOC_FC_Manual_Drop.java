@@ -10,7 +10,7 @@ public class METHODS_DOC_FC_Manual_Drop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         armControl.Init(hardwareMap);
-        armControl.StartPosition();
+        armControl.StartPosition(null);
 
         waitForStart();
 
@@ -18,6 +18,10 @@ public class METHODS_DOC_FC_Manual_Drop extends LinearOpMode {
 
         while(opModeIsActive()){
             armControl.driveControlsFieldCentric();
+
+            if(gamepad1.dpad_down){
+                armControl.SafetyStow(null);
+            }
 
             if (gamepad1.left_bumper) {
                 armControl.openClaw();

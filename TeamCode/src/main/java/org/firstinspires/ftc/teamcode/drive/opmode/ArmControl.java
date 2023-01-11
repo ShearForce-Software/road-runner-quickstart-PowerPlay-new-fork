@@ -100,7 +100,14 @@ public class ArmControl {
         imu.initialize(parameters);
     }
 
-    public void StartPosition() {
+    public void StartPosition(SampleMecanumDrive drive) {
+        slideOne.setTargetPosition(0);
+        slideTwo.setTargetPosition(0);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
         armGrip.setPosition(0);
         SpecialSleep(null, 300);
         spinOne.setPosition(.97);
@@ -315,6 +322,22 @@ public class ArmControl {
         WaitForSlides(drive);
         slideOne.setPower(0);
         slideTwo.setPower(0);
+    }
+
+    public void SafetyStow(SampleMecanumDrive drive) {
+        stow = false;
+        slideOne.setTargetPosition(10);
+        slideTwo.setTargetPosition(10);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+        armGrip.setPosition(0);
+        spinOne.setPosition(.88);
+        spinTwo.setPosition(.88);
+        armRote.setPosition(.11);
+        liftWrist.setPosition(.75);
     }
 //        coneStack = true;
 //        while (coneStack) {

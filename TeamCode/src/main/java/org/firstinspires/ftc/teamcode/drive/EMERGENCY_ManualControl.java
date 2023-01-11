@@ -45,7 +45,7 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
         slideOne = hardwareMap.get(DcMotor.class, "slideOne");
         slideTwo = hardwareMap.get(DcMotor.class, "slideTwo");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotor.class, "LeftRear");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         rightRear = hardwareMap.get(DcMotor.class, "rightRear");
 

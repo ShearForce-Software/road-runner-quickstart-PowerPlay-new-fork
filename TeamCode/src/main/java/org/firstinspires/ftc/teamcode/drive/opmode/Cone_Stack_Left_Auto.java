@@ -62,7 +62,7 @@ public class Cone_Stack_Left_Auto extends LinearOpMode {
         Pose2d linePos = new Pose2d(-40, stackY, Math.toRadians(-180));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
-        armControl.StartPosition();
+        armControl.StartPosition(null);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
                 //.setConstraints(10, 10, Math.toRadians(180), Math.toRadians(180), 12)

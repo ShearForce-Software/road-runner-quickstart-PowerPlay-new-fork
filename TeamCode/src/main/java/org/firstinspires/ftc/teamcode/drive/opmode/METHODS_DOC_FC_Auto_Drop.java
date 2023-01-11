@@ -10,7 +10,7 @@ public class METHODS_DOC_FC_Auto_Drop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         armControl.Init(hardwareMap);
-        armControl.StartPosition();
+        armControl.StartPosition(null);
 
         waitForStart();
 
@@ -24,6 +24,10 @@ public class METHODS_DOC_FC_Auto_Drop extends LinearOpMode {
                 // open claw when pole is detected by distance sensor
                 //************************************************************
                 armControl.armGrip.setPosition(.18);
+            }
+
+            if(gamepad1.dpad_down){
+                armControl.SafetyStow(null);
             }
 
             if (gamepad1.left_bumper) {
@@ -61,7 +65,7 @@ public class METHODS_DOC_FC_Auto_Drop extends LinearOpMode {
             //----------------------------------------------------------------
             // ground pos - reset to cone intake position from high, medium, and low positions only
             //----------------------------------------------------------------
-            if ((gamepad1.b)&&(!(armControl.stow))&&(armControl.rangeClaw > 2.75)&&((armControl.slideOne.getCurrentPosition()>5)||(armControl.slideTwo.getCurrentPosition()>5))){
+            if ((gamepad1.b)&&(!(armControl.stow))&&(armControl.rangeClaw > 2.75)&&((armControl.slideOne.getCurrentPosition()>0)||(armControl.slideTwo.getCurrentPosition()>0))){
                 armControl.readyToDrop = false;
                 if (!armControl.high) {
                     armControl.ReturnFromLowMedium(null);

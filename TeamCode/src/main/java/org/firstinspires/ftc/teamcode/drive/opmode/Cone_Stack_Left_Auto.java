@@ -118,7 +118,7 @@ public class Cone_Stack_Left_Auto extends LinearOpMode {
             for (int i = 0; i < 3; i++){
                 armControl.openClaw();
                 drive.followTrajectorySequenceAsync(ToStack);
-                armControl.SpecialSleep(drive, 500);
+                armControl.SpecialSleep(drive, 450);
                 armControl.closeClaw(); //god only knows why we need this here but it doesn't like to close the claw so
                 armControl.ReadyToGrabFromStack(drive);
                 armControl.SpecialSleep(drive, 800);

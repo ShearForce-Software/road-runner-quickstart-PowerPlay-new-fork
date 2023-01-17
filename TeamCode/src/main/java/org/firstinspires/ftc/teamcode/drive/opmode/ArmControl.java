@@ -109,7 +109,7 @@ public class ArmControl {
         slideOne.setPower(0);
         slideTwo.setPower(0);
         armGrip.setPosition(0);
-        SpecialSleep(null, 300);
+        SpecialSleep(null, 180);
         spinOne.setPosition(.97);
         spinTwo.setPosition(.97);
         armRote.setPosition(.11);
@@ -127,7 +127,8 @@ public class ArmControl {
         //************************************************************
         spinOne.setPosition(.14);
         spinTwo.setPosition(.14);
-        SpecialSleep(drive, 300);
+        liftWrist.setPosition(.13);
+        //SpecialSleep(drive, 180);
         //************************************************************
         // raise slides to high junction delivery height
         //************************************************************
@@ -141,7 +142,7 @@ public class ArmControl {
         //************************************************************
         // wrist to delivery angle (high)
         //************************************************************
-        liftWrist.setPosition(.13);
+
         // set stow variable to false
         stow = false;
         // set ready for delivery variable to true
@@ -161,9 +162,9 @@ public class ArmControl {
         slideTwo.setTargetPosition(MED_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
-        WaitForSlides(drive);
-        slideOne.setPower(0);
-        slideTwo.setPower(0);
+        //WaitForSlides(drive);
+        //slideOne.setPower(0);
+        //slideTwo.setPower(0);
         //************************************************************
         // spin arm to medium junction position
         //************************************************************
@@ -191,9 +192,9 @@ public class ArmControl {
         slideTwo.setTargetPosition(LOW_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
-        WaitForSlides(drive);
-        slideOne.setPower(0);
-        slideTwo.setPower(0);
+//        WaitForSlides(drive);
+//        slideOne.setPower(0);
+//        slideTwo.setPower(0);
         //************************************************************
         // spin arm to low junction position
         //************************************************************
@@ -211,33 +212,33 @@ public class ArmControl {
 
     public void ReturnFromLowMedium(SampleMecanumDrive drive) {
         armGrip.setPosition(.18);
-        SpecialSleep(drive, 100);
+        SpecialSleep(drive, 60);
         //************************************************************
         // Close claw
         //************************************************************
         armGrip.setPosition(0);
-        SpecialSleep(drive, 200);
+        SpecialSleep(drive, 120);
         //************************************************************
         // spin arm to safe return position
         //************************************************************
         spinOne.setPosition(0.95);
         spinTwo.setPosition(0.95);
-        SpecialSleep(drive, 300);
+        SpecialSleep(drive, 180);
         //************************************************************
         // straighten wrist
         //************************************************************
         liftWrist.setPosition(0.35);
-        SpecialSleep(drive, 300);
+        SpecialSleep(drive, 180);
         //************************************************************
         // rotate arm 180 degrees
         //************************************************************
         armRote.setPosition(0.11);
-        SpecialSleep(drive,550);
+        SpecialSleep(drive,400);
         //************************************************************
         // wrist to cone pickup position
         //************************************************************
         liftWrist.setPosition(0.6);
-        SpecialSleep(drive, 200);
+        SpecialSleep(drive, 120);
         //************************************************************
         // lower slides to cone intake height
         //************************************************************
@@ -257,7 +258,7 @@ public class ArmControl {
 
     public void ReturnFromHigh(SampleMecanumDrive drive) {
         armGrip.setPosition(.18);
-        SpecialSleep(drive, 100);
+        SpecialSleep(drive, 60);
         //************************************************************
         // Close claw
         //************************************************************
@@ -269,14 +270,14 @@ public class ArmControl {
         //************************************************************
         // spin arm to cone pickup position
         //************************************************************
-        SpecialSleep(drive, 700);
+        SpecialSleep(drive, 500);
         spinOne.setPosition(0.95);
         spinTwo.setPosition(0.95);
         //************************************************************
         // wrist to cone pickup position
         //************************************************************
         liftWrist.setPosition(0.6);
-        SpecialSleep(drive, 600);
+        SpecialSleep(drive, 360);
         //************************************************************
         // lower slides to cone intake height
         //************************************************************
@@ -297,31 +298,31 @@ public class ArmControl {
     public void ReadyToGrabFromStack(SampleMecanumDrive drive) {
         armGrip.setPosition(0); // Close claw
         armRote.setPosition(0.11); // rotate arm 180 degrees (so gripper is backwards)
-        SpecialSleep(drive, 700);
+        SpecialSleep(drive, 500);
         spinOne.setPosition(0.97); // spin arm to cone pickup position
         spinTwo.setPosition(0.97);
         liftWrist.setPosition(0.6); // wrist to cone pickup position
-        SpecialSleep(drive, 600);
+        SpecialSleep(drive, 300);
         slideOne.setTargetPosition(STACK_POS);
         slideTwo.setTargetPosition(STACK_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         armRote.setPosition(.13);
         liftWrist.setPosition(.6);
-        SpecialSleep(drive, 500);
+        SpecialSleep(drive, 300);
         armGrip.setPosition(.18);
     }
 
     public void GrabFromStack(SampleMecanumDrive drive) {
         armGrip.setPosition(0);
-        SpecialSleep(drive, 200);
+        SpecialSleep(drive, 120);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         slideOne.setTargetPosition(1200);
         slideTwo.setTargetPosition(1200);
-        WaitForSlides(drive);
-        slideOne.setPower(0);
-        slideTwo.setPower(0);
+//        WaitForSlides(drive);
+//        slideOne.setPower(0);
+//        slideTwo.setPower(0);
     }
 
     public void SafetyStow(SampleMecanumDrive drive) {
@@ -370,7 +371,7 @@ public class ArmControl {
         // armGrip close position
         armGrip.setPosition(0); // close claw
         // wait for claw to close
-        SpecialSleep(drive, 300);
+        SpecialSleep(drive, 200);
         //************************************************************
         // raise slide to cone stow position height
         //************************************************************
@@ -387,7 +388,7 @@ public class ArmControl {
         // liftWrist straight position
         liftWrist.setPosition(.35);   // straighten wrist
         // wait for wrist to straighten
-        SpecialSleep(drive, 200);
+        SpecialSleep(drive, 120);
         //slideHeight();}
         //************************************************************
         // rotate arm 180 degrees to flip cone
@@ -395,7 +396,7 @@ public class ArmControl {
         // armRote position
         armRote.setPosition(.82); // rotate arm 180 degrees
         // wait for arm to rotate
-        SpecialSleep(drive, 600);
+        SpecialSleep(drive, 400);
         //slideHeight();}
         //************************************************************
         // spin arm to cone stow rotate position

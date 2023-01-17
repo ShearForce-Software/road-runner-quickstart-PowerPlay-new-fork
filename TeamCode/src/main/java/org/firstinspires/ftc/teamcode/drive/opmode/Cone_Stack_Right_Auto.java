@@ -153,7 +153,7 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
             armControl.openClaw();
             if (tagOfInterest.id==11){
                 //to first spot
-                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(OGjunctionPos)
+                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(NEWjunctionPos)
                         .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))

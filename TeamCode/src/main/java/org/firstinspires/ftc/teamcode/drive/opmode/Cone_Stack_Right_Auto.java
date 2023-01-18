@@ -74,6 +74,7 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(36, -32, Math.toRadians(-91)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(55))
+
                 .splineToSplineHeading(OGjunctionPos, Math.toRadians(135),
                         SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(50))

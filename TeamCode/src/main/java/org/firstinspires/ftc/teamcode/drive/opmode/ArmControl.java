@@ -309,7 +309,7 @@ public class ArmControl {
         slideTwo.setPower(ARM_POWER);
         armRote.setPosition(.13);
         liftWrist.setPosition(.6);
-        SpecialSleep(drive, 300);
+        SpecialSleep(drive, 200);
         armGrip.setPosition(.18);
     }
 
@@ -371,7 +371,7 @@ public class ArmControl {
         // armGrip close position
         armGrip.setPosition(0); // close claw
         // wait for claw to close
-        SpecialSleep(drive, 200);
+        SpecialSleep(drive, 120);
         //************************************************************
         // raise slide to cone stow position height
         //************************************************************

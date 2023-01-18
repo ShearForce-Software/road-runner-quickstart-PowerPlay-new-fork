@@ -25,13 +25,14 @@ public class Auto_Blue_Right_Cone_Stack_PreTurn {
                                 .splineToConstantHeading(new Vector2d(29,-8), Math.toRadians(135))
                                 .waitSeconds(.75)
                                 .setReversed(false)
-                                .splineToSplineHeading(linePos, Math.toRadians(0))
+                                //.splineToSplineHeading(linePos, Math.toRadians(0))
                                 // slow down this portion of the trajectory
                                 .splineToLinearHeading(stackPos, Math.toRadians(0))
+                                .waitSeconds(.75)
                                 .setReversed(true)
                                 //2nd cone
                                 .splineToSplineHeading(new Pose2d(52, -13,Math.toRadians(-25)), Math.toRadians(180))
-                                .splineToConstantHeading(new Vector2d(31,-4), Math.toRadians(155))
+                                .splineToConstantHeading(new Vector2d(29.8, -5), Math.toRadians(155))
                                 .waitSeconds(.75)
                                 .setReversed(false)
                                 .splineToLinearHeading(stackPos, Math.toRadians(0))
@@ -39,7 +40,7 @@ public class Auto_Blue_Right_Cone_Stack_PreTurn {
                                 .setReversed(true)
                                 //3rd cone
                                 .splineToSplineHeading(new Pose2d(52, -13,Math.toRadians(-25)), Math.toRadians(180))
-                                .splineToConstantHeading(new Vector2d(31,-4), Math.toRadians(155))
+                                .splineToConstantHeading(new Vector2d(29.8, -5), Math.toRadians(155))
                                 .waitSeconds(.75)
                                 .setReversed(false)
                                 .splineToLinearHeading(stackPos, Math.toRadians(0))

@@ -1,9 +1,12 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+
+import java.util.Vector;
 //this is a test
 
 public class Auto_Blue_Right_Cone_Stack {
@@ -17,8 +20,9 @@ public class Auto_Blue_Right_Cone_Stack {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
-                                .forward(4)
-                                .splineToSplineHeading(new Pose2d(36, -34, Math.toRadians(-90)), Math.toRadians(90))
+                                .strafeTo(new Vector2d(36, -42))
+                                //.forward(12.5)
+                                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
 
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .setReversed(false)

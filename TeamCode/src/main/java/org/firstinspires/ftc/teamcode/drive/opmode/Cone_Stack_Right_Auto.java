@@ -67,11 +67,14 @@ public class Cone_Stack_Right_Auto extends LinearOpMode {
         armControl.StartPosition(null);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
+                .strafeTo(new Vector2d(36, -42),
+                        SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(55))
                 //.setConstraints(10, 10, Math.toRadians(180), Math.toRadians(180), 12)
                 /*.splineToSplineHeading(new Pose2d(36.5, -48, Math.toRadians(90)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(35,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(35))*/
-                .splineToSplineHeading(new Pose2d(36, -32, Math.toRadians(-91)), Math.toRadians(90),
+                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-91)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(55))
 

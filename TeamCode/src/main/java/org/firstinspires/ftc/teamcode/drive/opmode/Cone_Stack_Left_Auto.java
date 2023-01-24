@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 @Disabled
 @Config
-@Autonomous(name = "Cone Stack Auto Left")
+@Autonomous(name = "NO Cone Stack Auto Left")
 public class Cone_Stack_Left_Auto extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;

@@ -32,8 +32,9 @@ import java.util.ArrayList;
  * These coefficients can be tuned live in dashboard.
  */
 
+
 @Config
-@Autonomous(name = "COOl PRETURN Cone Stack Auto Right")
+@Autonomous(name = "Cone Stack Auto Right")
 public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;

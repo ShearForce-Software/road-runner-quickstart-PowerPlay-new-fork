@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * If you are using SampleMecanumDrive, you should be tuning TRANSLATIONAL_PID and HEADING_PID.
  * These coefficients can be tuned live in dashboard.
  */
-@Disabled
+
 @Config
 @Autonomous(name = "COOl PRETURN Cone Stack Auto Right")
 public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
@@ -61,7 +61,8 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
         double stackY = -14.2;
         armControl.STACK_POS = 550;
         Pose2d startPose = new Pose2d(36, -64.5, Math.toRadians(90));
-        Pose2d OGjunctionPos = new Pose2d(28.8,-7.8, Math.toRadians(-45));
+        Vector2d junctionVec = new Vector2d(25.8,-6.8);
+        Pose2d junctionPos = new Pose2d(25.8,-6.8, Math.toRadians(-45));
         Pose2d NEWjunctionPos = new Pose2d(29.8, -5,  Math.toRadians(-25));
         Pose2d stackPos = new Pose2d(63.5, stackY, Math.toRadians(0));
         Pose2d linePos = new Pose2d(40, stackY, Math.toRadians(0));
@@ -70,22 +71,24 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
         armControl.StartPosition(null);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
-                .strafeTo(new Vector2d(36, -42),
+                .strafeTo(new Vector2d(36,-56),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
-                .splineToSplineHeading(new Pose2d(36, -33, Math.toRadians(-91)), Math.toRadians(90),
+                .splineToSplineHeading(new Pose2d(36, -28, 0), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
-                .splineToSplineHeading(new Pose2d(36, -25, Math.toRadians(-45)), Math.toRadians(90),
+                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
-                .splineToConstantHeading(new Vector2d(28.8,-7.8), Math.toRadians(135),
+                .splineToSplineHeading(new Pose2d(36, -16.5, Math.toRadians(-45)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
-                .setReversed(false)
+                .splineToConstantHeading(junctionVec, Math.toRadians(135),
+                        SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(15))
                 .build();
 
-        TrajectorySequence OGToStack = drive.trajectorySequenceBuilder(OGjunctionPos)
+        TrajectorySequence OGToStack = drive.trajectorySequenceBuilder(junctionPos)
                 .setReversed(false)
                 .splineToSplineHeading(linePos, Math.toRadians(0),
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
@@ -96,12 +99,12 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                 .build();
 
 
-        TrajectorySequence NEWToStack = drive.trajectorySequenceBuilder(NEWjunctionPos)
-                .setReversed(false)
-                .splineToSplineHeading(stackPos , Math.toRadians(0),
-                        SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(25))
-                .build();
+//        TrajectorySequence NEWToStack = drive.trajectorySequenceBuilder(NEWjunctionPos)
+//                .setReversed(false)
+//                .splineToSplineHeading(stackPos , Math.toRadians(0),
+//                        SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+//                        SampleMecanumDrive.getAccelerationConstraint(25))
+//                .build();
 
         TrajectorySequence ToHighJunction = drive.trajectorySequenceBuilder(stackPos)
                 .setReversed(true)
@@ -130,6 +133,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             armControl.GoToHigh(drive);
             SlidesToHighHardCode(armControl, drive);
             armControl.WaitForTrajectoryToFinish(drive);
+            /*
             for (int i = 0; i < 4; i++){
                 armControl.openClaw();
                 if(i==0){
@@ -168,11 +172,13 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                     stackPos = new Pose2d(63.5, stackY, Math.toRadians(0));
                     armControl.STACK_POS -= 125;
                 }
-            }
+            }\
+
+             */
             armControl.openClaw();
             if (tagOfInterest.id==11){
                 //to first spot
-                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(NEWjunctionPos)
+                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(FirstCone.end())
                         .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
@@ -187,7 +193,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             }
             else if (tagOfInterest.id==14){
                 //to second spot
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(NEWjunctionPos)
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(FirstCone.end())
                         .splineToSplineHeading(new Pose2d(34.5, -14, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
@@ -199,7 +205,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
-                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(NEWjunctionPos)
+                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(FirstCone.end())
                         .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))

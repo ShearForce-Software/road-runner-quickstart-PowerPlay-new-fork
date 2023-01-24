@@ -93,8 +93,8 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                 .addTemporalMarker(0, () -> {
                     position5 = 0;                      // armGrip position
                     armGrip.setPosition(position5);     // make sure claw is closed
-                    slideOne.setTargetPosition(1400);   // set slide height
-                    slideTwo.setTargetPosition(1400);   // set slide height
+                    slideOne.setTargetPosition(1080);   // set slide height
+                    slideTwo.setTargetPosition(1080);   // set slide height
                     slideOne.setPower(1);               // raise slide elevator
                     slideTwo.setPower(1);               // raise slide elevator
                 })
@@ -114,12 +114,12 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                 .addTemporalMarker(1.65, () -> {
                     position5 = 0;                      // armGrip position
                     armGrip.setPosition(position5);     // make sure claw is still closed
-                    slideOne.setTargetPosition(1550);   // set slide height
-                    slideTwo.setTargetPosition(1550);   // set slide height
+                    slideOne.setTargetPosition(1080);   // set slide height
+                    slideTwo.setTargetPosition(1080);   // set slide height
                     slideOne.setPower(1);               // raise slide elevator
                     slideTwo.setPower(1);               // raise slide elevator
-                    position1 = .11;                    // spinOne position
-                    position2 = .11;                    // spinTwo position
+                    position1 = .14;                    // spinOne position
+                    position2 = .14;                    // spinTwo position
                     spinOne.setPosition(position1);     // swing arm to high position
                     spinTwo.setPosition(position2);     // swing arm to high position
                 })
@@ -132,7 +132,7 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                     armRote.setPosition(position3);     // rotate arm 180 degrees
                     liftWrist.setPosition(position4);   // set wrist position for cone delivery
                 })
-                .addTemporalMarker(9, () -> {
+                .addTemporalMarker(9.75, () -> {
                     position5 = 0;
                     position1 = .48;
                     position2 = .48;
@@ -141,7 +141,7 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                     position5 = .18;
                     armGrip.setPosition(position5);     // open claw
                 })
-                .addTemporalMarker(11, () -> {
+                .addTemporalMarker(11.75, () -> {
                     position5 = 0;
                     armGrip.setPosition(position5);     // close claw
                     spinOne.setPosition(position1);     // rotate arm
@@ -151,7 +151,7 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                     position1 = .95;
                     position2 = .95;
                 })
-                .addTemporalMarker(12, () -> {
+                .addTemporalMarker(12.75, () -> {
                     spinOne.setPosition(position1);
                     spinTwo.setPosition(position2);
                     slideOne.setTargetPosition(5);
@@ -161,7 +161,7 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                     slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 })
-                .addTemporalMarker(13.5, () -> {
+                .addTemporalMarker(14.25, () -> {
                     slideOne.setPower(0);
                     slideTwo.setPower(0);
                     position4 = .6;
@@ -182,7 +182,7 @@ public class Single_Cone_Left_Auto extends LinearOpMode {
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // drive LG at slower speed toward junction pole
-                .splineToSplineHeading(new Pose2d(-30, -2, Math.toRadians(-135)), Math.toRadians(45),
+                .splineToSplineHeading(new Pose2d(-27.5, -1.5, Math.toRadians(-135)), Math.toRadians(45),
                         SampleMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 .waitSeconds(.5)

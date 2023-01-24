@@ -93,8 +93,8 @@ public class Single_Cone_Right_Auto extends LinearOpMode {
                 .addTemporalMarker(0, () -> {
                     position5 = 0;                      // armGrip position
                     armGrip.setPosition(position5);     // make sure claw is closed
-                    slideOne.setTargetPosition(1400);   // set slide height
-                    slideTwo.setTargetPosition(1400);   // set slide height
+                    slideOne.setTargetPosition(1080);//set slide height
+                    slideTwo.setTargetPosition(1080);   // set slide height
                     slideOne.setPower(1);               // raise slide elevator
                     slideTwo.setPower(1);               // raise slide elevator
                 })
@@ -114,12 +114,12 @@ public class Single_Cone_Right_Auto extends LinearOpMode {
                 .addTemporalMarker(1.65, () -> {
                     position5 = 0;                      // armGrip position
                     armGrip.setPosition(position5);     // make sure claw is still closed
-                    slideOne.setTargetPosition(1550);   // set slide height
-                    slideTwo.setTargetPosition(1550);   // set slide height
+                    slideOne.setTargetPosition(1080);   // set slide height
+                    slideTwo.setTargetPosition(1080);   // set slide height
                     slideOne.setPower(1);               // raise slide elevator
                     slideTwo.setPower(1);               // raise slide elevator
-                    position1 = .11;                    // spinOne position
-                    position2 = .11;                    // spinTwo position
+                    position1 = .14;                    // spinOne position
+                    position2 = .14;                    // spinTwo position
                     spinOne.setPosition(position1);     // swing arm to high position
                     spinTwo.setPosition(position2);     // swing arm to high position
                 })
@@ -168,7 +168,7 @@ public class Single_Cone_Right_Auto extends LinearOpMode {
                     liftWrist.setPosition(position4);
                 })
                 // move forward 12 inches
-                .forward(12,
+                .forward(14,
                         SampleMecanumDrive.getVelocityConstraint(15,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(15))
                 // rotate 180 degree for cone delivery

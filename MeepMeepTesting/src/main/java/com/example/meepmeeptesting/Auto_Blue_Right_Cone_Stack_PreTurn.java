@@ -96,19 +96,21 @@ public class Auto_Blue_Right_Cone_Stack_PreTurn {
                                 // \/
                                  /*
                                 //29.27
-                                .forward(4)
-                                .splineToSplineHeading(new Pose2d(36, -34, Math.toRadians(-91)), Math.toRadians(90))
+                                .strafeTo(new Vector2d(36, -42))
+                                .splineToSplineHeading(new Pose2d(36, -33, Math.toRadians(-91)), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(36, -25, Math.toRadians(-45)), Math.toRadians(90))
                                 .splineToConstantHeading(new Vector2d(29,-8), Math.toRadians(135))
                                 .waitSeconds(.75)
                                 .setReversed(false)
                                 //.splineToSplineHeading(linePos, Math.toRadians(0))
                                 // slow down this portion of the trajectory
-                                .splineToLinearHeading(stackPos, Math.toRadians(0))
+                                .splineToSplineHeading(linePos, Math.toRadians(0))
+                                .splineToConstantHeading(new Vector2d(60, -13.5), Math.toRadians(0))
                                 .waitSeconds(.75)
                                 .setReversed(true)
                                 //2nd cone
-                                .splineToSplineHeading(new Pose2d(52, -13,Math.toRadians(-25)), Math.toRadians(180))
+                                .strafeTo(new Vector2d(48,-13))
+                                .splineToSplineHeading(new Pose2d(46, -13,Math.toRadians(-25)), Math.toRadians(180))
                                 .splineToConstantHeading(new Vector2d(29.8, -5), Math.toRadians(155))
                                 .waitSeconds(.75)
                                 .setReversed(false)

@@ -22,7 +22,7 @@ public class Auto_Blue_Right_Cone_Stack {
                         drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
                                 .strafeTo(new Vector2d(36, -42))
                                 //.forward(12.5)
-                                .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(36, -25, Math.toRadians(-90)), Math.toRadians(90))
 
                                 .splineToSplineHeading(junctionPos, Math.toRadians(135))
                                 .setReversed(false)

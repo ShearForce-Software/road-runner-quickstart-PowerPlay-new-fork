@@ -64,7 +64,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
         Vector2d junctionVec = new Vector2d(26.3,-7.3);
         Pose2d junctionPos = new Pose2d(26.3,-7.3, Math.toRadians(-45));
         Pose2d NEWjunctionPos = new Pose2d(29.8, -5,  Math.toRadians(-25));
-        Pose2d stackPos = new Pose2d(63.5, stackY, Math.toRadians(0));
+        Pose2d stackPos = new Pose2d(62.5, stackY, Math.toRadians(0));
         Pose2d linePos = new Pose2d(40, stackY, Math.toRadians(0));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
@@ -151,7 +151,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                 armControl.SpecialSleep(drive, 1700);//time to drive from stack to junction
 //                armControl.WaitForTrajectoryToFinish(drive);
                 armControl.STACK_POS -= 125;
-                stackY += .5;
+                stackY += .6;
                 stackPos = new Pose2d(63.5, stackY, Math.toRadians(0));
                 OGToStack = drive.trajectorySequenceBuilder(junctionPos)
                         .setReversed(false)
@@ -180,7 +180,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             armControl.openClaw();
             if (tagOfInterest.id==11){
                 //to first spot
-                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(FirstCone.end())
+                TrajectorySequence Park1 = drive.trajectorySequenceBuilder(junctionPos)
                         .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
@@ -195,19 +195,19 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             }
             else if (tagOfInterest.id==14){
                 //to second spot
-                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(FirstCone.end())
-                        .splineToSplineHeading(new Pose2d(34.5, -14, Math.toRadians(-90)), Math.toRadians(-90),
+                TrajectorySequence Park2 = drive.trajectorySequenceBuilder(junctionPos)
+                        .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
-//                        .forward(11,
-//                                SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-//                                SampleMecanumDrive.getAccelerationConstraint(30))
+                        .forward(11,
+                                SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(40))
                         .build();
                 drive.followTrajectorySequenceAsync(Park2);
             }
             else if(tagOfInterest.id==19) {
                 //to third spot
-                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(FirstCone.end())
+                TrajectorySequence Park3 = drive.trajectorySequenceBuilder(junctionPos)
                         .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
@@ -223,6 +223,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             armControl.SpecialSleep(drive, 1000);
             armControl.ReturnFromHigh(drive);
             armControl.closeClaw();
+            armControl.liftWrist.setPosition(1);
             armControl.WaitForTrajectoryToFinish(drive);
         }
     }

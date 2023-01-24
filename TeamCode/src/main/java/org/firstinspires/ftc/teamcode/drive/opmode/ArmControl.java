@@ -394,7 +394,7 @@ public class ArmControl {
         // rotate arm 180 degrees to flip cone
         //************************************************************
         // armRote position
-        armRote.setPosition(.82); // rotate arm 180 degrees
+        armRote.setPosition(.81); // rotate arm 180 degrees
         // wait for arm to rotate
         SpecialSleep(drive, 400);
         //slideHeight();}

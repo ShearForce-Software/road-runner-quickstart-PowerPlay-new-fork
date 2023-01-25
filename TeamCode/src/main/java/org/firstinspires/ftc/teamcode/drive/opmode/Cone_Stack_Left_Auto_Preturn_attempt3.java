@@ -58,10 +58,10 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         ArmControl armControl = new ArmControl(false, false, this);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         // Starting position of robot on field
-        double stackY = -12;
+        double stackY = -14;
         armControl.STACK_POS = 550;
         Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(90));
-        Vector2d junctionVec = new Vector2d(-26.3, -7.3);
+        Vector2d junctionVec = new Vector2d(-26.8, -6.7);
         Pose2d junctionPos = new Pose2d(-26.3,-7.3, Math.toRadians(-135));
         Pose2d stackPos = new Pose2d(-62.5, stackY, Math.toRadians(-180));
         drive.setPoseEstimate(startPose);
@@ -72,13 +72,13 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                 .strafeTo(new Vector2d(-36,-56),
                         SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(60))
-                .splineToSplineHeading(new Pose2d(-36, -28, 0), Math.toRadians(90),
+                .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(180)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(60))
                 .splineToConstantHeading(new Vector2d(-36, -24), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(60))
-                .splineToSplineHeading(new Pose2d(-36, -16.5, Math.toRadians(-135)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-36, -16.5, Math.toRadians(-135)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(45))
                 .splineToConstantHeading(junctionVec, Math.toRadians(45),
@@ -168,7 +168,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
             if (tagOfInterest.id==11){
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(junctionPos)
-                        .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
                         .forward(11,
@@ -183,7 +183,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
             else if (tagOfInterest.id==14){
                 //to second spot
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(junctionPos)
-                        .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
                         .forward(11,
@@ -195,7 +195,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
             else if(tagOfInterest.id==19) {
                 //to third spot
                 TrajectorySequence Park3 = drive.trajectorySequenceBuilder(junctionPos)
-                        .splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90),
+                        .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(40))
                         .forward(11,

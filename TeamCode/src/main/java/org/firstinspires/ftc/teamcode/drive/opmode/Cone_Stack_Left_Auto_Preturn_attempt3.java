@@ -61,8 +61,8 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         double stackY = -14;
         armControl.STACK_POS = 550;
         Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(90));
-        Vector2d junctionVec = new Vector2d(-25.8, -6.7);
-        Pose2d junctionPos = new Pose2d(-25.8,-6.7, Math.toRadians(-135));
+        Vector2d junctionVec = new Vector2d(-27.2, -5.95); //-26.8
+        Pose2d junctionPos = new Pose2d(-27.2,-5.95, Math.toRadians(-135));
         Pose2d stackPos = new Pose2d(-62.5, stackY, Math.toRadians(-180));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);

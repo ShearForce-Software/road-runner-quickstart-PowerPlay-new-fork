@@ -17,10 +17,11 @@ public class Auto_Blue_Left_Cone_Stack {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
+                .setDimensions(16,16)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .strafeTo(new Vector2d(-36,-56))
-                                .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(180)), Math.toRadians(90))
+                                //.strafeTo(new Vector2d(-36,-54))
+                                .splineToSplineHeading(new Pose2d(-36, -54, Math.toRadians(180)), Math.toRadians(90))
                                 .splineToConstantHeading(new Vector2d(-36, -24), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(-36, -16.5, Math.toRadians(-135)), Math.toRadians(90))
                                 .splineToConstantHeading(junctionVec, Math.toRadians(45))

@@ -69,10 +69,10 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         armControl.StartPosition(null);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
-                .strafeTo(new Vector2d(-36,-54),
-                        SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(60))
-                .splineToSplineHeading(new Pose2d(-36, -27, Math.toRadians(180)), Math.toRadians(90),
+//                .strafeTo(new Vector2d(-36,-54),
+//                        SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+//                        SampleMecanumDrive.getAccelerationConstraint(60))
+                .splineToSplineHeading(new Pose2d(-36, -54, Math.toRadians(180)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(60))
                 .splineToConstantHeading(new Vector2d(-36, -24), Math.toRadians(90),

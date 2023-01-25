@@ -81,6 +81,7 @@ public class Auto_Blue_Right_Cone_Stack_PreTurn {
                                 //park 2 only
                                 .splineToLinearHeading(new Pose2d(35.5, -12, Math.toRadians(-90)), Math.toRadians(-90))
                                 //for park 1 & 3
+                                //e?
                                 //.splineToSplineHeading(new Pose2d(36, -24, Math.toRadians(-90)), Math.toRadians(-90))
                                 //park 1
                                 //.splineToConstantHeading(new Vector2d(24, -36), Math.toRadians(180))

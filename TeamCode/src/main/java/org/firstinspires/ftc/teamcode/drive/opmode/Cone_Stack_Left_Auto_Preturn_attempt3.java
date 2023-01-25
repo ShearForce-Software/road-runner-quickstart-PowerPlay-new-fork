@@ -138,7 +138,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                 armControl.StowCone(drive);
                 SlidesToHighHardCode(armControl, drive); //love it sm
                 armControl.GoToHigh(drive);
-                armControl.SpecialSleep(drive, 1700);
+                armControl.SpecialSleep(drive, 1600);
                 armControl.STACK_POS -= 125;
                 stackY -= .6;
                 stackPos = new Pose2d(-61, stackY, Math.toRadians(-180));
@@ -153,10 +153,10 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                         .build();
                 ToHighJunction = drive.trajectorySequenceBuilder(stackPos)
                         .setReversed(true)
-                        .strafeTo(new Vector2d(-44,-12),
+                        .strafeTo(new Vector2d(-44,-14),
                                 SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(25))
-                        .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(0),
+                        .splineToSplineHeading(new Pose2d(-36, -14, Math.toRadians(-135)), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(25))
                         .splineToConstantHeading(junctionVec, Math.toRadians(45),

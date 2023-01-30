@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 //@Disabled
 @Config
-@Autonomous(name = "attempt 3 left side")
+@Autonomous(name = "Cone Stack Auto Left")
 public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -163,7 +163,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                             SampleMecanumDrive.getVelocityConstraint(20,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(20))
                     .build();
-            for (int i = 0; i < 3; i++){
+            for (int i = 0; i < 2; i++){
                 armControl.openClaw();
                 drive.followTrajectorySequenceAsync(OGToStack);
                 armControl.SpecialSleep(drive, 450);
@@ -209,14 +209,14 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(junctionPos)
                         .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
-                                SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(45))
-                        .forward(13,
-                                SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(45))
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(50))
+                        .forward(13.5,
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(50))
                         .strafeRight(22,
-                                SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(55))
+                                SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(60))
                         .build();
                 drive.followTrajectorySequenceAsync(Park1);
             }
@@ -224,11 +224,11 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                 //to second spot
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(junctionPos)
                         .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
-                                SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(45))
-                        .forward(13,
-                                SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(45))
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(50))
+                        .forward(13.5,
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(50))
                         .build();
                 drive.followTrajectorySequenceAsync(Park2);
             }
@@ -236,14 +236,15 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                 //to third spot
                 TrajectorySequence Park3 = drive.trajectorySequenceBuilder(junctionPos)
                         .splineToSplineHeading(new Pose2d(-36, -24, Math.toRadians(-90)), Math.toRadians(-90),
-                                SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(45))
-                        .forward(13,
-                                SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(45))
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(50))
+                        .forward(13.5
+                                ,
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(50))
                         .strafeLeft(24,
-                                SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(55))
+                                SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(60))
                         .build();
                 drive.followTrajectorySequenceAsync(Park3);
             }

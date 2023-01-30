@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
@@ -32,7 +33,7 @@ import java.util.ArrayList;
  * These coefficients can be tuned live in dashboard.
  */
 
-
+@Disabled
 @Config
 @Autonomous(name = "Cone Stack Auto Left using Jacobs Computer")
 public class Cone_Stack_Left_Auto_PreTurn_JacobComputer extends LinearOpMode {

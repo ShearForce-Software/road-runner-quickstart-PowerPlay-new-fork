@@ -32,8 +32,9 @@ dependencies {
     implementation 'com.acmerobotics.roadrunner:core:0.5.6'
 
     implementation 'org.openftc:easyopencv:1.5.2' // added for OpenCV
-}
 
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
+}
 
 dependencies {
     implementation 'org.openftc:easyopencv:1.5.2'

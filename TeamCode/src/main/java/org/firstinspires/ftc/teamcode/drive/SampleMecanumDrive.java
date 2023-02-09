@@ -73,7 +73,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    private IMU imu;
+    //private IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
@@ -91,13 +91,13 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        imu = hardwareMap.get(IMU.class, "imu");
+        //imu = hardwareMap.get(IMU.class, "imu");
         // TODO: Adjust the orientations here to match your robot. See the FTC SDK documentation for
         // details
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
-        imu.initialize(parameters);
+        //IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+        //        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+        //        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+        //imu.initialize(parameters);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
@@ -279,13 +279,13 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        return 0;//return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
-    @Override
+    /*@Override
     public Double getExternalHeadingVelocity() {
         return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-    }
+    }*/
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(

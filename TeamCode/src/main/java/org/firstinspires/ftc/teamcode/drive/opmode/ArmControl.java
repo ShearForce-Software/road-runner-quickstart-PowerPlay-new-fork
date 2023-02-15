@@ -263,6 +263,7 @@ public class ArmControl {
         // Close claw
         //************************************************************
         armGrip.setPosition(0);
+        liftWrist.setPosition(.57);
         //************************************************************
         // rotate arm 180 degrees (so gripper is backwards)
         //************************************************************
@@ -270,7 +271,6 @@ public class ArmControl {
         //************************************************************
         // spin arm to cone pickup position
         //************************************************************
-        liftWrist.setPosition(.57);
         SpecialSleep(drive, 500);
         spinOne.setPosition(1);
         spinTwo.setPosition(1);

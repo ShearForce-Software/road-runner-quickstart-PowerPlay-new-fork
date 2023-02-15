@@ -61,8 +61,8 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         double stackY = -14;
         armControl.STACK_POS = 550;
         Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(90));
-        Vector2d junctionVec = new Vector2d(-27.2, -5.95); //-26.8
-        Pose2d junctionPos = new Pose2d(-27.2,-5.95, Math.toRadians(-135));
+        Vector2d junctionVec = new Vector2d(-28.2, -7); //-26.8
+        Pose2d junctionPos = new Pose2d(-28.2,-7, Math.toRadians(-135));
         Pose2d stackPos = new Pose2d(-62.5, stackY, Math.toRadians(-180));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
@@ -88,7 +88,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
 
         TrajectorySequence OGToStack = drive.trajectorySequenceBuilder(junctionPos)
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(-38, -12, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(-38, -14, Math.toRadians(180)), Math.toRadians(180),
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(25))
                 .splineToLinearHeading(stackPos, Math.toRadians(180),
@@ -140,8 +140,6 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
             armControl.GoToHigh(drive);
             armControl.SpecialSleep(drive, 1700);
             armControl.STACK_POS -= 125;
-            stackY -= .6;
-            stackPos = new Pose2d(-61, stackY, Math.toRadians(-180));
             OGToStack = drive.trajectorySequenceBuilder(junctionPos)
                     .setReversed(false)
                     .splineToSplineHeading(new Pose2d(-38, -12, Math.toRadians(180)), Math.toRadians(180),
@@ -163,7 +161,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                             SampleMecanumDrive.getVelocityConstraint(20,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                             SampleMecanumDrive.getAccelerationConstraint(20))
                     .build();
-            for (int i = 0; i < 2; i++){
+            for (int i = 0; i < 3; i++){
                 armControl.openClaw();
                 drive.followTrajectorySequenceAsync(OGToStack);
                 armControl.SpecialSleep(drive, 450);

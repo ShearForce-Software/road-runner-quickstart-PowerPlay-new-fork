@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "3) Methods Main Driver Robot Centric (Auto Drop)")
-
+@Disabled
 public class METHODS_DOC_RC_Auto_Drop extends LinearOpMode {
     ArmControl armControl = new ArmControl(true, false, this);
     @Override

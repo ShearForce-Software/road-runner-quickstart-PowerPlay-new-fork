@@ -98,10 +98,12 @@ public class ConeSensorsTest extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("sensor RED distances: left:",String.format(Locale.US, "%.02f"), rangeRedLeft, " right: ",String.format(Locale.US, "%.02f"), rangeRedRight);
-            telemetry.addData("sensor BLUE distances: left:",String.format(Locale.US, "%.02f"), rangeBlueLeft, " right: ",String.format(Locale.US, "%.02f"), rangeBlueRight);
-            telemetry.addData("Left(+)/Right(-) RED: ",String.format(Locale.US, "%.02f"), rangeRedRight - rangeRedLeft);
-            telemetry.addData("Left(+)/Right(-) BLUE: ",String.format(Locale.US, "%.02f"), rangeBlueRight - rangeBlueLeft);
+            telemetry.addData("sensor RED distance left:",String.format(Locale.US, "%.02f", rangeRedLeft));
+            telemetry.addData("sensor RED distance Right:",String.format(Locale.US, "%.02f", rangeRedRight));
+            telemetry.addData("sensor BLUE distance left:",String.format(Locale.US, "%.02f", rangeBlueLeft));
+            telemetry.addData("sensor BLUE distance Right:",String.format(Locale.US, "%.02f", rangeBlueRight));
+            telemetry.addData("Left(+)/Right(-) RED: ",String.format(Locale.US, "%.02f", rangeRedRight - rangeRedLeft));
+            telemetry.addData("Left(+)/Right(-) BLUE: ",String.format(Locale.US, "%.02f", rangeBlueRight - rangeBlueLeft));
             //telemetry.addData("Forward: ", ((rangeRedRight + rangeRedLeft)/2)-1);
             telemetry.update();
         }

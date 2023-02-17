@@ -123,8 +123,8 @@ public class ArmControl {
         //************************************************************
         // swinging arm to high junction position
         //************************************************************
-        spinOne.setPosition(.18);
-        spinTwo.setPosition(.18);
+        spinOne.setPosition(.16);
+        spinTwo.setPosition(.16);
         liftWrist.setPosition(.05);
         //SpecialSleep(drive, 180);
         //************************************************************

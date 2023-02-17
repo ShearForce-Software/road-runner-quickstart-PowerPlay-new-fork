@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
+import java.util.Locale;
+
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
  * teleop routine and make sure the robot's estimated pose matches the robot's actual pose (slight
@@ -52,23 +54,55 @@ public class ConeSensorsTest extends LinearOpMode {
             drive.update();
             rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
             rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
-            double rangeLeft = rawRangeLeft * 1.708300399 - 0.407779539;
-            double rangeRight = rawRangeRight * 1.247496845 - 0.204661338;
-
-//            angle1 = Math.atan((rangeLeft-rangeRight)/1.5);
-//            angle2 = Math.acos((Math.sqrt(Math.pow((rangeLeft-rangeRight),2)+Math.pow(1.5,2)))/(2*1.55));
-//            distanceCenter = 1.55*Math.acos(angle1+angle2);
+            double rangeRedLeft, rangeRedRight, rangeBlueLeft, rangeBlueRight;
+            //red
+            if(rawRangeLeft < 1.78){
+                rangeRedLeft = rawRangeLeft * 1.352 - 0.089;
+            }
+            else if(rawRangeLeft > 1.78){
+                rangeRedLeft = rawRangeLeft * 3.333 - 3.777;
+            }
+            else{
+                rangeRedLeft=rawRangeLeft;
+            }
+            if(rawRangeRight < 2.23){
+                rangeRedRight = rawRangeRight * 1.050 - 0.040;
+            }
+            else if(rawRangeRight > 2.23){
+                rangeRedRight = rawRangeRight * 2.038 - 2.399;
+            }
+            else{
+                rangeRedRight=rawRangeRight;
+            }
+            //~~~~~~~~~~~~~~~~~blue~~~~~~~~~~~~~~~~```
+            if(rawRangeLeft<2.0){
+                rangeBlueLeft = rawRangeLeft * 1.290 - 0.292;
+            }
+            else if(rawRangeLeft>2.0){
+                rangeBlueLeft = rawRangeLeft * 3.947 - 5.623;
+            }
+            else{
+                rangeBlueLeft=rawRangeLeft;
+            }
+            if(rawRangeRight<2.55){
+                rangeBlueRight = rawRangeRight * 0.948 - 0.085;
+            }
+            else if(rawRangeRight>2.55){
+                rangeBlueRight = rawRangeRight * 2.838 - 5.360;
+            }
+            else{
+                rangeBlueRight=rawRangeRight;
+            }
 
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("left sensor distance: ", rangeLeft);
-            telemetry.addData("right sensor distance: ", rangeRight);
-            telemetry.addData("RAW left sensor distance: ", rawRangeLeft);
-            telemetry.addData("RAW right sensor distance: ", rawRangeRight);
-            telemetry.addData("Left(+)/Right(-): ", rangeRight - rangeLeft);
-            telemetry.addData("Forward: ", ((rangeRight + rangeLeft)/2)-1);
+            telemetry.addData("sensor RED distances: left:",String.format(Locale.US, "%.02f"), rangeRedLeft, " right: ",String.format(Locale.US, "%.02f"), rangeRedRight);
+            telemetry.addData("sensor BLUE distances: left:",String.format(Locale.US, "%.02f"), rangeBlueLeft, " right: ",String.format(Locale.US, "%.02f"), rangeBlueRight);
+            telemetry.addData("Left(+)/Right(-) RED: ",String.format(Locale.US, "%.02f"), rangeRedRight - rangeRedLeft);
+            telemetry.addData("Left(+)/Right(-) BLUE: ",String.format(Locale.US, "%.02f"), rangeBlueRight - rangeBlueLeft);
+            //telemetry.addData("Forward: ", ((rangeRedRight + rangeRedLeft)/2)-1);
             telemetry.update();
         }
     }

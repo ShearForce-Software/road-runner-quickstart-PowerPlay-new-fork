@@ -20,7 +20,7 @@ public class METHODS_DOC_RC_Auto_Drop extends LinearOpMode {
         while(opModeIsActive()){
             armControl.driveControlsRobotCentric();
 
-            if((armControl.rangeRear < 2) && (armControl.readyToDrop)){
+            if((armControl.rangeRight < 2) && (armControl.readyToDrop)){
                 //************************************************************
                 // open claw when pole is detected by distance sensor
                 //************************************************************

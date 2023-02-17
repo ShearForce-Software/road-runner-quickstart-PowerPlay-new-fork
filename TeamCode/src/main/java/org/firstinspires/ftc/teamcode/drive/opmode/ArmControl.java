@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -27,14 +25,14 @@ public class ArmControl {
     DcMotor leftRear;
     DcMotor rightFront;
     DcMotor rightRear;
-    DistanceSensor rearDistance;
+    DistanceSensor rightDistance;
     DistanceSensor clawDistance;
-    DistanceSensor frontDistance;
+    DistanceSensor leftDistance;
     BNO055IMU imu;
 
-    double rangeRear;
+    double rangeRight;
     double rangeClaw;
-    double rangeFront;
+    double rangeLeft;
 
     int START_POS = 10; //5
     int STOW_POS = 1080; //1400
@@ -58,9 +56,9 @@ public class ArmControl {
     }
 
     public void Init (HardwareMap hardwareMap) {
-        rearDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
+        rightDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
         clawDistance = hardwareMap.get(DistanceSensor.class, "clawDistance");
-        frontDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
+        leftDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
         spinOne = hardwareMap.get(Servo.class, "spinOne");
         spinTwo = hardwareMap.get(Servo.class, "spinTwo");
         armRote = hardwareMap.get(Servo.class, "armRote");
@@ -263,7 +261,7 @@ public class ArmControl {
         // Close claw
         //************************************************************
         armGrip.setPosition(0);
-        liftWrist.setPosition(.57);
+        liftWrist.setPosition(1);
         //************************************************************
         // rotate arm 180 degrees (so gripper is backwards)
         //************************************************************
@@ -292,6 +290,7 @@ public class ArmControl {
         //************************************************************
         // Open claw
         //************************************************************
+        liftWrist.setPosition(.57);
         armGrip.setPosition(0.18);
         intake = true;
     }
@@ -299,6 +298,7 @@ public class ArmControl {
     public void ReadyToGrabFromStack(SampleMecanumDrive drive) {
         armGrip.setPosition(0); // Close claw
         armRote.setPosition(0.11); // rotate arm 180 degrees (so gripper is backwards)
+        liftWrist.setPosition(1);
         SpecialSleep(drive, 500);
         spinOne.setPosition(0.97); // spin arm to cone pickup position
         spinTwo.setPosition(0.97);
@@ -309,7 +309,7 @@ public class ArmControl {
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         armRote.setPosition(.13);
-        liftWrist.setPosition(.6);
+        liftWrist.setPosition(.57);
         SpecialSleep(drive, 200);
         armGrip.setPosition(.18);
     }
@@ -422,9 +422,9 @@ public class ArmControl {
         double x = -opMode.gamepad2.left_stick_x * 1.1;
         double rx = opMode.gamepad2.right_stick_x;
 
-        rangeRear = rearDistance.getDistance(DistanceUnit.CM);
+        rangeRight = rightDistance.getDistance(DistanceUnit.CM);
         rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
-        rangeFront = frontDistance.getDistance(DistanceUnit.CM);
+        rangeLeft = leftDistance.getDistance(DistanceUnit.CM);
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         double frontLeftPower = (y + x + rx) / denominator;
@@ -443,9 +443,9 @@ public class ArmControl {
         double x = opMode.gamepad2.left_stick_x * 1.1;
         double rx = opMode.gamepad2.right_stick_x;
 
-        rangeRear = rearDistance.getDistance(DistanceUnit.CM);
+        rangeRight = rightDistance.getDistance(DistanceUnit.CM);
         rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
-        rangeFront = frontDistance.getDistance(DistanceUnit.CM);
+        rangeLeft = leftDistance.getDistance(DistanceUnit.CM);
 
         double botHeading = -imu.getAngularOrientation().firstAngle;
 
@@ -511,6 +511,45 @@ public class ArmControl {
                 if(!IsFieldCentric) driveControlsRobotCentric();
             }
         }
+    }
+    public double[] FindConeCenter(boolean isRed){
+        double leftA, rightA;
+        double[] finalStuff = { 0, 0};
+        double rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
+        double rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
+        if(isRed){
+            //red values
+            if(rawRangeLeft < 1.78){
+                leftA = rawRangeLeft * 1.352 - 0.089;
+            }
+            else if(rawRangeLeft > 1.78){
+                leftA = rawRangeLeft * 3.333 - 3.777;
+            }
+            if(rawRangeRight < 2.23){
+                rightA = rawRangeRight * 1.050 - 0.040;
+            }
+            else if(rawRangeRight > 2.23){
+                rightA = rawRangeRight * 2.038 - 2.399;
+            }
+        }
+        else{
+            //blue values
+            if(rawRangeLeft<2.0){
+                leftA = rawRangeLeft * 1.290 - 0.292;
+            }
+            else if(rawRangeLeft>2.0){
+                leftA = rawRangeLeft * 3.947 - 5.623;
+            }
+            if(rawRangeRight<2.55){
+                rightA = rawRangeRight * 0.948 - 0.085;
+            }
+            else if(rawRangeRight>2.55){
+                rightA = rawRangeRight * 2.838 - 5.360;
+            }
+
+        }
+
+        return (finalStuff);
     }
 }
 

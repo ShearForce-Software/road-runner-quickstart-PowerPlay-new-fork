@@ -111,7 +111,7 @@ public class ArmControl {
         spinOne.setPosition(1);
         spinTwo.setPosition(1);
         armRote.setPosition(.11);
-        liftWrist.setPosition(.57);
+        liftWrist.setPosition(.53);
     }
 
     public void GoToHigh(SampleMecanumDrive drive) {
@@ -123,15 +123,25 @@ public class ArmControl {
         //************************************************************
         // swinging arm to high junction position
         //************************************************************
-        spinOne.setPosition(.14);
-        spinTwo.setPosition(.14);
-        liftWrist.setPosition(.13);
+        spinOne.setPosition(.18);
+        spinTwo.setPosition(.18);
+        liftWrist.setPosition(.05);
         //SpecialSleep(drive, 180);
         //************************************************************
         // raise slides to high junction delivery height
         //************************************************************
-        slideOne.setTargetPosition(HIGH_POS);
-        slideTwo.setTargetPosition(HIGH_POS);
+        slideOne.setTargetPosition(1610);
+        slideTwo.setTargetPosition(1610);
+        //OLD ARM POSITIONS PRE DANGLY-BIT >>
+//        spinOne.setPosition(.14);
+//        spinTwo.setPosition(.14);
+//        liftWrist.setPosition(.13);
+//        //SpecialSleep(drive, 180);
+//        //************************************************************
+//        // raise slides to high junction delivery height
+//        //************************************************************
+//        slideOne.setTargetPosition(HIGH_POS);
+//        slideTwo.setTargetPosition(HIGH_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         WaitForSlides(drive);
@@ -235,7 +245,7 @@ public class ArmControl {
         //************************************************************
         // wrist to cone pickup position
         //************************************************************
-        liftWrist.setPosition(0.57);
+        liftWrist.setPosition(0.53);
         SpecialSleep(drive, 120);
         //************************************************************
         // lower slides to cone intake height
@@ -290,7 +300,7 @@ public class ArmControl {
         //************************************************************
         // Open claw
         //************************************************************
-        liftWrist.setPosition(.57);
+        liftWrist.setPosition(.53);
         armGrip.setPosition(0.18);
         intake = true;
     }

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -29,8 +28,6 @@ public class ArmControl {
     DistanceSensor rightDistance;
     DistanceSensor clawDistance;
     DistanceSensor leftDistance;
-    ColorSensor sensorColorLeft;
-    ColorSensor sensorColorRight;
     BNO055IMU imu;
 
     double rangeRight;
@@ -62,8 +59,6 @@ public class ArmControl {
         rightDistance = hardwareMap.get(DistanceSensor.class, "rearDistance");
         clawDistance = hardwareMap.get(DistanceSensor.class, "clawDistance");
         leftDistance = hardwareMap.get(DistanceSensor.class, "frontDistance");
-        sensorColorLeft = hardwareMap.get(ColorSensor.class, "frontDistance");
-        sensorColorRight = hardwareMap.get(ColorSensor.class, "rearDistance");
         spinOne = hardwareMap.get(Servo.class, "spinOne");
         spinTwo = hardwareMap.get(Servo.class, "spinTwo");
         armRote = hardwareMap.get(Servo.class, "armRote");
@@ -527,82 +522,44 @@ public class ArmControl {
             }
         }
     }
-    public double[] FindConeCenter(){
-        double finalLeft, finalRight, shiftLG, forwardLG;
-        double[] finalValues = {0, 0}; //first value of the array will be right/left. second value will be forward
+    public double[] FindConeCenter(boolean isRed){
+        double leftA, rightA;
+        double[] finalStuff = { 0, 0};
         double rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
         double rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
-        //~~sort through data~~
-        if((sensorColorLeft.red() > 75 || sensorColorRight.red() > 75) && (sensorColorLeft.red() > sensorColorLeft.blue())){
+        if(isRed){
             //red values
             if(rawRangeLeft < 1.78){
-                finalLeft = rawRangeLeft * 1.352 - 0.089;
+                leftA = rawRangeLeft * 1.352 - 0.089;
             }
             else if(rawRangeLeft > 1.78){
-                finalLeft = rawRangeLeft * 3.333 - 3.777;
-            }
-            else{
-                finalLeft = rawRangeLeft;
+                leftA = rawRangeLeft * 3.333 - 3.777;
             }
             if(rawRangeRight < 2.23){
-                finalRight = rawRangeRight * 1.050 - 0.040;
+                rightA = rawRangeRight * 1.050 - 0.040;
             }
             else if(rawRangeRight > 2.23){
-                finalRight = rawRangeRight * 2.038 - 2.399;
-            }
-            else{
-                finalRight = rawRangeRight;
-            }
-            //find shift and forward values
-            shiftLG = (finalRight - finalLeft) * .8;
-            forwardLG = ((finalRight + finalLeft)/2) - .6;
-            //if the math ever pushes over an inch
-            if (shiftLG > 1) {
-                shiftLG = 1;
-                forwardLG = finalLeft - 0.25;
-            }
-            else if (shiftLG < -1){
-                shiftLG = -1;
-                forwardLG = finalRight - 0.25;
+                rightA = rawRangeRight * 2.038 - 2.399;
             }
         }
         else{
             //blue values
             if(rawRangeLeft<2.0){
-                finalLeft = rawRangeLeft * 1.290 - 0.292;
+                leftA = rawRangeLeft * 1.290 - 0.292;
             }
             else if(rawRangeLeft>2.0){
-                finalLeft = rawRangeLeft * 3.947 - 5.623;
-            }
-            else{
-                finalLeft = rawRangeLeft;
+                leftA = rawRangeLeft * 3.947 - 5.623;
             }
             if(rawRangeRight<2.55){
-                finalRight = rawRangeRight * 0.948 - 0.085;
+                rightA = rawRangeRight * 0.948 - 0.085;
             }
             else if(rawRangeRight>2.55){
-                finalRight = rawRangeRight * 2.838 - 5.360;
+                rightA = rawRangeRight * 2.838 - 5.360;
             }
-            else{
-                finalRight = rawRangeRight;
-            }
-            //find shift and forward values
-            shiftLG = (finalRight - finalLeft) * .85;
-            forwardLG = ((finalRight + finalLeft)/2) - .5;
-            //if the math ever pushes over an inch
-            if (shiftLG > 1) {
-                shiftLG = 1;
-                forwardLG = finalLeft - 0.35;
-            }
-            else if (shiftLG < -1){
-                shiftLG = -1;
-                forwardLG = finalRight - 0.35;
-            }
+
         }
-        //place final values into array for returnin'
-        finalValues[0] = shiftLG; //the value for right or left of cone center
-        finalValues[1] = forwardLG; //the value for how far forward
-        return (finalValues);
+
+        return (finalStuff);
     }
 }
 

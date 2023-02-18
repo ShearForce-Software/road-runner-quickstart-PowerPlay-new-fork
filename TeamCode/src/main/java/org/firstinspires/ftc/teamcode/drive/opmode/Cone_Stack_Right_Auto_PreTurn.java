@@ -66,8 +66,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
         Pose2d junctionPos = new Pose2d(29,-7.4, Math.toRadians(-45)); //27.8, -5.8 ^^and up there
         Pose2d NEWjunctionPos = new Pose2d(29.8, -5,  Math.toRadians(-25));
         Pose2d almostStackPos = new Pose2d(57, stackY, Math.toRadians(0));
-        Vector2d realStackPos;//this is the one that's gonna be changed by ben's FindConeCenter method
-        TrajectorySequence ToRealStack;
+        Pose2d realStackPos;//this is the one that's gonna be changed by ben's FindConeCenter method
         Pose2d linePos = new Pose2d(40, stackY, Math.toRadians(0));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
@@ -91,7 +90,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(45))
                 .build();
 
-        TrajectorySequence ToAlmostStack = drive.trajectorySequenceBuilder(junctionPos)
+        TrajectorySequence OGToStack = drive.trajectorySequenceBuilder(junctionPos)
                 .setReversed(false)
 //                .splineToSplineHeading(new Pose2d(38, -12, Math.toRadians(0)), Math.toRadians(0),
 //                        SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
@@ -104,8 +103,6 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(25))
                 .build();
-
-
 
 
 //        TrajectorySequence NEWToStack = drive.trajectorySequenceBuilder(NEWjunctionPos)
@@ -135,23 +132,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                 //TODO: call methods for getting distances
                 //returns values for drift and distance to stack
                 //set realStackPos to the correct location with those values returned
-                drive.followTrajectorySequenceAsync(ToAlmostStack);
-                //bring arm back
-                armControl.SpecialSleep(drive, 450);//time to start moving arm down after delivering
-                armControl.closeClaw(); //who knows why we need this here but it doesn't like to close the claw so
-                armControl.ReadyToGrabFromStack(drive);
-                armControl.SpecialSleep(drive, 800);//time to close claw on cone
-                //should be at correct position to scan now
-                realStackPos = new Vector2d(57 + armControl.FindConeCenter()[1], stackY - armControl.FindConeCenter()[0]);
-                //~~~~~The call to find the cone center currently assumes its a RED CONE~~~~~~~~
-                ToRealStack = drive.trajectorySequenceBuilder(almostStackPos)
-                        .splineToConstantHeading(realStackPos, Math.toRadians(0),
-                                SampleMecanumDrive.getVelocityConstraint(20,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(20))
-                        .build();
-                drive.followTrajectorySequenceAsync(ToRealStack);
-
-
+                drive.followTrajectorySequenceAsync(OGToStack);
 //                SenseToStack = drive.trajectorySequenceBuilder(almostStackPos)
 //                        .setReversed(false)
 //                        .lineTo(realStackPos,
@@ -173,7 +154,10 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
 //                        SampleMecanumDrive.getAccelerationConstraint(15))
 //                        .build();
                 //drive.followTrajectorySequenceAsync(OGToStack);don't need this anymore
-
+                armControl.SpecialSleep(drive, 450);//time to start moving arm down after delivering
+                armControl.closeClaw(); //who knows why we need this here but it doesn't like to close the claw so
+                armControl.ReadyToGrabFromStack(drive);
+                armControl.SpecialSleep(drive, 800);//time to close claw on cone
 //                armControl.GrabFromStack(drive);
 //                drive.followTrajectorySequenceAsync(ToHighJunction);
 //                //armControl.SpecialSleep(drive, 250);

@@ -68,16 +68,16 @@ public class Cone_2_Sensor_Data_Collect extends LinearOpMode {
             else {
                 rangeRedRight = raw_rangeRight;
             }
-            shiftRed = (rangeRedRight - rangeRedLeft) * .85;
-            forwardRed = ((rangeRedRight + rangeRedLeft)/2) - .75;
+            shiftRed = (rangeRedRight - rangeRedLeft) * .8;
+            forwardRed = ((rangeRedRight + rangeRedLeft)/2) - .6;
 
             if (shiftRed > 1) {
                 shiftRed = 1;
-                forwardRed = rangeRedLeft - 0.35;
+                forwardRed = rangeRedLeft - 0.25;
             }
             else if (shiftRed < -1){
                 shiftRed = -1;
-                forwardRed = rangeRedRight - 0.35;
+                forwardRed = rangeRedRight - 0.25;
             }
 
             // Two Calibration Equations for Red BlueCone
@@ -101,7 +101,7 @@ public class Cone_2_Sensor_Data_Collect extends LinearOpMode {
                 rangeBlueRight = raw_rangeRight;
             }
             shiftBlue = (rangeBlueRight - rangeBlueLeft) * .85;
-            forwardBlue = ((rangeBlueRight + rangeBlueLeft)/2) - .75;
+            forwardBlue = ((rangeBlueRight + rangeBlueLeft)/2) - .5;
 
             if (shiftBlue > 1) {
                 shiftBlue = 1;

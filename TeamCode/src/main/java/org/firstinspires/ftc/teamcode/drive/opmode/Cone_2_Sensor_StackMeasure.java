@@ -66,7 +66,7 @@ public class Cone_2_Sensor_StackMeasure extends LinearOpMode {
                     rangeRight = rawRangeRight;
                 }
                 shiftLG = (rangeRight - rangeLeft) * .8;
-                forwardLG = ((rangeRight + rangeLeft)/2) - .75;
+                forwardLG = ((rangeRight + rangeLeft)/2) - .6;
 
                 if (shiftLG > 1) {
                     shiftLG = 1;
@@ -94,7 +94,7 @@ public class Cone_2_Sensor_StackMeasure extends LinearOpMode {
                     rangeRight = rawRangeRight;
                 }
                 shiftLG = (rangeRight - rangeLeft) * .85;
-                forwardLG = ((rangeRight + rangeLeft)/2) - .75;
+                forwardLG = ((rangeRight + rangeLeft)/2) - .5;
 
                 if (shiftLG > 1) {
                     shiftLG = 1;

@@ -118,10 +118,10 @@ public class Cone_2_Sensor_Data_Collect extends LinearOpMode {
             telemetry.addData("heading", "%6.2f deg", Math.toDegrees(poseEstimate.getHeading()));
             telemetry.addData("RED distance left/right","%.2f in   %.2f in", rangeRedLeft, rangeRedRight);
             telemetry.addData("BLUE distance left/right","%.2f in   %.2f in", rangeBlueLeft, rangeBlueRight);
-            telemetry.addData("Left(+)/Right(-) RED: ", "%.2f", shiftRed);
-            telemetry.addData("Left(+)/Right(-) BLUE: ","%.2f", shiftBlue);
-            telemetry.addData("Forward RED ","%.2f", forwardRed);
-            telemetry.addData("Forward BLUE ", "%.2f", forwardBlue);
+            //telemetry.addData("Left(+)/Right(-) RED: ", "%.2f", shiftRed);
+            //telemetry.addData("Left(+)/Right(-) BLUE: ","%.2f", shiftBlue);
+            //telemetry.addData("Forward RED ","%.2f", forwardRed);
+            //telemetry.addData("Forward BLUE ", "%.2f", forwardBlue);
             telemetry.update();
         }
     }

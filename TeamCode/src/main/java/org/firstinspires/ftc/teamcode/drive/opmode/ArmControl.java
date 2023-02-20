@@ -533,70 +533,78 @@ public class ArmControl {
         double rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
         double rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
         //~~sort through data~~
-        if((sensorColorLeft.red() > 75 || sensorColorRight.red() > 75) && (sensorColorLeft.red() > sensorColorLeft.blue())){
+        if(((sensorColorLeft.red() + sensorColorRight.red()) / 2) > ((sensorColorLeft.blue() + sensorColorRight.blue()) / 2)){
             //red values
             if(rawRangeLeft < 1.78){
-                finalLeft = rawRangeLeft * 1.352 - 0.089;
+                finalLeft = rawRangeLeft * 1.352 - 0.089 - 0.15;
             }
             else if(rawRangeLeft > 1.78){
-                finalLeft = rawRangeLeft * 3.333 - 3.777;
+                finalLeft = rawRangeLeft * 3.333 - 3.777 - 0.15;
             }
             else{
                 finalLeft = rawRangeLeft;
             }
             if(rawRangeRight < 2.23){
-                finalRight = rawRangeRight * 1.050 - 0.040;
+                finalRight = rawRangeRight * 1.050 - 0.040 - 0.15;
             }
             else if(rawRangeRight > 2.23){
-                finalRight = rawRangeRight * 2.038 - 2.399;
-            }
-            else{
-                finalRight = rawRangeRight;
-            }
-            //find shift and forward values
-            shiftLG = (finalRight - finalLeft) * .8;
-            forwardLG = ((finalRight + finalLeft)/2) - .6;
-            //if the math ever pushes over an inch
-            if (shiftLG > 1) {
-                shiftLG = 1;
-                forwardLG = finalLeft - 0.25;
-            }
-            else if (shiftLG < -1){
-                shiftLG = -1;
-                forwardLG = finalRight - 0.25;
-            }
-        }
-        else{
-            //blue values
-            if(rawRangeLeft<2.0){
-                finalLeft = rawRangeLeft * 1.290 - 0.292;
-            }
-            else if(rawRangeLeft>2.0){
-                finalLeft = rawRangeLeft * 3.947 - 5.623;
-            }
-            else{
-                finalLeft = rawRangeLeft;
-            }
-            if(rawRangeRight<2.55){
-                finalRight = rawRangeRight * 0.948 - 0.085;
-            }
-            else if(rawRangeRight>2.55){
-                finalRight = rawRangeRight * 2.838 - 5.360;
+                finalRight = rawRangeRight * 2.038 - 2.399 - 0.15;
             }
             else{
                 finalRight = rawRangeRight;
             }
             //find shift and forward values
             shiftLG = (finalRight - finalLeft) * .85;
-            forwardLG = ((finalRight + finalLeft)/2) - .5;
+            forwardLG = ((finalRight + finalLeft)/2) - .1;
             //if the math ever pushes over an inch
-            if (shiftLG > 1) {
-                shiftLG = 1;
-                forwardLG = finalLeft - 0.35;
+            if (shiftLG > 1.1) {
+                shiftLG = 1.25;
             }
-            else if (shiftLG < -1){
-                shiftLG = -1;
-                forwardLG = finalRight - 0.35;
+            else if (shiftLG < -1.1){
+                shiftLG = -1.25;
+            }
+            if (shiftLG > 0.5) {
+                forwardLG = rangeLeft + 0.2;
+            }
+            else if (shiftLG < -0.5){
+                forwardLG = rangeRight + 0.2;
+            }
+        }
+        else{
+            //blue values
+            if(rawRangeLeft<2.0){
+                finalLeft = rawRangeLeft * 1.290 - 0.292 - 0.1;
+            }
+            else if(rawRangeLeft>2.0){
+                finalLeft = rawRangeLeft * 3.947 - 5.623 - 0.1;
+            }
+            else{
+                finalLeft = rawRangeLeft;
+            }
+            if(rawRangeRight<2.55){
+                finalRight = rawRangeRight * 0.948 - 0.085 - 0.1;
+            }
+            else if(rawRangeRight>2.55){
+                finalRight = rawRangeRight * 2.838 - 5.360 - 0.1;
+            }
+            else{
+                finalRight = rawRangeRight;
+            }
+            //find shift and forward values
+            shiftLG = (finalRight - finalLeft) * .85;
+            forwardLG = ((finalRight + finalLeft)/2) - 0.15;
+            //if the math ever pushes over an inch
+            if (shiftLG > 1.1) {
+                shiftLG = 1.25;
+            }
+            else if (shiftLG < -1.1){
+                shiftLG = -1.25;
+            }
+            if (shiftLG > 0.5) {
+                forwardLG = rangeLeft + 0.1;
+            }
+            else if (shiftLG < -0.5){
+                forwardLG = rangeRight + 0.1;
             }
         }
         //place final values into array for returnin'

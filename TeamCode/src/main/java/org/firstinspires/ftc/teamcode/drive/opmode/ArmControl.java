@@ -41,8 +41,11 @@ public class ArmControl {
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
     int MED_POS = 2370;   //3560
-    int HIGH_POS = 1080;  //1550     900
+    int HIGH_POS = 1610;//550     900
     int STACK_POS = 550; //1100
+
+    public double forwardLG, shiftLG;
+
     public boolean high = false;
     public boolean stow = false;
     public boolean readyToDrop = false;
@@ -315,16 +318,16 @@ public class ArmControl {
         armRote.setPosition(0.11); // rotate arm 180 degrees (so gripper is backwards)
         liftWrist.setPosition(1);
         SpecialSleep(drive, 500);
-        spinOne.setPosition(0.97); // spin arm to cone pickup position
-        spinTwo.setPosition(0.97);
+        spinOne.setPosition(1); // spin arm to cone pickup position
+        spinTwo.setPosition(1);
         liftWrist.setPosition(0.6); // wrist to cone pickup position
         SpecialSleep(drive, 300);
         slideOne.setTargetPosition(STACK_POS);
         slideTwo.setTargetPosition(STACK_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
-        armRote.setPosition(.13);
-        liftWrist.setPosition(.57);
+        armRote.setPosition(.11);
+        liftWrist.setPosition(.53);
         SpecialSleep(drive, 200);
         armGrip.setPosition(.18);
     }
@@ -334,21 +337,16 @@ public class ArmControl {
         SpecialSleep(drive, 120);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
-        slideOne.setTargetPosition(1200);
-        slideTwo.setTargetPosition(1200);
+        slideOne.setTargetPosition(1300);
+        slideTwo.setTargetPosition(1300);
 //        WaitForSlides(drive);
 //        slideOne.setPower(0);
 //        slideTwo.setPower(0);
     }
 
-    public void ManualSlideAdjust(SampleMecanumDrive drive, int adjustAmount){
-        slideOne.setPower(ARM_POWER);
-        slideTwo.setPower(ARM_POWER);
-        slideOne.setTargetPosition(slideOne.getCurrentPosition()+adjustAmount);
-        slideTwo.setTargetPosition(slideTwo.getCurrentPosition()+adjustAmount);
-        WaitForSlides(drive);
-        slideOne.setPower(0);
-        slideTwo.setPower(0);
+    public void ManualSlideAdjust(SampleMecanumDrive drive, float adjust){
+            slideOne.setPower(adjust);
+            slideTwo.setPower(adjust);
     }
 
     public void SafetyStow(SampleMecanumDrive drive) {
@@ -397,7 +395,7 @@ public class ArmControl {
         // armGrip close position
         armGrip.setPosition(0); // close claw
         // wait for claw to close
-        SpecialSleep(drive, 120);
+        SpecialSleep(drive, 200);
         //************************************************************
         // raise slide to cone stow position height
         //************************************************************
@@ -537,28 +535,28 @@ public class ArmControl {
             }
         }
     }
-    public double[] FindConeCenter(){
-        double finalLeft, finalRight, shiftLG, forwardLG;
-        double[] finalValues = {0, 0}; //first value of the array will be right/left. second value will be forward
+    public void FindConeCenter(){
+        double finalLeft, finalRight;
+        //double[] finalValues = {0, 0}; //first value of the array will be right/left. second value will be forward
         double rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
         double rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
         //~~sort through data~~
         if(((sensorColorLeft.red() + sensorColorRight.red()) / 2) > ((sensorColorLeft.blue() + sensorColorRight.blue()) / 2)){
             //red values
             if(rawRangeLeft < 1.78){
-                finalLeft = rawRangeLeft * 1.352 - 0.089 - 0.15;
+                finalLeft = (rawRangeLeft * 1.352 - 0.089) - 0.15;
             }
             else if(rawRangeLeft > 1.78){
-                finalLeft = rawRangeLeft * 3.333 - 3.777 - 0.15;
+                finalLeft = (rawRangeLeft * 3.333 - 3.777) - 0.15;
             }
             else{
                 finalLeft = rawRangeLeft;
             }
             if(rawRangeRight < 2.23){
-                finalRight = rawRangeRight * 1.050 - 0.040 - 0.15;
+                finalRight = (rawRangeRight * 1.050 - 0.040) - 0.15;
             }
             else if(rawRangeRight > 2.23){
-                finalRight = rawRangeRight * 2.038 - 2.399 - 0.15;
+                finalRight = (rawRangeRight * 2.038 - 2.399) - 0.15;
             }
             else{
                 finalRight = rawRangeRight;
@@ -574,28 +572,28 @@ public class ArmControl {
                 shiftLG = -1.25;
             }
             if (shiftLG > 0.5) {
-                forwardLG = rangeLeft + 0.2;
+                forwardLG = finalLeft + 0.2;
             }
             else if (shiftLG < -0.5){
-                forwardLG = rangeRight + 0.2;
+                forwardLG = finalRight + 0.2;
             }
         }
         else{
             //blue values
             if(rawRangeLeft<2.0){
-                finalLeft = rawRangeLeft * 1.290 - 0.292 - 0.1;
+                finalLeft = (rawRangeLeft * 1.290 - 0.292) - 0.1;
             }
             else if(rawRangeLeft>2.0){
-                finalLeft = rawRangeLeft * 3.947 - 5.623 - 0.1;
+                finalLeft = (rawRangeLeft * 3.947 - 5.623) - 0.1;
             }
             else{
                 finalLeft = rawRangeLeft;
             }
             if(rawRangeRight<2.55){
-                finalRight = rawRangeRight * 0.948 - 0.085 - 0.1;
+                finalRight = (rawRangeRight * 0.948 - 0.085) - 0.1;
             }
             else if(rawRangeRight>2.55){
-                finalRight = rawRangeRight * 2.838 - 5.360 - 0.1;
+                finalRight = (rawRangeRight * 2.838 - 5.360) - 0.1;
             }
             else{
                 finalRight = rawRangeRight;
@@ -611,16 +609,15 @@ public class ArmControl {
                 shiftLG = -1.25;
             }
             if (shiftLG > 0.5) {
-                forwardLG = rangeLeft + 0.1;
+                forwardLG = finalLeft + 0.1;
             }
             else if (shiftLG < -0.5){
-                forwardLG = rangeRight + 0.1;
+                forwardLG = finalRight + 0.1;
             }
         }
-        //place final values into array for returnin'
-        finalValues[0] = shiftLG; //the value for right or left of cone center
-        finalValues[1] = forwardLG; //the value for how far forward
-        return (finalValues);
+//        //place final values into array for returnin'
+//        finalValues[0] = shiftLG; //the value for right or left of cone center
+//        finalValues[1] = forwardLG; //the value for how far forward
     }
 }
 

@@ -25,12 +25,9 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
             if(gamepad1.dpad_up){
                 armControl.StartPosition(null);
             }
-            if(gamepad2.dpad_down){
-                armControl.ManualSlideAdjust(null,-10);
-            }
-            if(gamepad2.dpad_up){
-                armControl.ManualSlideAdjust(null,10);
-            }
+
+            armControl.ManualSlideAdjust(null,gamepad1.right_stick_y);
+
 
             if (gamepad1.left_bumper) {
                 armControl.openClaw();

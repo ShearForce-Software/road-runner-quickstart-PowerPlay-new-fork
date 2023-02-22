@@ -341,6 +341,16 @@ public class ArmControl {
 //        slideTwo.setPower(0);
     }
 
+    public void ManualSlideAdjust(SampleMecanumDrive drive, int adjustAmount){
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        slideOne.setTargetPosition(slideOne.getCurrentPosition()+adjustAmount);
+        slideTwo.setTargetPosition(slideTwo.getCurrentPosition()+adjustAmount);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+    }
+
     public void SafetyStow(SampleMecanumDrive drive) {
         stow = false;
         slideOne.setTargetPosition(10);

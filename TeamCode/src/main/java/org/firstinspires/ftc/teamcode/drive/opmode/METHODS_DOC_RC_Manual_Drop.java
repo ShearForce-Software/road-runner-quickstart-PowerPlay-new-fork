@@ -33,7 +33,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
                 armControl.closeClaw();
             }
 
-            if ((((armControl.rangeClaw < 3) && (armControl.armGrip.getPosition() == .18)) && (armControl.slideOne.getCurrentPosition() <= 100) && (armControl.slideTwo.getCurrentPosition() <= 100))) {
+            if ((armControl.rangeClaw < 3 && armControl.armGrip.getPosition() == .18 && armControl.slideOne.getCurrentPosition() <= 100 && armControl.slideTwo.getCurrentPosition() <= 100) || gamepad1.dpad_left) {
                 armControl.StowCone(null);
             }
             //----------------------------------------------------------------

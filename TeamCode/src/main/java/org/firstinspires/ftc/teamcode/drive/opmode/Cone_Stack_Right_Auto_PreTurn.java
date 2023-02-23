@@ -91,10 +91,6 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
 
         TrajectorySequence ToAlmostStack = drive.trajectorySequenceBuilder(junctionPos)
                 .setReversed(false)
-//                .splineToSplineHeading(new Pose2d(38, -12, Math.toRadians(0)), Math.toRadians(0),
-//                        SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-//                        SampleMecanumDrive.getAccelerationConstraint(25))
-
                 .splineToSplineHeading(new Pose2d(38, -14.26, Math.toRadians(0)), Math.toRadians(0),
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(25))
@@ -103,20 +99,10 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                         SampleMecanumDrive.getAccelerationConstraint(25))
                 .build();
 
-
-
-//        TrajectorySequence NEWToStack = drive.trajectorySequenceBuilder(NEWjunctionPos)
-//                .setReversed(false)
-//                .splineToSplineHeading(stackPos , Math.toRadians(0),
-//                        SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-//                        SampleMecanumDrive.getAccelerationConstraint(25))
-//                .build();
-
         AprilTags();
         waitForStart();
         if (isStopRequested()) return;
         if (opModeIsActive()) {
-            // TODO:  Review this trajectory, chain together the correct path to make it all
             // the way to the first junction.
             drive.followTrajectorySequenceAsync(FirstCone);
 
@@ -134,7 +120,6 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                 armControl.SpecialSleep(drive, 450);//time to start moving arm down after delivering
                 armControl.closeClaw(); //who knows why we need this here but it doesn't like to close the claw so
                 armControl.ReadyToGrabFromStack(drive);
-                //armControl.SpecialSleep(drive, 1000);//time to close claw on cone
                 armControl.WaitForTrajectoryToFinish(drive);
                 //At position to scan
                 armControl.FindConeCenter(); // scans
@@ -171,27 +156,6 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                 armControl.GoToHigh(drive);
                 armControl.SpecialSleep(drive, 1500);//time to drive from stack to junction
                 armControl.STACK_POS -= 125;
-
-//                SenseToStack = drive.trajectorySequenceBuilder(almostStackPos)
-//                        .setReversed(false)
-//                        .lineTo(realStackPos,
-//                                SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-//                                SampleMecanumDrive.getAccelerationConstraint(25))
-//                        .build();
-//                drive.followTrajectorySequenceAsync(SenseToStack);
-//                drive.update();
-                //drive.followTrajectorySequenceAsync(OGToStack);don't need this anymore
-
-//                armControl.GrabFromStack(drive);
-//                drive.followTrajectorySequenceAsync(ToHighJunction);
-//                //armControl.SpecialSleep(drive, 250);
-//                SlidesToStowHardCode(armControl, drive); //we love having trust issues with the slides
-//                armControl.StowCone(drive);
-//                SlidesToHighHardCode(armControl, drive); //love it sm
-//                armControl.GoToHigh(drive);
-//                armControl.SpecialSleep(drive, 1700);//time to drive from stack to junction
-////                armControl.WaitForTrajectoryToFinish(drive);
-//                armControl.STACK_POS -= 125;
             }
 
             armControl.openClaw();

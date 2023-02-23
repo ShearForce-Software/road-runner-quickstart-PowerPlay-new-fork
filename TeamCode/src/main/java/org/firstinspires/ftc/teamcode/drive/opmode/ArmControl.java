@@ -44,7 +44,9 @@ public class ArmControl {
     int HIGH_POS = 1610;//550     900
     int STACK_POS = 550; //1100
 
+    //FindCondeCenter variables
     public double forwardLG, shiftLG;
+    private double finalLeft, finalRight, rawRangeLeft, rawRangeRight;
 
     public boolean high = false;
     public boolean stow = false;
@@ -536,10 +538,8 @@ public class ArmControl {
         }
     }
     public void FindConeCenter(){
-        double finalLeft, finalRight;
-        //double[] finalValues = {0, 0}; //first value of the array will be right/left. second value will be forward
-        double rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
-        double rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
+        rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
+        rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
         //~~sort through data~~
         if(((sensorColorLeft.red() + sensorColorRight.red()) / 2) > ((sensorColorLeft.blue() + sensorColorRight.blue()) / 2)){
             //red values
@@ -615,9 +615,6 @@ public class ArmControl {
                 forwardLG = finalRight + 0.1;
             }
         }
-//        //place final values into array for returnin'
-//        finalValues[0] = shiftLG; //the value for right or left of cone center
-//        finalValues[1] = forwardLG; //the value for how far forward
     }
 }
 

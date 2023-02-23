@@ -64,12 +64,9 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
         Pose2d startPose = new Pose2d(36, -64.5, Math.toRadians(90));
         Vector2d junctionVec = new Vector2d(29, -7.4);
         Pose2d junctionPos = new Pose2d(29,-7.4, Math.toRadians(-45)); //27.8, -5.8 ^^and up there
-        Pose2d NEWjunctionPos = new Pose2d(29.8, -5,  Math.toRadians(-25));
         Pose2d almostStackPos = new Pose2d(58, stackY, Math.toRadians(0));
-        Vector2d realStackVec;//this is the one that's gonna be changed by ben's FindConeCenter method
-        Pose2d realStackPos;
+        Vector2d realStackVec;
         TrajectorySequence ToRealStack;
-        Pose2d linePos = new Pose2d(40, stackY, Math.toRadians(0));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
         armControl.StartPosition(null);
@@ -132,9 +129,6 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
 
             for (int i = 0; i < 3; i++){
                 armControl.openClaw();
-                //TODO: call methods for getting distances
-                //returns values for drift and distance to stack
-                //set realStackPos to the correct location with those values returned
                 drive.followTrajectorySequenceAsync(ToAlmostStack);
                 //bring arm back
                 armControl.SpecialSleep(drive, 450);//time to start moving arm down after delivering
@@ -142,23 +136,21 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
                 armControl.ReadyToGrabFromStack(drive);
                 //armControl.SpecialSleep(drive, 1000);//time to close claw on cone
                 armControl.WaitForTrajectoryToFinish(drive);
-                //should be at correct position to scan now
-                //double tempPos[] = armControl.FindConeCenter();
-                armControl.FindConeCenter();
+                //At position to scan
+                armControl.FindConeCenter(); // scans
+                //updates pos and drives there
                 realStackVec = new Vector2d(drive.getPoseEstimate().getX() + armControl.forwardLG, drive.getPoseEstimate().getY() + armControl.shiftLG);
-                //realStackPos = new Pose2d(drive.getPoseEstimate().getX() + tempPos[1], drive.getPoseEstimate().getY() + tempPos[0], 0);
-
-                //~~~~~The call to find the cone center currently assumes its a RED CONE~~~~~~~~
                 ToRealStack = drive.trajectorySequenceBuilder(almostStackPos)
                         .splineToConstantHeading(realStackVec, Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(20,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(20))
                         .build();
-
                 drive.followTrajectorySequenceAsync(ToRealStack);
                 armControl.WaitForTrajectoryToFinish(drive);
+                //at the real spot, now grabs from stack
                 armControl.GrabFromStack(drive);
                 armControl.SpecialSleep(drive, 300);
+                //must redefine the toHighJunction trajectory since the starting position was changed
                 TrajectorySequence ToHighJunction = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .setReversed(true)
                         .strafeTo(new Vector2d(44,-12),

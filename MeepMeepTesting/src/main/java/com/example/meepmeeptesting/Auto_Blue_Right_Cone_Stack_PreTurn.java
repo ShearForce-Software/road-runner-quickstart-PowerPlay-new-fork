@@ -20,7 +20,7 @@ public class Auto_Blue_Right_Cone_Stack_PreTurn {
                         drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
                                 // /*
                                 //first cone
-                                .strafeTo(new Vector2d(36,-42))
+                                .strafeTo(new Vector2d(36,-57))
                                 .splineToSplineHeading(new Pose2d(36, -28, 0), Math.toRadians(90))
                                 .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(90))
                                 .splineToSplineHeading(new Pose2d(36, -16.5, Math.toRadians(-45)), Math.toRadians(90))

@@ -61,7 +61,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         double stackY = -14.26;
         armControl.STACK_POS = 550;
         Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(90));
-        Vector2d junctionVec = new Vector2d(-29, -7.4);
+        Vector2d junctionVec = new Vector2d(-27, -7.4);
         Pose2d junctionPos = new Pose2d(-29,-7.4, Math.toRadians(-135));
         Pose2d almostStackPos = new Pose2d(-58, stackY, Math.toRadians(-180));
         Vector2d realStackVec;
@@ -71,15 +71,15 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         armControl.StartPosition(null);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
-                .strafeTo(new Vector2d(-36,-56),
-                        SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(60))
+                .strafeTo(new Vector2d(-36,-58),
+                        SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(55))
                 .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(180)), Math.toRadians(90),
-                        SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(60))
+                        SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(55))
                 .splineToConstantHeading(new Vector2d(-36, -24), Math.toRadians(90),
-                        SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                        SampleMecanumDrive.getAccelerationConstraint(60))
+                        SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                        SampleMecanumDrive.getAccelerationConstraint(55))
                 .splineToSplineHeading(new Pose2d(-36, -16.5, Math.toRadians(-135)), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(45,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(45))
@@ -106,12 +106,11 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         if (opModeIsActive()) {
             // the way to the first junction.
             drive.followTrajectorySequenceAsync(FirstCone);
-
-            //**************ADDED HARD CODE FOR SLIDE MOVEMENTS**************//
-            SlidesToStowHardCode(armControl, drive);
-            armControl.StowCone(drive);
-            armControl.GoToHigh(drive);
+//            SlidesToStowHardCode(armControl, drive);
+//            armControl.StowCone(drive);
+//            armControl.GoToHigh(drive);
             SlidesToHighHardCode(armControl, drive);
+            armControl.autoArmToHigh(drive);
             armControl.WaitForTrajectoryToFinish(drive);
 
             for (int i = 0; i < 3; i++){
@@ -135,29 +134,30 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
                 armControl.WaitForTrajectoryToFinish(drive);
                 //at real spot
                 armControl.GrabFromStack(drive);
-                armControl.SpecialSleep(drive, 300);
+                armControl.SpecialSleep(drive, 200);
                 //redefine ToHighJunction
                 ToHighJunction = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .setReversed(true)
                         .strafeTo(new Vector2d(-44,-12),
-                                SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(30))
+                                SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(25))
                         .splineToSplineHeading(new Pose2d(-36, -12, Math.toRadians(-135)), Math.toRadians(0),
-                                SampleMecanumDrive.getVelocityConstraint(30,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(30))
+                                SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(25))
                         .splineToConstantHeading(junctionVec, Math.toRadians(45),
                                 SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(25))
                         .build();
                 drive.followTrajectorySequenceAsync(ToHighJunction);
                 //armControl.SpecialSleep(drive, 250);
-                SlidesToStowHardCode(armControl, drive); //we love having trust issues with the slides
-                armControl.StowCone(drive);
+//                SlidesToStowHardCode(armControl, drive); //we love having trust issues with the slides
+//                armControl.StowCone(drive);
                 SlidesToHighHardCode(armControl, drive); //love it sm
-                armControl.GoToHigh(drive);
-                armControl.SpecialSleep(drive, 1500);
+                armControl.autoArmToHigh(drive);
+                armControl.SpecialSleep(drive, 1700);
                 armControl.STACK_POS -= 125;
             }
+
             armControl.openClaw();
             if (tagOfInterest.id==11){
                 //to first spot
@@ -225,9 +225,9 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         armControl.slideTwo.setTargetPosition(armControl.HIGH_POS);
         armControl.slideOne.setPower(armControl.ARM_POWER);
         armControl.slideTwo.setPower(armControl.ARM_POWER);
-        armControl.WaitForSlides(drive);
-        armControl.slideOne.setPower(0);
-        armControl.slideTwo.setPower(0);
+//        armControl.WaitForSlides(drive);
+//        armControl.slideOne.setPower(0);
+//        armControl.slideTwo.setPower(0);
     }
 
 

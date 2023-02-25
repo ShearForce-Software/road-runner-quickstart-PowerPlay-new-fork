@@ -345,10 +345,26 @@ public class ArmControl {
 //        slideOne.setPower(0);
 //        slideTwo.setPower(0);
     }
+    private boolean slideAdjustOn = false;
 
-    public void ManualSlideAdjust(SampleMecanumDrive drive, float adjust){
-            slideOne.setPower(adjust);
-            slideTwo.setPower(adjust);
+    public void ManualSlideAdjust(boolean up){
+        if(up){
+            slideOne.setPower(1);
+            slideTwo.setPower(1);
+        }
+        else{
+            slideOne.setPower(-1);
+            slideTwo.setPower(-1);
+        }
+        slideAdjustOn = true;
+
+    }
+    public void ManualSlideAdjust(){
+        if(!(slideOne.isBusy() && slideTwo.isBusy()) || slideAdjustOn){
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+            slideAdjustOn = false;
+        }
     }
 
     public void SafetyStow(SampleMecanumDrive drive) {

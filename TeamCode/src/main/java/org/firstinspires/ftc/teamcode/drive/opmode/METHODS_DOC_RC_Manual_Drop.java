@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
 
@@ -26,7 +27,28 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
                 armControl.StartPosition(null);
             }
 
-            //~~~~~NEW MANUAL ARM STUFF~~~~~~
+            //~~~~~NEW MANUAL ARM STUFF~~~~~~\
+            if(gamepad1.left_stick_y!=0){
+                if(gamepad1.left_stick_y>0) {
+                    armControl.slideOne.setTargetPosition(armControl.slideOne.getCurrentPosition() - 100);
+                    armControl.slideTwo.setTargetPosition(armControl.slideTwo.getCurrentPosition() - 100);
+                    armControl.slideOne.setPower(1);
+                    armControl.slideTwo.setPower(1);
+                    armControl.WaitForSlides(null);
+                    armControl.slideOne.setPower(0);
+                    armControl.slideTwo.setPower(0);
+                }
+                if(gamepad1.left_stick_y<0) {
+                    armControl.slideOne.setTargetPosition(armControl.slideOne.getCurrentPosition() + 100);
+                    armControl.slideTwo.setTargetPosition(armControl.slideTwo.getCurrentPosition() + 100);
+                    armControl.slideOne.setPower(1);
+                    armControl.slideTwo.setPower(1);
+                    armControl.WaitForSlides(null);
+                    armControl.slideOne.setPower(0);
+                    armControl.slideTwo.setPower(0);
+                }
+            }
+            /*
             if(gamepad1.right_trigger == 1 && gamepad1.left_trigger == 0) {
                 armControl.ManualSlideAdjust(true);
             }
@@ -36,6 +58,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
             else{
                 armControl.ManualSlideAdjust();
             }
+            */
             //ends here
 
             if (gamepad1.left_bumper) {

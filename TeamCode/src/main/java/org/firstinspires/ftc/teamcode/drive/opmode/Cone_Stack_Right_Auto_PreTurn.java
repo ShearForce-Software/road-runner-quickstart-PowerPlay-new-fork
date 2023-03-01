@@ -33,7 +33,7 @@ import java.util.ArrayList;
  */
 
 @Config
-@Autonomous(name = "Cone Stack Auto Right")
+@Autonomous(name = "MAIN Autonomous Right ")
 public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -58,11 +58,11 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
         ArmControl armControl = new ArmControl(false, false, this);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         // Starting position of robot on field
-        double stackY = -14.26;
+        double stackY = -12.26;
         armControl.STACK_POS = 550;
         Pose2d startPose = new Pose2d(36, -64.5, Math.toRadians(90));
-        Vector2d junctionVec = new Vector2d(29, -7.4);
-        Pose2d junctionPos = new Pose2d(29,-7.4, Math.toRadians(-45)); //27.8, -5.8 ^^and in Vec
+        Vector2d junctionVec = new Vector2d(29, -6.4);
+        Pose2d junctionPos = new Pose2d(29,-6.4, Math.toRadians(-45)); //27.8, -5.8 ^^and in Vec
         Pose2d almostStackPos = new Pose2d(58, stackY, Math.toRadians(0));
         Vector2d realStackVec;
         TrajectorySequence ToRealStack;
@@ -90,7 +90,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
 
         TrajectorySequence ToAlmostStack = drive.trajectorySequenceBuilder(junctionPos)
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(38, -14.26, Math.toRadians(0)), Math.toRadians(0),
+                .splineToSplineHeading(new Pose2d(38, -12.26, Math.toRadians(0)), Math.toRadians(0),
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(25))
                 .splineToLinearHeading(almostStackPos, Math.toRadians(0),
@@ -110,6 +110,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
             SlidesToHighHardCode(armControl, drive);
             armControl.autoArmToHigh(drive);
             armControl.WaitForTrajectoryToFinish(drive);
+
 
             for (int i = 0; i < 3; i++){
                 armControl.openClaw();
@@ -152,7 +153,7 @@ public class Cone_Stack_Right_Auto_PreTurn extends LinearOpMode {
 //                armControl.StowCone(drive);
                 SlidesToHighHardCode(armControl, drive);
                 armControl.autoArmToHigh(drive);
-                armControl.SpecialSleep(drive, 1600);//time to drive from stack to junction
+                armControl.SpecialSleep(drive, 1850);//time to drive from stack to junction
                 armControl.STACK_POS -= 125;
             }
 

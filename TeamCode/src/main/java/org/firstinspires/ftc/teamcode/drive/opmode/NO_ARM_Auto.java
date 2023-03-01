@@ -34,7 +34,7 @@ import java.util.ArrayList;
  * These coefficients can be tuned live in dashboard.
  */
 @Config
-@Autonomous(name = "NO ARM Auto (Scan and Park)")
+@Autonomous(name = "EMERGENCY NO ARM Auto (Scan and Park)")
 public class NO_ARM_Auto extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;

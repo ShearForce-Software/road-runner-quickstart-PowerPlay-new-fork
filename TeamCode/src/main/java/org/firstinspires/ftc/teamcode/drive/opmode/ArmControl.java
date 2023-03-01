@@ -348,11 +348,16 @@ public class ArmControl {
     private boolean slideAdjustOn = false;
 
     public void ManualSlideAdjust(boolean up){
+
         if(up){
+            slideOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            slideTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             slideOne.setPower(1);
             slideTwo.setPower(1);
         }
         else{
+            slideOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            slideTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             slideOne.setPower(-1);
             slideTwo.setPower(-1);
         }
@@ -363,6 +368,8 @@ public class ArmControl {
         if(!(slideOne.isBusy() && slideTwo.isBusy()) || slideAdjustOn){
             slideOne.setPower(0);
             slideTwo.setPower(0);
+            slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slideAdjustOn = false;
         }
     }

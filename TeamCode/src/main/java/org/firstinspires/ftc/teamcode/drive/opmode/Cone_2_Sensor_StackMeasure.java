@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.Locale;
-
+@Disabled
 @TeleOp(name = "2 Cone Auto Detect and Measure")
 //@Disabled                            // Comment this out to add to the opmode list
 public class Cone_2_Sensor_StackMeasure extends LinearOpMode {

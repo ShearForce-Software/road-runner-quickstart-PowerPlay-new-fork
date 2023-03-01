@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.Locale;
 
-//@Disabled
+@Disabled
 @TeleOp(name = "2 Sensor Data Collect")
 
 public class Cone_2_Sensor_Data_Collect extends LinearOpMode {

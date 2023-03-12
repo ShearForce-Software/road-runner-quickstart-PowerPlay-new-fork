@@ -14,7 +14,7 @@ public class PWPowerplayRightBenTest {
         MeepMeep meepMeep = new MeepMeep(600);
         Pose2d junctionPos;
         if(left){//~~~~~~~~~~~~~~LEFT SIDE~~~~~~~~~~~~
-            junctionPos = new Pose2d(-29,-6.4, Math.toRadians(-135));
+            junctionPos = new Pose2d(-27,-7.4, Math.toRadians(-135));
             if (parkSpot == 3) {//Spot 3
                 RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                         .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
@@ -22,7 +22,7 @@ public class PWPowerplayRightBenTest {
                         .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(junctionPos)
                                         .forward(2.5)
-                                        .splineToSplineHeading(new Pose2d(-29 - ((5 * Math.sqrt(2)) / 2), -6.4 - ((5 * Math.sqrt(2)) / 2), Math.toRadians(180)), Math.toRadians(-135))
+                                        .splineToSplineHeading(new Pose2d(-27 - ((5.0 * Math.sqrt(2)) / 2.0), -7.4 - ((5.0 * Math.sqrt(2)) / 2.0), Math.toRadians(180)), Math.toRadians(-135))
                                         // ^some really exact math :)
                                         .splineToConstantHeading(new Vector2d(-24, -12), Math.toRadians(0))
                                         .splineToSplineHeading(new Pose2d(-12, -12, Math.toRadians(180)), Math.toRadians(0))
@@ -76,7 +76,7 @@ public class PWPowerplayRightBenTest {
                         .followTrajectorySequence(drive ->
                                 drive.trajectorySequenceBuilder(junctionPos)
                                         .forward(2.5)
-                                        .splineToSplineHeading(new Pose2d(29 + ((5 * Math.sqrt(2)) / 2), -6.4 - ((5 * Math.sqrt(2)) / 2), Math.toRadians(0)), Math.toRadians(-45))
+                                        .splineToSplineHeading(new Pose2d(29 + ((5.0 * Math.sqrt(2)) / 2.0), -6.4 - ((5.0 * Math.sqrt(2)) / 2.0), Math.toRadians(0)), Math.toRadians(-45))
                                         // ^some really exact math :)
                                         .splineToConstantHeading(new Vector2d(24, -12), Math.toRadians(180))
                                         .splineToSplineHeading(new Pose2d(12, -12, Math.toRadians(0)), Math.toRadians(180))

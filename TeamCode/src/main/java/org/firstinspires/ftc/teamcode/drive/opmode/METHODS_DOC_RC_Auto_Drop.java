@@ -11,7 +11,7 @@ public class METHODS_DOC_RC_Auto_Drop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         armControl.Init(hardwareMap);
-        armControl.StartPosition(null);
+        armControl.StartPosition(null, true);
 
         waitForStart();
 

@@ -108,20 +108,45 @@ public class ArmControl {
         imu.initialize(parameters);
     }
 
-    public void StartPosition(SampleMecanumDrive drive) {
-        slideOne.setTargetPosition(0);
-        slideTwo.setTargetPosition(0);
-        slideOne.setPower(ARM_POWER);
-        slideTwo.setPower(ARM_POWER);
-        WaitForSlides(drive);
-        slideOne.setPower(0);
-        slideTwo.setPower(0);
-        armGrip.setPosition(0);
-        SpecialSleep(null, 180);
-        spinOne.setPosition(1);
-        spinTwo.setPosition(1);
-        armRote.setPosition(.11);
-        liftWrist.setPosition(.53);
+    public void StartPosition(SampleMecanumDrive drive, boolean isDriverControl) {
+        if(isDriverControl) {
+            slideOne.setTargetPosition(0);
+            slideTwo.setTargetPosition(0);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            WaitForSlides(drive);
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+            armGrip.setPosition(0);
+            SpecialSleep(null, 180);
+            spinOne.setPosition(1);
+            spinTwo.setPosition(1);
+            armRote.setPosition(.11);
+            liftWrist.setPosition(.53);
+        }
+        else{
+            slideOne.setTargetPosition(0);
+            slideTwo.setTargetPosition(0);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            WaitForSlides(drive);
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+            spinOne.setPosition(0.79);
+            spinTwo.setPosition(0.79);
+            armRote.setPosition(0.83);
+            liftWrist.setPosition(0.63);
+            armGrip.setPosition(0);
+            SpecialSleep(null, 180);
+            slideOne.setTargetPosition(115);
+            slideTwo.setTargetPosition(115);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            WaitForSlides(drive);
+            spinOne.setPosition(0.81);
+            spinTwo.setPosition(0.81);
+            liftWrist.setPosition(0.88);
+        }
     }
 
     public void GoToHigh(SampleMecanumDrive drive) {
@@ -165,6 +190,26 @@ public class ArmControl {
         stow = false;
         // set ready for delivery variable to true
         readyToDrop = true;
+    }
+    public void GoToHigh180(SampleMecanumDrive drive){
+        armGrip.setPosition(0);
+        spinOne.setPosition(.16);
+        spinTwo.setPosition(.16);
+        slideOne.setTargetPosition(1610);
+        slideTwo.setTargetPosition(1610);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+
+        // set stow variable to false
+        stow = false;
+        // set ready for delivery variable to true
+        readyToDrop = true;
+
     }
 
     public void GoToMedium(SampleMecanumDrive drive) {

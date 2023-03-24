@@ -10,7 +10,7 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class Auto_Blue_Left_Cone_Stack {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
-        Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(-90));
         Vector2d junctionPos = new Vector2d(-27,-7.4);
         Pose2d stackPos = new Pose2d(-63, -13.26, Math.toRadians(180));
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -19,10 +19,11 @@ public class Auto_Blue_Left_Cone_Stack {
                 .setDimensions(16,16)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .strafeTo(new Vector2d(-36,-58))
-                                .splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(180)), Math.toRadians(90))
-                                .splineToConstantHeading(new Vector2d(-36, -24), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(-36, -16.5, Math.toRadians(-135)), Math.toRadians(90))
+                                //.strafeTo(new Vector2d(-36,-58))
+                                //.splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(180)), Math.toRadians(90))
+                                .setReversed(true)
+                                .splineToConstantHeading(new Vector2d(-36, -20), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(-36, -20, Math.toRadians(-135)), Math.toRadians(90))
                                 .splineToConstantHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(0.25)
                                 //stack

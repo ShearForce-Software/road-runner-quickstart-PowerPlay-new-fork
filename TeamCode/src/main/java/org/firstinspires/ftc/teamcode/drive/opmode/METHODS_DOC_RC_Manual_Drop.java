@@ -11,7 +11,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         armControl.Init(hardwareMap);
-        armControl.StartPosition(null);
+        armControl.StartPosition(null, true);
 
         waitForStart();
 
@@ -24,7 +24,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
                 armControl.SafetyStow(null);
             }
             if(gamepad1.dpad_up){
-                armControl.StartPosition(null);
+                armControl.StartPosition(null, true);
             }
 
             //~~~~~NEW MANUAL ARM STUFF~~~~~~\

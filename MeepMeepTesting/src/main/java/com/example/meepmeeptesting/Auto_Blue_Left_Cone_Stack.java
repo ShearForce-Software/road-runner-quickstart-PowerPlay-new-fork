@@ -19,14 +19,13 @@ public class Auto_Blue_Left_Cone_Stack {
                 .setDimensions(16,16)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                //.strafeTo(new Vector2d(-36,-58))
-                                //.splineToSplineHeading(new Pose2d(-36, -28, Math.toRadians(180)), Math.toRadians(90))
                                 .setReversed(true)
                                 .splineToConstantHeading(new Vector2d(-36, -20), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(-36, -20, Math.toRadians(-135)), Math.toRadians(90))
+                                .splineToSplineHeading(new Pose2d(-27-(6*(1/Math.sqrt(2))), -7.4-(6*(1/Math.sqrt(2))), Math.toRadians(-135)), Math.toRadians(45))
                                 .splineToConstantHeading(junctionPos, Math.toRadians(45))
                                 .waitSeconds(0.25)
                                 //stack
+                                .setReversed(false)
                                 .splineToSplineHeading(new Pose2d(-38, -13.26, Math.toRadians(180)), Math.toRadians(180))
                                 .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(.75)

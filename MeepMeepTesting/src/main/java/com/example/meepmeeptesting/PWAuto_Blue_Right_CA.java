@@ -17,17 +17,15 @@ public class PWAuto_Blue_Right_CA {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                 .setDimensions(16,16)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
+                        drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(-90)))
                                 // /*
                                 //first cone
-                                .strafeTo(new Vector2d(36,-58))
-                                .splineToSplineHeading(new Pose2d(36, -28, 0), Math.toRadians(90))
-                                .splineToConstantHeading(new Vector2d(36, -24), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(36, -16.5, Math.toRadians(-90)), Math.toRadians(90))
+                                .setReversed(true)
                                 .splineToConstantHeading(new Vector2d(36, -14), Math.toRadians(90))
                                 .splineToConstantHeading(junctionPos, Math.toRadians(90))
                                 .waitSeconds(0.25)
                                 //stack
+                                .setReversed(false)
                                 .splineToConstantHeading(new Vector2d(28,-12), Math.toRadians(0))
                                 .splineToSplineHeading(new Pose2d(48, -12, Math.toRadians(0)), Math.toRadians(0))
                                 .splineToLinearHeading(stackPos, Math.toRadians(0))

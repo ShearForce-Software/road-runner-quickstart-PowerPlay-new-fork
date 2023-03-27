@@ -11,7 +11,7 @@ public class PWAuto_Blue_Left_CA_OtherHigh {
         MeepMeep meepMeep = new MeepMeep(600);
         Vector2d junctionVec = new Vector2d(-27,-7.4);
         Vector2d junctionTwoVec = new Vector2d(-6,-18);
-        Pose2d stackPos = new Pose2d(-63, -12, Math.toRadians(180));
+        Pose2d stackPos = new Pose2d(-63, -13.26, Math.toRadians(180));
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(50, 50, Math.toRadians(200), Math.toRadians(200), 12.5)
@@ -26,7 +26,7 @@ public class PWAuto_Blue_Left_CA_OtherHigh {
                                 .waitSeconds(0.5)
                                 //return to stack
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(-38, -12, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-38, -13.26, Math.toRadians(180)), Math.toRadians(180))
                                 .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(1.75)
 

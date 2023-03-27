@@ -195,6 +195,7 @@ public class ArmControl {
         armGrip.setPosition(0);
         spinOne.setPosition(.16);
         spinTwo.setPosition(.16);
+        liftWrist.setPosition(.05);
         slideOne.setTargetPosition(1610);
         slideTwo.setTargetPosition(1610);
         slideOne.setPower(ARM_POWER);

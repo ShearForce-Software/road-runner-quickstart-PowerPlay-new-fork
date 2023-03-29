@@ -10,6 +10,7 @@ public class PWAuto_Blue_Left_CA_OtherHigh {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(600);
         Vector2d junctionVec = new Vector2d(-27,-7.4);
+        Pose2d junctionPos = new Pose2d(-27,-7.4,Math.toRadians(-135));
         Vector2d junctionTwoVec = new Vector2d(-6,-18);
         Pose2d stackPos = new Pose2d(-63, -13.26, Math.toRadians(180));
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -20,8 +21,13 @@ public class PWAuto_Blue_Left_CA_OtherHigh {
                         drive.trajectorySequenceBuilder(new Pose2d(-36, -63, Math.toRadians(-90)))
                                 //first Cone
                                 .setReversed(true)
+//                                .splineToLinearHeading(new Pose2d(-36, -22, Math.toRadians(-90)), Math.toRadians(90))
+//                                .splineToSplineHeading(new Pose2d(-36, -16.5, Math.toRadians(-135)), Math.toRadians(90))
+//                                .splineToConstantHeading(junctionVec, Math.toRadians(45))
+
+
                                 .splineToConstantHeading(new Vector2d(-36, -20), Math.toRadians(90))
-                                .splineToSplineHeading(new Pose2d(junctionVec.getX()-(6*(1/Math.sqrt(2))), junctionVec.getY()-(6*(1/Math.sqrt(2))), Math.toRadians(-135)), Math.toRadians(45))
+                                .splineToSplineHeading(new Pose2d(junctionVec.getX()-(2*(1/Math.sqrt(2))), junctionVec.getY()-(2*(1/Math.sqrt(2))), Math.toRadians(-135)), Math.toRadians(45))
                                 .splineToConstantHeading(junctionVec, Math.toRadians(45))
                                 .waitSeconds(0.5)
                                 //return to stack

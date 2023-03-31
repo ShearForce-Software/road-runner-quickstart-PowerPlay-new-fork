@@ -32,14 +32,14 @@ public class PWAuto_Blue_Left_CA_OtherHigh {
                                 .waitSeconds(0.5)
                                 //return to stack
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(-38, -13.26, Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-38, -14.26, Math.toRadians(180)), Math.toRadians(180))
                                 .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(1.75)
 
                                 //2nd cone
                                 .setReversed(true)
-                                .splineToConstantHeading(new Vector2d(-20, -12), Math.toRadians(0))
-                                .splineToSplineHeading(new Pose2d(junctionTwoVec.getX()-(5*(1/Math.sqrt(2))), junctionTwoVec.getY()+(5*(1/Math.sqrt(2))), Math.toRadians(135)), Math.toRadians(-45))
+                                .splineToConstantHeading(new Vector2d(-20, -14), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(junctionTwoVec.getX()-(2*(1/Math.sqrt(2))), junctionTwoVec.getY()+(2*(1/Math.sqrt(2))), Math.toRadians(135)), Math.toRadians(-45))
                                 .splineToConstantHeading(junctionTwoVec, Math.toRadians(-45))
                                 .waitSeconds(1.25)
                                 .setReversed(false)

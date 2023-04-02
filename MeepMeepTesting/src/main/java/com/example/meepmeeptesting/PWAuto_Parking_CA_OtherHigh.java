@@ -11,8 +11,8 @@ import java.util.Vector;
 public class PWAuto_Parking_CA_OtherHigh {
     public static void main(String[] args) {
         //~~~~~~~~~~THIS CONTAINS ALL PARKING FOR BOTH SIDES~~~~~~~~~~~~~~
-        int parkSpot = 3;
-        boolean left = false;
+        int parkSpot = 2;
+        boolean left = true;
         MeepMeep meepMeep = new MeepMeep(600);
         Pose2d junctionPos;
         if(left){//~~~~~~~~~~~~~~LEFT SIDE~~~~~~~~~~~~
@@ -41,6 +41,7 @@ public class PWAuto_Parking_CA_OtherHigh {
                                 drive.trajectorySequenceBuilder(junctionPos)
                                         .forward(1.5)
                                         .splineToSplineHeading(new Pose2d(-24, -12, Math.toRadians(180)), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-30, -12), Math.toRadians(180))
                                         .splineToConstantHeading(new Vector2d(-36, -12), Math.toRadians(180))
                                         .build()
                         );
@@ -51,6 +52,7 @@ public class PWAuto_Parking_CA_OtherHigh {
                         .addEntity(myBot)
                         .start();
             } else {//Spot 1
+
                 RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                         .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
                         .setDimensions(16, 16)
@@ -58,6 +60,7 @@ public class PWAuto_Parking_CA_OtherHigh {
                                 drive.trajectorySequenceBuilder(junctionPos)
                                         .forward(1.5)
                                         .splineToSplineHeading(new Pose2d(-24, -12, Math.toRadians(180)), Math.toRadians(180))
+                                        .splineToConstantHeading(new Vector2d(-50, -12), Math.toRadians(180))
                                         .splineToConstantHeading(new Vector2d(-58, -12), Math.toRadians(180))
                                         .build()
                         );

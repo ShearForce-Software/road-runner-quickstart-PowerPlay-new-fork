@@ -38,13 +38,17 @@ public class PWAuto_Blue_Left_CA_OtherHigh {
 
                                 //2nd cone
                                 .setReversed(true)
-                                .splineToConstantHeading(new Vector2d(-20, -14), Math.toRadians(0))
-                                .splineToSplineHeading(new Pose2d(junctionTwoVec.getX()-(2*(1/Math.sqrt(2))), junctionTwoVec.getY()+(2*(1/Math.sqrt(2))), Math.toRadians(135)), Math.toRadians(-45))
+                                .splineToConstantHeading(new Vector2d(-24, -14), Math.toRadians(0))
+                                .splineToSplineHeading(new Pose2d(-14,-14, Math.toRadians(135)), Math.toRadians(0))
                                 .splineToConstantHeading(junctionTwoVec, Math.toRadians(-45))
+
+
+//                                .splineToSplineHeading(new Pose2d(junctionTwoVec.getX()-(2*(1/Math.sqrt(2))), junctionTwoVec.getY()+(2*(1/Math.sqrt(2))), Math.toRadians(135)), Math.toRadians(-45))
+//                                .splineToConstantHeading(junctionTwoVec, Math.toRadians(-45))
                                 .waitSeconds(1.25)
                                 .setReversed(false)
-                                .splineToSplineHeading(new Pose2d(-16,-12,Math.toRadians(180)), Math.toRadians(180))
-                                .splineToSplineHeading(new Pose2d(-50,-12,Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-16,-14,Math.toRadians(180)), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(-50,-14,Math.toRadians(180)), Math.toRadians(180))
                                 .splineToLinearHeading(stackPos, Math.toRadians(180))
                                 .waitSeconds(2.0)
 

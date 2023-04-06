@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 //@Disabled
 @Config
-@Autonomous(name = "EXPERIMENT 180 Left Autonomous")
+@Autonomous(name = "EXPERIMENT Left 180 ONLY Autonomous")
 public class Left_Auto_180 extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;

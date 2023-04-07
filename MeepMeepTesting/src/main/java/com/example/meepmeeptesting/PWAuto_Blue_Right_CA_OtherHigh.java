@@ -33,8 +33,8 @@ public class PWAuto_Blue_Right_CA_OtherHigh {
 
                                 //2nd cone
                                 .setReversed(true)
-                                .splineToConstantHeading(new Vector2d(20, -12), Math.toRadians(180))
-                                .splineToSplineHeading(new Pose2d(junctionTwoVec.getX()+(5*(1/Math.sqrt(2))), junctionTwoVec.getY()+(5*(1/Math.sqrt(2))), Math.toRadians(45)), Math.toRadians(-135))
+                                .splineToConstantHeading(new Vector2d(24,-12), Math.toRadians(180))
+                                .splineToSplineHeading(new Pose2d(14,-12, Math.toRadians(45)), Math.toRadians(180))
                                 .splineToConstantHeading(junctionTwoVec, Math.toRadians(-135))
                                 .waitSeconds(1.25)
                                 .setReversed(false)

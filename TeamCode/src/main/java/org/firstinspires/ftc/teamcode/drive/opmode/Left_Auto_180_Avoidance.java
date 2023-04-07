@@ -54,7 +54,7 @@ public class Left_Auto_180_Avoidance extends LinearOpMode {
 
         Vector2d junctionVec = new Vector2d(-27, -7);
         Pose2d junctionPos = new Pose2d(-27,-7, Math.toRadians(-135));
-        Vector2d junctionTwoVec = new Vector2d(-4,-22);
+        Vector2d junctionTwoVec = new Vector2d(-4,-21.5);
         //Pose2d junctionTwoPos = new Pose2d(-5,-22, Math.toRadians(135));
         Pose2d stackEstimate = new Pose2d(0,0,0);
 
@@ -109,7 +109,7 @@ public class Left_Auto_180_Avoidance extends LinearOpMode {
 
             firstJuncEstimate = drive.getPoseEstimate();
 
-            telemetry.addData("First Junction Pose ~ (X: ",firstJuncEstimate.getX() + " && Y: " + firstJuncEstimate.getY() + ")");
+            telemetry.addData("First Junction Pose ~ (X: ","%.2f  %.2f",firstJuncEstimate.getX(), firstJuncEstimate.getY());
             telemetry.update();
 
             for (int i = 0; i < 3; i++){
@@ -156,9 +156,9 @@ public class Left_Auto_180_Avoidance extends LinearOpMode {
 //                    temp = drive.getPoseEstimate();
 //                }
                 telemetry.clearAll();
-                telemetry.addData("1st Junc Estimate ~ (X: ",firstJuncEstimate.getX() + " && Y: " + firstJuncEstimate.getY() + ")");
-                telemetry.addData("Stack Estimate Pose ~ (X: ",stackEstimate.getX() + " && Y: " + stackEstimate.getY() + ")");
-                telemetry.addData("2nd Junc Estimate ~ (X: ",secondJuncEstimate.getX() + " && Y: " + secondJuncEstimate.getY() + ")");
+                telemetry.addData("1st Junc Estimate ~ (X: ","%.2f  %.2f",firstJuncEstimate.getX(), firstJuncEstimate.getY());
+                telemetry.addData("Stack Estimate Pose ~ (X: ","%.2f  %.2f",stackEstimate.getX(), stackEstimate.getY());
+                telemetry.addData("2nd Junc Estimate ~ (X: ","%.2f  %.2f", secondJuncEstimate.getX(), secondJuncEstimate.getY());
                 telemetry.update();
 
                 armControl.GrabFromStack(drive);
@@ -186,9 +186,9 @@ public class Left_Auto_180_Avoidance extends LinearOpMode {
 
                 secondJuncEstimate = drive.getPoseEstimate();
                 telemetry.clearAll();
-                telemetry.addData("1st Junc Estimate ~ (X: ",firstJuncEstimate.getX() + " && Y: " + firstJuncEstimate.getY() + ")");
-                telemetry.addData("Stack Estimate Pose ~ (X: ",stackEstimate.getX() + " && Y: " + stackEstimate.getY() + ")");
-                telemetry.addData("2nd Junc Estimate ~ (X: ",secondJuncEstimate.getX() + " && Y: " + secondJuncEstimate.getY() + ")");
+                telemetry.addData("1st Junc Estimate ~ (X: ","%.2f  %.2f",firstJuncEstimate.getX(), firstJuncEstimate.getY());
+                telemetry.addData("Stack Estimate Pose ~ (X: ","%.2f  %.2f",stackEstimate.getX(), stackEstimate.getY());
+                telemetry.addData("2nd Junc Estimate ~ (X: ","%.2f  %.2f", secondJuncEstimate.getX(), secondJuncEstimate.getY());
                 telemetry.update();
             }
             armControl.openClaw();
@@ -208,7 +208,7 @@ public class Left_Auto_180_Avoidance extends LinearOpMode {
                         .splineToConstantHeading(new Vector2d(-50, stackEstimate.getY()), Math.toRadians(180),
                                 SampleMecanumDrive.getVelocityConstraint(60,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(60))
-                        .splineToConstantHeading(new Vector2d(-58, stackEstimate.getY()), Math.toRadians(180),
+                        .splineToConstantHeading(new Vector2d(-57, stackEstimate.getY()), Math.toRadians(180),
                                 SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(20))
                         .build();

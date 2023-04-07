@@ -83,7 +83,7 @@ public class EMERGENCY_ManualControl extends LinearOpMode {
             driveControls(leftFront, leftRear, rightFront, rightRear);
 
             if (gamepad1.left_bumper) {
-                position5 = .18;
+                position5 = .165;
             }
             if (gamepad1.right_bumper) {
                 position5 = 0;

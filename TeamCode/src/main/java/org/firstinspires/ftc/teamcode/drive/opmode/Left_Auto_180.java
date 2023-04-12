@@ -56,6 +56,7 @@ public class Left_Auto_180 extends LinearOpMode {
         Pose2d junctionPos = new Pose2d(-26,-6, Math.toRadians(-135));
 
         Pose2d almostStackPos = new Pose2d(-58, stackY, Math.toRadians(-180));
+        Pose2d stackEstimate = new Pose2d(0,0,0);
         Vector2d realStackVec;
         TrajectorySequence ToRealStack;
         TrajectorySequence ToHighJunction;
@@ -120,6 +121,7 @@ public class Left_Auto_180 extends LinearOpMode {
                         .build();
                 drive.followTrajectorySequenceAsync(ToRealStack);
                 armControl.WaitForTrajectoryToFinish(drive);
+                stackEstimate = drive.getPoseEstimate();
                 armControl.GrabFromStack(drive);
                 armControl.SpecialSleep(drive, 200);
                 ToHighJunction = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
@@ -148,7 +150,7 @@ public class Left_Auto_180 extends LinearOpMode {
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .setReversed(false)
-                        .splineToSplineHeading(new Pose2d(-48, -12, Math.toRadians(180)), Math.toRadians(180),
+                        .splineToSplineHeading(new Pose2d(-48, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(180),
                                 SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
                         .forward(10,
@@ -161,7 +163,7 @@ public class Left_Auto_180 extends LinearOpMode {
                 //to second spot
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .setReversed(false)
-                        .splineToLinearHeading(new Pose2d(-36, -12, Math.toRadians(180)), Math.toRadians(-135),
+                        .splineToLinearHeading(new Pose2d(-36, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(-135),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
                         .build();
@@ -178,10 +180,10 @@ public class Left_Auto_180 extends LinearOpMode {
                         .splineToSplineHeading(new Pose2d(temp.getX()-(6*(1/Math.sqrt(2))), temp.getY()-(6*(1/Math.sqrt(2))), Math.toRadians(180)), Math.toRadians(-135),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .splineToConstantHeading(new Vector2d(-24, -12), Math.toRadians(0),
+                        .splineToConstantHeading(new Vector2d(-24, stackEstimate.getY()), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .splineToConstantHeading(new Vector2d(-12, -12), Math.toRadians(0),
+                        .splineToConstantHeading(new Vector2d(-12, stackEstimate.getY()), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(45))
                         .build();

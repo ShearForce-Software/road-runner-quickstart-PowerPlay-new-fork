@@ -391,7 +391,7 @@ public class ArmControl {
         armRote.setPosition(.11);
         liftWrist.setPosition(.53);
         SpecialSleep(drive, 200);
-        armGrip.setPosition(.165);
+        armGrip.setPosition(.145);
     }
 
     public void GrabFromStack(SampleMecanumDrive drive) {

@@ -53,6 +53,7 @@ public class Left_Auto_180 extends LinearOpMode {
         Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(-90));
 
         Vector2d junctionVec = new Vector2d(-26, -6);
+        Vector2d junctionFirstVec = new Vector2d(-26.5, -6.5);
         Pose2d junctionPos = new Pose2d(-26,-6, Math.toRadians(-135));
 
         Pose2d almostStackPos = new Pose2d(-58, stackY, Math.toRadians(-180));
@@ -69,10 +70,10 @@ public class Left_Auto_180 extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-36, -20), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(40))
-                .splineToSplineHeading(new Pose2d(junctionVec.getX()-(2*(1/Math.sqrt(2))), junctionVec.getY()-(2*(1/Math.sqrt(2))), Math.toRadians(-135)), Math.toRadians(45),
+                .splineToSplineHeading(new Pose2d(junctionFirstVec.getX()-(2*(1/Math.sqrt(2))), junctionFirstVec.getY()-(2*(1/Math.sqrt(2))), Math.toRadians(-135)), Math.toRadians(45),
                         SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(35))
-                .splineToConstantHeading(junctionVec, Math.toRadians(45),
+                .splineToConstantHeading(junctionFirstVec, Math.toRadians(45),
                         SampleMecanumDrive.getVelocityConstraint(35,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(35))
                 .build();

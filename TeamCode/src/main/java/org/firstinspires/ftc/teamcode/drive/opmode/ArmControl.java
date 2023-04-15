@@ -41,7 +41,7 @@ public class ArmControl {
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
     int MED_POS = 2370;   //3560
-    int HIGH_POS = 1610;//550     900
+    int HIGH_POS = 1510;//550     900
     int STACK_POS = 550; //1100
 
     //FindCondeCenter variables

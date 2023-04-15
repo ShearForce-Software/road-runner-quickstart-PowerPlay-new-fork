@@ -203,13 +203,13 @@ public class Left_Auto_180_Avoidance extends LinearOpMode {
                         .forward(1.5,
                                 SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .splineToSplineHeading(new Pose2d(-24, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(180),
+                        .splineToSplineHeading(new Pose2d(-24, stackEstimate.getY(), Math.toRadians(-90)), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(50))
-                        .splineToConstantHeading(new Vector2d(-50, stackEstimate.getY()), Math.toRadians(180),
+                        .splineToConstantHeading(new Vector2d(-50, stackEstimate.getY()), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(60))
-                        .splineToConstantHeading(new Vector2d(-57, stackEstimate.getY()), Math.toRadians(180),
+                        .splineToConstantHeading(new Vector2d(-57, stackEstimate.getY()), Math.toRadians(-90),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(20))
                         .build();

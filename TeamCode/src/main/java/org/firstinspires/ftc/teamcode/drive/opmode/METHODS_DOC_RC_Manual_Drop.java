@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
 
 public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
@@ -19,6 +21,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
 
         while(opModeIsActive()){
             armControl.driveControlsRobotCentric();
+            telemetry.addData("claw distance: ", armControl.clawDistance.getDistance(DistanceUnit.CM));
 
             if(gamepad1.dpad_down){
                 armControl.SafetyStow(null);
@@ -68,7 +71,7 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
                 armControl.closeClaw();
             }
 
-            if ((armControl.rangeClaw < 3 && armControl.armGrip.getPosition() == .18 && armControl.slideOne.getCurrentPosition() <= 100 && armControl.slideTwo.getCurrentPosition() <= 100) || gamepad1.dpad_left) {
+            if ((armControl.rangeClaw < 3 && armControl.armGrip.getPosition() >= .14 && armControl.slideOne.getCurrentPosition() <= 100 && armControl.slideTwo.getCurrentPosition() <= 100) || gamepad1.dpad_left) {
                 armControl.StowCone(null);
             }
             //----------------------------------------------------------------

@@ -33,8 +33,8 @@ import java.util.ArrayList;
  */
 //@Disabled
 @Config
-@Autonomous(name = "AVOIDANCE Left Autonomous")
-public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
+@Autonomous(name = "AVOIDANCE Right Autonomous")
+public class Right_Auto_180_Avoidance_Tweak extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
     static final double FEET_PER_METER = 3.28084;
@@ -51,12 +51,11 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         double stackY = -14.26;
         armControl.STACK_POS = 550;
-        Pose2d startPose = new Pose2d(-36, -64.5, Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(36, -64.5, Math.toRadians(-90));
 
-        Vector2d junctionVec = new Vector2d(-28.5, -7);
-        Pose2d junctionPos = new Pose2d(-28.5,-7, Math.toRadians(-135));
-        Vector2d junctionTwoVec = new Vector2d(-4,-21.5);
-        Pose2d junctionTwoPos = new Pose2d(-5,-23, Math.toRadians(135));
+        Vector2d junctionVec = new Vector2d(28.5, -7);
+        Pose2d junctionPos = new Pose2d(28.5,-7, Math.toRadians(-45));
+        Pose2d junctionTwoPos = new Pose2d(5.75,-20.25, Math.toRadians(45));
         Pose2d stackEstimate = new Pose2d(0,0,0);
 
         //telemetry positions only
@@ -64,7 +63,7 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
         Pose2d secondJuncEstimate = new Pose2d(0,0,0);
 
 
-        Pose2d almostStackPos = new Pose2d(-57, stackY, Math.toRadians(-180));
+        Pose2d almostStackPos = new Pose2d(58, stackY, Math.toRadians(0)); //X was 58.75
         Vector2d realStackVec;
         TrajectorySequence ToRealStack;
         TrajectorySequence ToHighJunction;
@@ -74,23 +73,23 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
                 .setReversed(true)
-                .splineToConstantHeading(new Vector2d(-36, -20), Math.toRadians(90),
+                .splineToConstantHeading(new Vector2d(36, -20), Math.toRadians(90),
                         SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(40))
-                .splineToSplineHeading(new Pose2d(junctionVec.getX()-(2*(1/Math.sqrt(2))), junctionVec.getY()-(2*(1/Math.sqrt(2))), Math.toRadians(-135)), Math.toRadians(45),
+                .splineToSplineHeading(new Pose2d(junctionVec.getX()+(3*(1/Math.sqrt(2))), junctionVec.getY()-(3*(1/Math.sqrt(2))), Math.toRadians(-45)), Math.toRadians(135),
                         SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(35))
-                .splineToConstantHeading(junctionVec, Math.toRadians(45),
+                .splineToConstantHeading(junctionVec, Math.toRadians(135),
                         SampleMecanumDrive.getVelocityConstraint(35,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(35))
                 .build();
 
         TrajectorySequence ToAlmostStackOne = drive.trajectorySequenceBuilder(junctionPos)
                 .setReversed(false)
-                .splineToSplineHeading(new Pose2d(-38, stackY, Math.toRadians(180)), Math.toRadians(180),
+                .splineToSplineHeading(new Pose2d(38, stackY, Math.toRadians(0)), Math.toRadians(0),
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(25))
-                .splineToLinearHeading(almostStackPos, Math.toRadians(180),
+                .splineToLinearHeading(almostStackPos, Math.toRadians(0),
                         SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                         SampleMecanumDrive.getAccelerationConstraint(25))
                 .build();
@@ -122,16 +121,16 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
                 }
                 else{
                     //RUNS THIS AFTER THE FIRST CONE FROM THE STACK HAS BEEN RELEASED
-                    almostStackPos = new Pose2d(-58, stackEstimate.getY(), Math.toRadians(-180));
+                    almostStackPos = new Pose2d(58.75, stackEstimate.getY(), Math.toRadians(0));
                     ToAlmostStackTwo = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                             .setReversed(false)
-                            .splineToSplineHeading(new Pose2d(-16,stackEstimate.getY(),Math.toRadians(180)), Math.toRadians(180),
+                            .splineToSplineHeading(new Pose2d(16,stackEstimate.getY(),Math.toRadians(0)), Math.toRadians(0),
                                     SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(35))
-                            .splineToSplineHeading(new Pose2d(-50,stackEstimate.getY(),Math.toRadians(180)), Math.toRadians(180),
+                            .splineToSplineHeading(new Pose2d(50,stackEstimate.getY(),Math.toRadians(0)), Math.toRadians(0),
                                     SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(35))
-                            .splineToLinearHeading(almostStackPos, Math.toRadians(180),
+                            .splineToLinearHeading(almostStackPos, Math.toRadians(0),
                                     SampleMecanumDrive.getVelocityConstraint(25,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                     SampleMecanumDrive.getAccelerationConstraint(25))
                             .build();
@@ -144,9 +143,9 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
 
                 armControl.FindConeCenter();
 
-                realStackVec = new Vector2d(drive.getPoseEstimate().getX() - armControl.forwardLG, drive.getPoseEstimate().getY() - armControl.shiftLG);
+                realStackVec = new Vector2d(drive.getPoseEstimate().getX() + armControl.forwardLG, drive.getPoseEstimate().getY() + armControl.shiftLG);
                 ToRealStack = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .splineToConstantHeading(realStackVec, Math.toRadians(180),
+                        .splineToConstantHeading(realStackVec, Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(20, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(20))
                         .build();
@@ -167,21 +166,18 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
                 armControl.SpecialSleep(drive, 200);
                 ToHighJunction = drive.trajectorySequenceBuilder(stackEstimate)
                         .setReversed(true)
-                        .splineToConstantHeading(new Vector2d(-24, stackEstimate.getY()), Math.toRadians(0),
+                        .splineToConstantHeading(new Vector2d(24, stackEstimate.getY()), Math.toRadians(180),
                                 SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(35))
-//                        .forward(-38,
+//                        .splineToSplineHeading(new Pose2d(18, stackEstimate.getY(), Math.toRadians(45)), Math.toRadians(180),
 //                                SampleMecanumDrive.getVelocityConstraint(50, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
 //                                SampleMecanumDrive.getAccelerationConstraint(35))
-                        //.splineToSplineHeading(new Pose2d(-14, stackEstimate.getY(), Math.toRadians(-45)), Math.toRadians(0),
-                        //        SampleMecanumDrive.getVelocityConstraint(55, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        //        SampleMecanumDrive.getAccelerationConstraint(25))
-                        .splineToSplineHeading(junctionTwoPos, Math.toRadians(-45),
+                        .splineToSplineHeading(junctionTwoPos, Math.toRadians(-135),
                                 SampleMecanumDrive.getVelocityConstraint(35, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(25))
                         .build();
                 drive.followTrajectorySequenceAsync(ToHighJunction);
-                 SlidesToHighHardCode(armControl, drive); //love it sm
+                SlidesToHighHardCode(armControl, drive); //love it sm
                 armControl.autoArmToHigh(drive);
                 armControl.SpecialSleep(drive, 2100); //~~~~~~~~~~~EDIT THIS TIME FOR DROPPING THE CONE AND RESETTING ETC
                 armControl.STACK_POS -= 125;
@@ -203,17 +199,13 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
                         .setReversed(false)
                         .forward(1.5,
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(40))
-                        .splineToSplineHeading(new Pose2d(-24, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(180),
+                                SampleMecanumDrive.getAccelerationConstraint(30))
+                        .splineToSplineHeading(new Pose2d(12, stackEstimate.getY(), Math.toRadians(0)), Math.toRadians(45),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(50))
-                        .splineToLinearHeading(new Pose2d(-56.75, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(180),
-                                SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(40))
+                                SampleMecanumDrive.getAccelerationConstraint(30))
                         .build();
                 drive.followTrajectorySequenceAsync(Park1);
             }
-
             else if (tagOfInterest.id==14){
                 //to second spot
                 TrajectorySequence Park2 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
@@ -221,13 +213,13 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
                         .forward(1.5,
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
-                        .splineToSplineHeading(new Pose2d(-24, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(180),
+                        .splineToSplineHeading(new Pose2d(24, stackEstimate.getY(), Math.toRadians(0)), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(50))
-                        .splineToConstantHeading(new Vector2d(-30, stackEstimate.getY()), Math.toRadians(180),
+                        .splineToConstantHeading(new Vector2d(30, stackEstimate.getY()), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(50))
-                        .splineToConstantHeading(new Vector2d(-36, stackEstimate.getY()), Math.toRadians(180),
+                        .splineToConstantHeading(new Vector2d(36, stackEstimate.getY()), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(20))
                         .build();
@@ -239,20 +231,25 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
                         .setReversed(false)
                         .forward(1.5,
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(30))
-                        .splineToSplineHeading(new Pose2d(-12, stackEstimate.getY(), Math.toRadians(180)), Math.toRadians(135),
+                                SampleMecanumDrive.getAccelerationConstraint(40))
+                        .splineToSplineHeading(new Pose2d(24, stackEstimate.getY(), Math.toRadians(0)), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(30))
+                                SampleMecanumDrive.getAccelerationConstraint(50))
+                        .splineToLinearHeading(new Pose2d(57, stackEstimate.getY(), 0), Math.toRadians(0),
+                                SampleMecanumDrive.getVelocityConstraint(55,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(40))
                         .build();
                 drive.followTrajectorySequenceAsync(Park3);
             }
             armControl.SpecialSleep(drive, 1000); //~~~~~EXPERIMENT with this time
             armControl.ReturnFromHigh(drive);
-            armControl.closeClaw();
-            armControl.liftWrist.setPosition(1);
+            //armControl.closeClaw();
+            armControl.armGrip.setPosition(.145);
+            armControl.SpecialSleep(null, 180);
+            //armControl.liftWrist.setPosition(1);
             armControl.WaitForTrajectoryToFinish(drive);
 
-             //*/
+            //*/
 
         }
     }

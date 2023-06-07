@@ -27,6 +27,12 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
                 armControl.SafetyStow(null);
             }
             if(gamepad1.dpad_up){
+                armControl.slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                armControl.slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                armControl.slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                armControl.slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                armControl.slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armControl.slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 armControl.StartPosition(null, true);
             }
 

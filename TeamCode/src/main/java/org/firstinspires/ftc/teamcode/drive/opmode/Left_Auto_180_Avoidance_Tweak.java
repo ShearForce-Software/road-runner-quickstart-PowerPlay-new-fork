@@ -249,6 +249,7 @@ public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {
             armControl.SpecialSleep(drive, 1000); //~~~~~EXPERIMENT with this time
             armControl.ReturnFromHigh(drive);
             armControl.closeClaw();
+            armControl.SpecialSleep(null, 180);
             armControl.liftWrist.setPosition(1);
             armControl.WaitForTrajectoryToFinish(drive);
 

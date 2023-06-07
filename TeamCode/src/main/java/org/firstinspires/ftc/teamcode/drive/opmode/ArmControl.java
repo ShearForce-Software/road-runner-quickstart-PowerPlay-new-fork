@@ -40,8 +40,8 @@ public class ArmControl {
     int START_POS = 10; //5
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
-    int MED_POS = 2370;   //3560
-    int HIGH_POS = 1510;//550     900
+    int MED_POS = 2300;   //3560
+    int HIGH_POS = 1710;//550     900
     int STACK_POS = 550; //1100
 
     //FindCondeCenter variables
@@ -179,8 +179,8 @@ public class ArmControl {
         //************************************************************
         // raise slides to high junction delivery height
         //************************************************************
-        slideOne.setTargetPosition(1610);
-        slideTwo.setTargetPosition(1610);
+        slideOne.setTargetPosition(HIGH_POS);
+        slideTwo.setTargetPosition(HIGH_POS);
         //OLD ARM POSITIONS PRE DANGLY-BIT >>
 //        spinOne.setPosition(.14);
 //        spinTwo.setPosition(.14);
@@ -210,8 +210,8 @@ public class ArmControl {
         spinOne.setPosition(.18);
         spinTwo.setPosition(.18);
         liftWrist.setPosition(.02);
-        slideOne.setTargetPosition(1610);
-        slideTwo.setTargetPosition(1610);
+        slideOne.setTargetPosition(HIGH_POS);
+        slideTwo.setTargetPosition(HIGH_POS);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         slideOne.setPower(ARM_POWER);
@@ -589,6 +589,27 @@ public class ArmControl {
         leftRear.setPower(backLeftPower);
         rightFront.setPower(frontRightPower);
         rightRear.setPower(backRightPower);
+    }
+
+    public void driveControlsRobotCentricKID() {
+        double y = opMode.gamepad2.left_stick_y;
+        double x = -opMode.gamepad2.left_stick_x * 1.1;
+        double rx = opMode.gamepad2.right_stick_x;
+
+        rangeRight = rightDistance.getDistance(DistanceUnit.CM);
+        rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
+        rangeLeft = leftDistance.getDistance(DistanceUnit.CM);
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower*.25);
+        leftRear.setPower(backLeftPower*.25);
+        rightFront.setPower(frontRightPower*.25);
+        rightRear.setPower(backRightPower*.25);
     }
 
     public void driveControlsFieldCentric() {

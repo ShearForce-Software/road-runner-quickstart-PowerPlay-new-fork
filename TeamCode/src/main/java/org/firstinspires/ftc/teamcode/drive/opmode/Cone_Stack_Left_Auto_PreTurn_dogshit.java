@@ -67,7 +67,7 @@ public class Cone_Stack_Left_Auto_PreTurn_dogshit extends LinearOpMode {
         Pose2d stackPos = new Pose2d(-62.5, stackY, Math.toRadians(180));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
-        armControl.StartPosition(null);
+        armControl.StartPosition(null, true);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
                 .strafeTo(new Vector2d(-36,-56),

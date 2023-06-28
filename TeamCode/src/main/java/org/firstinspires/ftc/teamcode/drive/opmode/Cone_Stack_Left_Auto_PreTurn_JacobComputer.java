@@ -70,7 +70,7 @@ public class Cone_Stack_Left_Auto_PreTurn_JacobComputer extends LinearOpMode {
         //Pose2d linePos = new Pose2d(40, stackY, Math.toRadians(0));
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
-        armControl.StartPosition(null);
+        armControl.StartPosition(null, true);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
                 .strafeTo(new Vector2d(-36,-56),

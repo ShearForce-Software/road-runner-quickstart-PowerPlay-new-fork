@@ -10,7 +10,7 @@ public class METHODS_DOC_FC_Manual_Drop extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         armControl.Init(hardwareMap);
-        armControl.StartPosition(null);
+        armControl.StartPosition(null, true);
 
         waitForStart();
 

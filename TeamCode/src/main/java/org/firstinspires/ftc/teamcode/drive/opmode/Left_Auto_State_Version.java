@@ -31,10 +31,10 @@ import java.util.ArrayList;
  * If you are using SampleMecanumDrive, you should be tuning TRANSLATIONAL_PID and HEADING_PID.
  * These coefficients can be tuned live in dashboard.
  */
-//@Disabled
+@Disabled
 @Config
 @Autonomous(name = "MAIN Autonomous Left")
-public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
+public class Left_Auto_State_Version extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -68,7 +68,7 @@ public class Cone_Stack_Left_Auto_Preturn_attempt3 extends LinearOpMode {
         TrajectorySequence ToRealStack;
         drive.setPoseEstimate(startPose);
         armControl.Init(hardwareMap);
-        armControl.StartPosition(null);
+        armControl.StartPosition(null, true);
 
         TrajectorySequence FirstCone = drive.trajectorySequenceBuilder(startPose)
                 .strafeTo(new Vector2d(-36,-58),

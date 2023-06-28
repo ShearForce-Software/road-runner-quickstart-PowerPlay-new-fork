@@ -18,6 +18,7 @@ public class Auto_Blue_Right_Cone_Stack {
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 12.0)
+                .setDimensions(16,16)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(36, -64.5, Math.toRadians(90)))
                                 .strafeTo(new Vector2d(36, -42))

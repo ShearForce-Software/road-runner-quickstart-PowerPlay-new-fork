@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
+@TeleOp(name = "Demonstration Mode")
 
-public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
+public class KID_FRIENDLY extends LinearOpMode {
     ArmControl armControl = new ArmControl(true, false, this);
     @Override
     public void runOpMode() throws InterruptedException {
@@ -20,43 +20,43 @@ public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
         if (isStopRequested()) return;
 
         while(opModeIsActive()){
-            armControl.driveControlsRobotCentric();
+            armControl.driveControlsRobotCentricKID();
             telemetry.addData("claw distance: ", armControl.clawDistance.getDistance(DistanceUnit.CM));
 
-            if(gamepad1.dpad_down){
-                armControl.SafetyStow(null);
-            }
-            if(gamepad1.dpad_up){
-                armControl.slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                armControl.slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                armControl.slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                armControl.slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                armControl.slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                armControl.slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                armControl.StartPosition(null, true);
-            }
-
-            //~~~~~NEW MANUAL ARM STUFF~~~~~~\
-            if(gamepad1.left_stick_y!=0){
-                if(gamepad1.left_stick_y>0) {
-                    armControl.slideOne.setTargetPosition(armControl.slideOne.getCurrentPosition() - 100);
-                    armControl.slideTwo.setTargetPosition(armControl.slideTwo.getCurrentPosition() - 100);
-                    armControl.slideOne.setPower(1);
-                    armControl.slideTwo.setPower(1);
-                    armControl.WaitForSlides(null);
-                    armControl.slideOne.setPower(0);
-                    armControl.slideTwo.setPower(0);
-                }
-                if(gamepad1.left_stick_y<0) {
-                    armControl.slideOne.setTargetPosition(armControl.slideOne.getCurrentPosition() + 100);
-                    armControl.slideTwo.setTargetPosition(armControl.slideTwo.getCurrentPosition() + 100);
-                    armControl.slideOne.setPower(1);
-                    armControl.slideTwo.setPower(1);
-                    armControl.WaitForSlides(null);
-                    armControl.slideOne.setPower(0);
-                    armControl.slideTwo.setPower(0);
-                }
-            }
+//            if(gamepad1.dpad_down){
+//                armControl.SafetyStow(null);
+//            }
+//            if(gamepad1.dpad_up){
+//                armControl.slideOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                armControl.slideTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                armControl.slideOne.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                armControl.slideTwo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                armControl.slideOne.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                armControl.slideTwo.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                armControl.StartPosition(null, true);
+//            }
+//
+//            //~~~~~NEW MANUAL ARM STUFF~~~~~~\
+//            if(gamepad1.left_stick_y!=0){
+//                if(gamepad1.left_stick_y>0) {
+//                    armControl.slideOne.setTargetPosition(armControl.slideOne.getCurrentPosition() - 100);
+//                    armControl.slideTwo.setTargetPosition(armControl.slideTwo.getCurrentPosition() - 100);
+//                    armControl.slideOne.setPower(1);
+//                    armControl.slideTwo.setPower(1);
+//                    armControl.WaitForSlides(null);
+//                    armControl.slideOne.setPower(0);
+//                    armControl.slideTwo.setPower(0);
+//                }
+//                if(gamepad1.left_stick_y<0) {
+//                    armControl.slideOne.setTargetPosition(armControl.slideOne.getCurrentPosition() + 100);
+//                    armControl.slideTwo.setTargetPosition(armControl.slideTwo.getCurrentPosition() + 100);
+//                    armControl.slideOne.setPower(1);
+//                    armControl.slideTwo.setPower(1);
+//                    armControl.WaitForSlides(null);
+//                    armControl.slideOne.setPower(0);
+//                    armControl.slideTwo.setPower(0);
+//                }
+//            }
             /*
             if(gamepad1.right_trigger == 1 && gamepad1.left_trigger == 0) {
                 armControl.ManualSlideAdjust(true);

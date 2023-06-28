@@ -40,13 +40,27 @@ public class ArmControl {
     int START_POS = 10; //5
     int STOW_POS = 1080; //1400
     int LOW_POS = 1250;   //1850
-    int MED_POS = 2370;   //3560
-    int HIGH_POS = 1610;//550     900
+    int MED_POS = 2300;   //3560
+    int HIGH_POS = 1710;//550     900
     int STACK_POS = 550; //1100
 
     //FindCondeCenter variables
     public double forwardLG, shiftLG;
-    private double finalLeft, finalRight, rawRangeLeft, rawRangeRight;
+    private double finalLeft, finalRight, rawRangeLeft, rawRangeRight,redConeDetect, blueConeDetect;
+    double RedLeftSensorOffset = 0.49;
+    double RedRightSensorOffset = 0.31;
+    double BlueLeftSensorOffset = 0.39;
+    double BlueRightSensorOffset = 0.28;
+
+    double shiftRedScaleValue = 0.925;
+    double forward_both_RedSensorScaleValue = -0.15;
+    double forward_single_RedSensorScaleValue1 = -0.45;
+    double forward_single_RedSensorScaleValue2 = -0.4;
+
+    double shiftBlueScaleValue = 0.95;
+    double forward_both_BlueSensorScaleValue = -0.1;
+    double forward_single_BlueSensorScaleValue1 = -0.3;
+    double forward_single_BlueSensorScaleValue2 = -0.2;
 
     public boolean high = false;
     public boolean stow = false;
@@ -108,20 +122,45 @@ public class ArmControl {
         imu.initialize(parameters);
     }
 
-    public void StartPosition(SampleMecanumDrive drive) {
-        slideOne.setTargetPosition(0);
-        slideTwo.setTargetPosition(0);
-        slideOne.setPower(ARM_POWER);
-        slideTwo.setPower(ARM_POWER);
-        WaitForSlides(drive);
-        slideOne.setPower(0);
-        slideTwo.setPower(0);
-        armGrip.setPosition(0);
-        SpecialSleep(null, 180);
-        spinOne.setPosition(1);
-        spinTwo.setPosition(1);
-        armRote.setPosition(.11);
-        liftWrist.setPosition(.53);
+    public void StartPosition(SampleMecanumDrive drive, boolean isDriverControl) {
+        if(isDriverControl) {
+            slideOne.setTargetPosition(0);
+            slideTwo.setTargetPosition(0);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            WaitForSlides(drive);
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+            armGrip.setPosition(.145);
+            SpecialSleep(null, 180);
+            spinOne.setPosition(1);
+            spinTwo.setPosition(1);
+            armRote.setPosition(.11);
+            liftWrist.setPosition(.53);
+        }
+        else{
+            slideOne.setTargetPosition(0);
+            slideTwo.setTargetPosition(0);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            WaitForSlides(drive);
+            slideOne.setPower(0);
+            slideTwo.setPower(0);
+            spinOne.setPosition(0.79);
+            spinTwo.setPosition(0.79);
+            armRote.setPosition(0.83);
+            liftWrist.setPosition(0.63);
+            armGrip.setPosition(0);
+            SpecialSleep(null, 180);
+            slideOne.setTargetPosition(115);
+            slideTwo.setTargetPosition(115);
+            slideOne.setPower(ARM_POWER);
+            slideTwo.setPower(ARM_POWER);
+            WaitForSlides(drive);
+            spinOne.setPosition(0.81);
+            spinTwo.setPosition(0.81);
+            liftWrist.setPosition(0.88);
+        }
     }
 
     public void GoToHigh(SampleMecanumDrive drive) {
@@ -133,15 +172,15 @@ public class ArmControl {
         //************************************************************
         // swinging arm to high junction position
         //************************************************************
-        spinOne.setPosition(.16);
-        spinTwo.setPosition(.16);
-        liftWrist.setPosition(.05);
+        spinOne.setPosition(.18);
+        spinTwo.setPosition(.18);
+        liftWrist.setPosition(.02);
         //SpecialSleep(drive, 180);
         //************************************************************
         // raise slides to high junction delivery height
         //************************************************************
-        slideOne.setTargetPosition(1610);
-        slideTwo.setTargetPosition(1610);
+        slideOne.setTargetPosition(HIGH_POS);
+        slideTwo.setTargetPosition(HIGH_POS);
         //OLD ARM POSITIONS PRE DANGLY-BIT >>
 //        spinOne.setPosition(.14);
 //        spinTwo.setPosition(.14);
@@ -165,6 +204,27 @@ public class ArmControl {
         stow = false;
         // set ready for delivery variable to true
         readyToDrop = true;
+    }
+    public void GoToHigh180(SampleMecanumDrive drive){
+        armGrip.setPosition(0);
+        spinOne.setPosition(.18);
+        spinTwo.setPosition(.18);
+        liftWrist.setPosition(.02);
+        slideOne.setTargetPosition(HIGH_POS);
+        slideTwo.setTargetPosition(HIGH_POS);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        slideOne.setPower(ARM_POWER);
+        slideTwo.setPower(ARM_POWER);
+        WaitForSlides(drive);
+        slideOne.setPower(0);
+        slideTwo.setPower(0);
+
+        // set stow variable to false
+        stow = false;
+        // set ready for delivery variable to true
+        readyToDrop = true;
+
     }
 
     public void GoToMedium(SampleMecanumDrive drive) {
@@ -251,7 +311,7 @@ public class ArmControl {
         // rotate arm 180 degrees
         //************************************************************
         armRote.setPosition(0.11);
-        SpecialSleep(drive,400);
+        SpecialSleep(drive,500);
         //************************************************************
         // wrist to cone pickup position
         //************************************************************
@@ -311,7 +371,7 @@ public class ArmControl {
         // Open claw
         //************************************************************
         liftWrist.setPosition(.53);
-        armGrip.setPosition(0.18);
+        armGrip.setPosition(0.145);
         intake = true;
     }
 
@@ -320,8 +380,8 @@ public class ArmControl {
         armRote.setPosition(0.11); // rotate arm 180 degrees (so gripper is backwards)
         liftWrist.setPosition(1);
         SpecialSleep(drive, 500);
-        spinOne.setPosition(1); // spin arm to cone pickup position
-        spinTwo.setPosition(1);
+        spinOne.setPosition(.93); // spin arm to cone pickup position//1
+        spinTwo.setPosition(.93);//1
         liftWrist.setPosition(0.6); // wrist to cone pickup position
         SpecialSleep(drive, 300);
         slideOne.setTargetPosition(STACK_POS);
@@ -331,12 +391,15 @@ public class ArmControl {
         armRote.setPosition(.11);
         liftWrist.setPosition(.53);
         SpecialSleep(drive, 200);
-        armGrip.setPosition(.18);
+        armGrip.setPosition(.14);
     }
 
     public void GrabFromStack(SampleMecanumDrive drive) {
+        spinOne.setPosition(1);
+        spinTwo.setPosition(1);
+        SpecialSleep(drive, 200);
         armGrip.setPosition(0);
-        SpecialSleep(drive, 120);
+        SpecialSleep(drive, 200);
         slideOne.setPower(ARM_POWER);
         slideTwo.setPower(ARM_POWER);
         slideOne.setTargetPosition(1610);
@@ -445,7 +508,7 @@ public class ArmControl {
         // armRote position
         armRote.setPosition(.81); // rotate arm 180 degrees
         // wait for arm to rotate
-        SpecialSleep(drive, 400);
+        SpecialSleep(drive, 450);
         //slideHeight();}
         //************************************************************
         // spin arm to cone stow rotate position
@@ -483,19 +546,19 @@ public class ArmControl {
         // rotate arm 180 degrees to flip cone
         //************************************************************
         // armRote position
-        armRote.setPosition(.81); // rotate arm 180 degrees
+        armRote.setPosition(.83); // rotate arm 180 degrees
         // wait for arm to rotate
-        SpecialSleep(drive, 400);
+        SpecialSleep(drive, 450);
         //slideHeight();}
         //************************************************************
         // spin arm to cone high junct position
         //************************************************************
-        spinOne.setPosition(.16); // spin arm to cone stow rotate position
-        spinTwo.setPosition(.16); // spin arm to cone stow rotate position
+        spinOne.setPosition(.18); // spin arm to cone stow rotate position
+        spinTwo.setPosition(.18); // spin arm to cone stow rotate position
         //************************************************************
         // verify claw is closed
         //*************************armGrip.setPosition(0);***********************************
-        liftWrist.setPosition(.05);
+        liftWrist.setPosition(.02);
         //SpecialSleep(drive, 180);
     }
 
@@ -504,7 +567,7 @@ public class ArmControl {
     }
 
     public void openClaw(){
-        armGrip.setPosition(.18);
+        armGrip.setPosition(.145);
     }
 
     public void driveControlsRobotCentric() {
@@ -526,6 +589,27 @@ public class ArmControl {
         leftRear.setPower(backLeftPower);
         rightFront.setPower(frontRightPower);
         rightRear.setPower(backRightPower);
+    }
+
+    public void driveControlsRobotCentricKID() {
+        double y = opMode.gamepad2.left_stick_y;
+        double x = -opMode.gamepad2.left_stick_x * 1.1;
+        double rx = opMode.gamepad2.right_stick_x;
+
+        rangeRight = rightDistance.getDistance(DistanceUnit.CM);
+        rangeClaw = clawDistance.getDistance(DistanceUnit.CM);
+        rangeLeft = leftDistance.getDistance(DistanceUnit.CM);
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x - rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower*.25);
+        leftRear.setPower(backLeftPower*.25);
+        rightFront.setPower(frontRightPower*.25);
+        rightRear.setPower(backRightPower*.25);
     }
 
     public void driveControlsFieldCentric() {
@@ -605,7 +689,83 @@ public class ArmControl {
     public void FindConeCenter(){
         rawRangeLeft = leftDistance.getDistance(DistanceUnit.INCH);
         rawRangeRight = rightDistance.getDistance(DistanceUnit.INCH);
+        redConeDetect = (sensorColorLeft.red() + sensorColorRight.red()) / 2;
+        blueConeDetect = (sensorColorLeft.blue() + sensorColorRight.blue()) / 2;
         //~~sort through data~~
+        if (redConeDetect > blueConeDetect) {
+            if (rawRangeLeft < 1.78) {
+                rangeLeft = (rawRangeLeft * 1.352 - 0.089) - RedLeftSensorOffset;
+            } else if (rawRangeLeft > 1.78) {
+                rangeLeft = (rawRangeLeft * 3.333 - 3.777) - RedLeftSensorOffset;
+            } else {
+                rangeLeft = rawRangeLeft;
+            }
+            if (rawRangeRight < 2.23) {
+                rangeRight = (rawRangeRight * 1.050 - 0.040) - RedRightSensorOffset;
+            } else if (rawRangeRight > 2.23) {
+                rangeRight = (rawRangeRight * 2.038 - 2.399) - RedRightSensorOffset;
+            } else {
+                rangeRight = rawRangeRight;
+            }
+
+            //apply left and right corrections
+            shiftLG = (rangeRight - rangeLeft) * shiftRedScaleValue;
+
+            //apply forward correction based on single sensor or both sensors seeing cone
+            if (Math.abs((rangeRight - rangeLeft)) > 1 && Math.abs((rangeRight - rangeLeft)) < 2.1) {
+                if (rangeLeft < rangeRight) {
+                    forwardLG = rangeLeft - forward_single_RedSensorScaleValue1;
+                } else {
+                    forwardLG = rangeRight - forward_single_RedSensorScaleValue1;
+                }
+            } else if (Math.abs((rangeRight - rangeLeft)) > 2.1) {
+                if (rangeLeft < rangeRight) {
+                    forwardLG = rangeLeft - forward_single_RedSensorScaleValue2;
+                } else {
+                    forwardLG = rangeRight - forward_single_RedSensorScaleValue2;
+                }
+            } else {
+                forwardLG = ((rangeRight + rangeLeft) / 2) - forward_both_RedSensorScaleValue;
+            }
+        }
+
+        // apply blue range calibration equations
+        if (blueConeDetect > redConeDetect) {
+            if (rawRangeLeft < 2.0) {
+                rangeLeft = (rawRangeLeft * 1.290 - 0.292) - BlueLeftSensorOffset;
+            } else if (rawRangeLeft > 2.0) {
+                rangeLeft = (rawRangeLeft * 3.947 - 5.623) - BlueLeftSensorOffset;
+            } else {
+                rangeLeft = rawRangeLeft;
+            }
+            if (rawRangeRight < 2.55) {
+                rangeRight = (rawRangeRight * 0.948 - 0.085) - BlueRightSensorOffset;
+            } else if (rawRangeRight > 2.55) {
+                rangeRight = (rawRangeRight * 2.838 - 5.360) - BlueRightSensorOffset;
+            } else {
+                rangeRight = rawRangeRight;
+            }
+            shiftLG = (rangeRight - rangeLeft) * shiftBlueScaleValue;
+
+            //apply forward correction based on single sensor or both sensors seeing cone
+            if (Math.abs((rangeRight - rangeLeft)) > 1 && Math.abs((rangeRight - rangeLeft)) < 2.1) {
+                if (rangeLeft < rangeRight) {
+                    forwardLG = rangeLeft - forward_single_BlueSensorScaleValue1;
+                } else {
+                    forwardLG = rangeRight - forward_single_BlueSensorScaleValue1;
+                }
+            } else if (Math.abs((rangeRight - rangeLeft)) > 2.1) {
+                if (rangeLeft < rangeRight) {
+                    forwardLG = rangeLeft - forward_single_BlueSensorScaleValue2;
+                } else {
+                    forwardLG = rangeRight - forward_single_BlueSensorScaleValue2;
+                }
+            } else {
+                forwardLG = ((rangeRight + rangeLeft) / 2) - forward_both_BlueSensorScaleValue;
+            }
+        }
+
+        /*
         if(((sensorColorLeft.red() + sensorColorRight.red()) / 2) > ((sensorColorLeft.blue() + sensorColorRight.blue()) / 2)){
             //red values
             if(rawRangeLeft < 1.78){
@@ -680,6 +840,8 @@ public class ArmControl {
                 forwardLG = finalRight + 0.1;
             }
         }
+
+         */
     }
 }
 

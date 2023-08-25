@@ -46,24 +46,24 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
     public static double startX = 36;            // added start variable
     public static double startY = -64.5;          // added start variable
     public static double startHeading = -90;      // added start variable
-    public static double stackY = -14;
+    public static double stackY = -13;
     public static double stackX = 62;
     public static double junctionX = 30;
     public static double junctionY = -6;
-    public static double junction1X = 30;          // added for to ID specific junction X
-    public static double junction1Y = -6;           // added for to ID specific junction Y
+    public static double junction1X = 31;          // added for to ID specific junction X
+    public static double junction1Y = -5;           // added for to ID specific junction Y
     public static double junction1Heading = -45;     // added for to ID specific junction Heading
     public static double junction2X = 30;            // added for to ID specific junction X
     public static double junction2Y = -6;             // added for to ID specific junction Y
     public static double junction2Heading = -45;     // added for to ID specific junction Heading
-    public static double numConesStack = 4;
-    public static double toFirstConeVel = 55;
-    public static double toStackVel = 35;
-    public static double toHighVel = 35;
+    public static double numConesStack = 3;
+    public static double toFirstConeVel = 50;
+    public static double toStackVel = 25;
+    public static double toHighVel = 25;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        ArmControlRR armControl = new ArmControlRR(false, false, true, this);
+        ArmControlRR armControl = new ArmControlRR(false, false, false, this);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         String step = "none";           // telemetry messages for steps in autonomous
@@ -114,7 +114,6 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
                 telemetry.update();                                   // display on screen
 
                 TrajectorySequence ToStack = drive.trajectorySequenceBuilder(junction1Pos)
-
                         .setReversed(false)
                         .splineToSplineHeading(new Pose2d(38, stackY, Math.toRadians(0)), Math.toRadians(0),
                                 SampleMecanumDrive.getVelocityConstraint(toStackVel,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
@@ -123,6 +122,7 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
                                 SampleMecanumDrive.getVelocityConstraint(toStackVel,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(toStackVel))
                         .build();
+
                 drive.followTrajectorySequenceAsync(ToStack);         // drive toward stack without using distance sensor correction
 
                 step = "two - command movement to stack";
@@ -165,7 +165,8 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
                 //SlidesToHighHardCode(armControl, drive); //love it sm       // sets conditions to raise the slides to high position but does not command it
                 armControl.autoArmToHigh(drive);                            // actually commands and executes arm movement for delivery
                 armControl.SpecialSleepTraj(drive, 1850);             // wait 1.85 sec then open claw - there is no wait for trajectory to complete
-                if (i == 1 || i == 2) armControl.STACK_POS -= 200;
+                if (i == 1) armControl.STACK_POS -= 250;
+                if (i == 2) armControl.STACK_POS -= 200;
                 if (i > 2) armControl.STACK_POS = armControl.START_POS;
                 armControl.openClaw();
                 // set position for next cone pickup

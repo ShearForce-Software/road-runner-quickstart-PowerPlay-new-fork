@@ -56,14 +56,14 @@ public class RR_Left_Auto_Edit extends LinearOpMode {
     //public static double junction2X = -26;            // added for to ID specific junction X
     //public static double junction2Y = -6;             // added for to ID specific junction Y
     //public static double junction2Heading = -135;     // added for to ID specific junction Heading
-    public static double numConesStack = 4;
-    public static double toFirstConeVel = 55;
-    public static double toStackVel = 32.5;
-    public static double toHighVel = 32.5;
+    public static double numConesStack = 3;
+    public static double toFirstConeVel = 50;
+    public static double toStackVel = 25;
+    public static double toHighVel = 25;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        ArmControlRR armControl = new ArmControlRR(false, false, true, this);
+        ArmControlRR armControl = new ArmControlRR(false, false, false, this);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startPose = new Pose2d(startX, startY, Math.toRadians(startHeading));  // added to replace line above
@@ -105,6 +105,7 @@ public class RR_Left_Auto_Edit extends LinearOpMode {
             //armControl.SpecialSleep(drive, 1350);
             armControl.openClaw();
 
+            armControl.STACK_POS = 350;
             for (int i = 0; i < numConesStack; i++){
                 //armControl.openClaw();                                // open claw
                 step = "one - command open claw";

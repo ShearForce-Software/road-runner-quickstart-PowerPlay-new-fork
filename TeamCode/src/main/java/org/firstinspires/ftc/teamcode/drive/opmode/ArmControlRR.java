@@ -39,12 +39,12 @@ public class ArmControlRR {
     double rangeClaw;
 //    double rangeLeft;
 
-    public static int START_POS = 10; //5
+    public static int START_POS = 10;  //5
     public static int STOW_POS = 1080; //1400
-    public static int LOW_POS = 1250;   //1850
-    public static int MED_POS = 2300;   //3560
-    public static int HIGH_POS = 1710;//550     900
-    public static int STACK_POS = 400;//1100
+    public static int LOW_POS = 1250;  //1850
+    public static int MED_POS = 2300;  //3560
+    public static int HIGH_POS = 1710; //550     900
+    public static int STACK_POS = 350; //1100
 
     //FindCondeCenter variables
 //    public double forwardLG, shiftLG;
@@ -195,8 +195,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.12);
         }
         else {
-            spinOne.setPosition(0.18);
-            spinTwo.setPosition(0.18);
+            spinOne.setPosition(0.15);
+            spinTwo.setPosition(0.15);
         }
         liftWrist.setPosition(.06);
         //SpecialSleep(drive, 180);
@@ -240,8 +240,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.12);
         }
         else {
-            spinOne.setPosition(0.18);
-            spinTwo.setPosition(0.18);
+            spinOne.setPosition(0.15);
+            spinTwo.setPosition(0.15);
         }
         liftWrist.setPosition(.06);
         WaitForSlides(drive);
@@ -279,8 +279,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.88);
         }
         else {
-            spinOne.setPosition(0.83);
-            spinTwo.setPosition(0.83);
+            spinOne.setPosition(0.85);
+            spinTwo.setPosition(0.85);
         }
         //************************************************************
         // wrist to delivery angle (Medium)
@@ -315,8 +315,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.88);
         }
         else {
-            spinOne.setPosition(0.83);
-            spinTwo.setPosition(0.83);
+            spinOne.setPosition(0.85);
+            spinTwo.setPosition(0.85);
         }
         //************************************************************
         // wrist to delivery angle (Low)
@@ -501,8 +501,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.92);
         }
         else {
-            spinOne.setPosition(0.88);
-            spinTwo.setPosition(0.88);
+            spinOne.setPosition(0.9);
+            spinTwo.setPosition(0.9);
         }
         armRote.setPosition(.11);
         liftWrist.setPosition(.75);
@@ -573,8 +573,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.88);
         }
         else {
-            spinOne.setPosition(0.84);
-            spinTwo.setPosition(0.84);
+            spinOne.setPosition(0.86);
+            spinTwo.setPosition(0.86);
         }
         stow = true;
         // set input variable to false
@@ -619,8 +619,8 @@ public class ArmControlRR {
             spinTwo.setPosition(0.12);
         }
         else {
-            spinOne.setPosition(0.18);
-            spinTwo.setPosition(0.18);
+            spinOne.setPosition(0.15);
+            spinTwo.setPosition(0.15);
         }
         //************************************************************
         // verify claw is closed

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "1) Methods Main Driver Robot Centric (Manual Drop)")
+@TeleOp(name = "1) Main RC Controls")
 
 public class METHODS_DOC_RC_Manual_Drop extends LinearOpMode {
     ArmControlRR armControl = new ArmControlRR(true, false, false,this);

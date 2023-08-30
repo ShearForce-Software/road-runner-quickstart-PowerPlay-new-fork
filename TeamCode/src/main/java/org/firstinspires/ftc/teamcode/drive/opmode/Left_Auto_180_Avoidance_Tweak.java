@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * If you are using SampleMecanumDrive, you should be tuning TRANSLATIONAL_PID and HEADING_PID.
  * These coefficients can be tuned live in dashboard.
  */
-//@Disabled
+@Disabled
 @Config
 @Autonomous(name = "AVOIDANCE Left Autonomous")
 public class Left_Auto_180_Avoidance_Tweak extends LinearOpMode {

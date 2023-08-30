@@ -163,7 +163,7 @@ public class RR_Left_Auto_Edit extends LinearOpMode {
                 drive.followTrajectorySequenceAsync(ToHighJunction);        // drive to high junction
                 //SlidesToHighHardCode(armControl, drive);                 // sets conditions to raise the slides to high position but does not command it
                 armControl.autoArmToHigh(drive);                            // actually commands and executes arm movement for delivery
-                armControl.SpecialSleepTraj(drive, 1850);             // wait 1.85 sec then open claw - there is no wait for trajectory to complete
+                armControl.SpecialSleepTraj(drive, 2000);             // wait 1.85 sec then open claw - there is no wait for trajectory to complete
                 if (i == 1 || i == 2) armControl.STACK_POS -= 175;
                 if (i > 2) armControl.STACK_POS = armControl.START_POS;     //start pos = 10
                 armControl.openClaw();
@@ -175,7 +175,7 @@ public class RR_Left_Auto_Edit extends LinearOpMode {
                 //to first spot
                 TrajectorySequence Park1 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
                         .setReversed(false)
-                        .splineToSplineHeading(new Pose2d(-48, stackPos.getY(), Math.toRadians(180)), Math.toRadians(180),
+                        .splineToSplineHeading(new Pose2d(-48, stackY, Math.toRadians(180)), Math.toRadians(180),
                                 SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(30))
                         .forward(10,

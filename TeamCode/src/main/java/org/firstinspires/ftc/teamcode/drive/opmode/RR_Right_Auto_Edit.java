@@ -46,7 +46,7 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
     public static double startX = 36;            // added start variable
     public static double startY = -64.5;          // added start variable
     public static double startHeading = -90;      // added start variable
-    public static double stackY = -13;
+    public static double stackY = -12.5;
     public static double stackX = 62;
     public static double junctionX = 30;
     public static double junctionY = -6;
@@ -164,7 +164,7 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
                 drive.followTrajectorySequenceAsync(ToHighJunction);        // drive to high junction
                 //SlidesToHighHardCode(armControl, drive); //love it sm       // sets conditions to raise the slides to high position but does not command it
                 armControl.autoArmToHigh(drive);                            // actually commands and executes arm movement for delivery
-                armControl.SpecialSleepTraj(drive, 1850);             // wait 1.85 sec then open claw - there is no wait for trajectory to complete
+                armControl.SpecialSleepTraj(drive, 2000);             // wait 1.85 sec then open claw - there is no wait for trajectory to complete
                 if (i == 1) armControl.STACK_POS -= 250;
                 if (i == 2) armControl.STACK_POS -= 200;
                 if (i > 2) armControl.STACK_POS = armControl.START_POS;
@@ -200,10 +200,10 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
             else if(tagOfInterest.id==19) {
                 //to third spot
                 TrajectorySequence Park3 = drive.trajectorySequenceBuilder(drive.getPoseEstimate())
-                        .splineToLinearHeading(new Pose2d(36, -12, Math.toRadians(-90)), Math.toRadians(-90),
-                                SampleMecanumDrive.getVelocityConstraint(40,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
-                                SampleMecanumDrive.getAccelerationConstraint(40))
-                        .strafeLeft(24,
+                        .splineToSplineHeading(new Pose2d(50, stackY, Math.toRadians(0)), Math.toRadians(0),
+                                SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
+                                SampleMecanumDrive.getAccelerationConstraint(30))
+                        .forward(10,
                                 SampleMecanumDrive.getVelocityConstraint(50,DriveConstants.MAX_ANG_VEL,DriveConstants.TRACK_WIDTH),
                                 SampleMecanumDrive.getAccelerationConstraint(50))
                         .build();

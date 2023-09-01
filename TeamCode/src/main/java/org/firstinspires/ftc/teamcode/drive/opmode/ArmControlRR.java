@@ -42,9 +42,8 @@ public class ArmControlRR {
     public static int START_POS = 10;  //5
     public static int STOW_POS = 1080; //1400
     public static int LOW_POS = 1250;  //1850
-    public static int MED_POS = 2300;  //3560
-    public static int HIGH_POS = 1710; //550     900
-    public static int STACK_POS = 350; //1100
+    public static int MED_POS = 2425;  //3560
+    public static int HIGH_POS = 1500; //550     900
 
     //FindCondeCenter variables
 //    public double forwardLG, shiftLG;
@@ -64,6 +63,7 @@ public class ArmControlRR {
 //    double forward_single_BlueSensorScaleValue1 = -0.3;
 //    double forward_single_BlueSensorScaleValue2 = -0.2;
 
+    public  int STACK_POS = 650; //1100
     public boolean high = false;
     public boolean stow = false;
     public boolean readyToDrop = false;
@@ -195,10 +195,10 @@ public class ArmControlRR {
             spinTwo.setPosition(0.12);
         }
         else {
-            spinOne.setPosition(0.15);
-            spinTwo.setPosition(0.15);
+            spinOne.setPosition(0.19);
+            spinTwo.setPosition(0.19);
         }
-        liftWrist.setPosition(.06);
+        liftWrist.setPosition(.1);
         //SpecialSleep(drive, 180);
         //************************************************************
         // raise slides to high junction delivery height
@@ -240,10 +240,10 @@ public class ArmControlRR {
             spinTwo.setPosition(0.12);
         }
         else {
-            spinOne.setPosition(0.15);
-            spinTwo.setPosition(0.15);
+            spinOne.setPosition(0.19);
+            spinTwo.setPosition(0.19);
         }
-        liftWrist.setPosition(.06);
+        liftWrist.setPosition(.1);
         WaitForSlides(drive);
         slideOne.setPower(0);
         slideTwo.setPower(0);
@@ -424,7 +424,7 @@ public class ArmControlRR {
         //spinTwo.setPosition(.93);//1                                        TODO: return to 1?
         spinOne.setPosition(1.0); // returned to 1.0
         spinTwo.setPosition(1.0); // returned to 1.0
-        liftWrist.setPosition(0.58); // wrist to cone pickup position
+        liftWrist.setPosition(0.63); // wrist to cone pickup position
         SpecialSleep(drive, 300);
         slideOne.setTargetPosition(STACK_POS);
         slideTwo.setTargetPosition(STACK_POS);
@@ -441,7 +441,7 @@ public class ArmControlRR {
         //spinTwo.setPosition(1.0);               // not needed if corrections made in ReadyToGrabFromStack
         //SpecialSleep(drive, 200);               // not needed if corrections made in ReadyToGrabFromStack
         armGrip.setPosition(0.0);
-        SpecialSleep(drive, 200);
+        SpecialSleep(drive, 400);
 //        slideOne.setPower(ARM_POWER);               //setTarget before SetPower -- out of order??
 //        slideTwo.setPower(ARM_POWER);               //setTarget before SetPower -- out of order??
 //        slideOne.setTargetPosition(1610);           //setTarget before SetPower -- out of order??
@@ -619,21 +619,20 @@ public class ArmControlRR {
             spinTwo.setPosition(0.12);
         }
         else {
-            spinOne.setPosition(0.15);
-            spinTwo.setPosition(0.15);
+            spinOne.setPosition(0.19);
+            spinTwo.setPosition(0.19);
         }
         //************************************************************
         // verify claw is closed
         //************************************************************
         armGrip.setPosition(0);
-        liftWrist.setPosition(.02); // adjust wrist for cone drop on junction
+        liftWrist.setPosition(.1); // adjust wrist for cone drop on junction
         //SpecialSleep(drive, 180);
     }
 
     public void closeClaw(){
         armGrip.setPosition(0);
     }
-
     public void openClaw(){
         armGrip.setPosition(.145);
     }
@@ -678,6 +677,9 @@ public class ArmControlRR {
         leftRear.setPower(backLeftPower*.25);
         rightFront.setPower(frontRightPower*.25);
         rightRear.setPower(backRightPower*.25);
+
+        opMode.telemetry.addData("claw distance: ", clawDistance);
+        opMode.telemetry.update();
     }
 
     public void driveControlsFieldCentric() {

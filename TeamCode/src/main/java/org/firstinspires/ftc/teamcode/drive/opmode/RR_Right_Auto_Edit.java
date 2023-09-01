@@ -47,10 +47,10 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
     public static double startY = -64.5;          // added start variable
     public static double startHeading = -90;      // added start variable
     public static double stackY = -12.5;
-    public static double stackX = 62;
+    public static double stackX = 63.25;
     public static double junctionX = 30;
     public static double junctionY = -6;
-    public static double junction1X = 31;          // added for to ID specific junction X
+    public static double junction1X = 29.5;          // added for to ID specific junction X
     public static double junction1Y = -5;           // added for to ID specific junction Y
     public static double junction1Heading = -45;     // added for to ID specific junction Heading
     public static double junction2X = 30;            // added for to ID specific junction X
@@ -69,6 +69,7 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
         String step = "none";           // telemetry messages for steps in autonomous
 
         //armControl.STACK_POS = 550;
+        armControl.STACK_POS -= 250;
 
         Pose2d startPose = new Pose2d(startX, startY, Math.toRadians(startHeading));  // added to replace line above
         Vector2d junction1Vec = new Vector2d(junction1X, junction1Y);
@@ -165,8 +166,8 @@ public class RR_Right_Auto_Edit extends LinearOpMode {
                 //SlidesToHighHardCode(armControl, drive); //love it sm       // sets conditions to raise the slides to high position but does not command it
                 armControl.autoArmToHigh(drive);                            // actually commands and executes arm movement for delivery
                 armControl.SpecialSleepTraj(drive, 2000);             // wait 1.85 sec then open claw - there is no wait for trajectory to complete
-                if (i == 1) armControl.STACK_POS -= 250;
-                if (i == 2) armControl.STACK_POS -= 200;
+                if (i == 1||i==0) armControl.STACK_POS -= 150;
+                if (i == 2) armControl.STACK_POS -= 100;
                 if (i > 2) armControl.STACK_POS = armControl.START_POS;
                 armControl.openClaw();
                 // set position for next cone pickup

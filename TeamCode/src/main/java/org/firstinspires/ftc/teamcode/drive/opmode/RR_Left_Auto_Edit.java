@@ -47,11 +47,12 @@ public class RR_Left_Auto_Edit extends LinearOpMode {
     public static double startY = -64.5;          // added start variable
     public static double startHeading = -90;      // added start variable
     public static double stackY = -12.5;
-    public static double stackX = -58.5;
+    public static double stackX = -60;
     //public static double junctionX = -26;
     //public static double junctionY = -6;
     public static double junction1X = -26.5;          // added for to ID specific junction X
-    public static double junction1Y = -7.5;           // added for to ID specific junction Y
+    public static double junction1Y = -6;           // added for to ID specific j
+    // unction Y
     public static double junction1Heading = -135;     // added for to ID specific junction Heading
     //public static double junction2X = -26;            // added for to ID specific junction X
     //public static double junction2Y = -6;             // added for to ID specific junction Y
